@@ -12,8 +12,8 @@ using UniCabinet.Infrastructure.Persistence;
 namespace UniCabinet.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240926065939_ConfigureRelationships")]
-    partial class ConfigureRelationships
+    [Migration("20240926172133_UpdateUserToCustomUser")]
+    partial class UpdateUserToCustomUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

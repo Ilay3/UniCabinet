@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace UniCabinet.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class ConfigureRelationships : Migration
+    public partial class UpdateUserToCustomUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -5,8 +5,11 @@ namespace UniCabinet.Domain.Entities
 {
     public class User : IdentityUser<string>
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? Patronymic { get; set; }
+        public DateTime? DateBirthday { get; set; }
+
 
         public int? GroupId { get; set; }
         public Group Group { get; set; }
