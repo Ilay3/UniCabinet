@@ -5,7 +5,7 @@ using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Infrastructure.Persistence
 {
-    public class ApplicationDbContext : IdentityDbContext<User, Role, string,
+    public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string,
         IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>,
         IdentityRoleClaim<string>, IdentityUserToken<string>>
     {

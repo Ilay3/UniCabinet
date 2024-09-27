@@ -10,6 +10,14 @@ namespace UniCabinet.Domain.Entities
         public string? Patronymic { get; set; }
         public DateTime? DateBirthday { get; set; }
 
+        public bool IsVerified()
+        {
+            return !string.IsNullOrEmpty(FirstName) &&
+                   !string.IsNullOrEmpty(LastName) &&
+                   !string.IsNullOrEmpty(Patronymic) &&
+                   DateBirthday.HasValue &&
+                   EmailConfirmed;
+        }
 
         public int? GroupId { get; set; }
         public Group Group { get; set; }
