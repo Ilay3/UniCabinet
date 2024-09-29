@@ -19,25 +19,30 @@ public class ConfirmEmailModel : PageModel
     {
         if (userId == null || token == null)
         {
-            return RedirectToPage("/Index");
+            TempData["ConfirmationResult"] = "Неверная ссылка для подтверждения.";
+            return RedirectToPage("/Account/Manage/Index"); // Переходим на страницу профиля
         }
 
         var user = await _userManager.FindByIdAsync(userId);
         if (user == null)
         {
-            return NotFound($"Unable to load user with ID '{userId}'.");
+            TempData["ConfirmationResult"] = $"Не удалось загрузить пользователя с ID '{userId}'.";
+            return RedirectToPage("/Account/Manage/Index"); // Переходим на страницу профиля
         }
 
         var result = await _userManager.ConfirmEmailAsync(user, token);
         if (result.Succeeded)
         {
-            if (await _verificationService.VerifyUserAsync(userId))
-            {
-                return RedirectToPage("/Account/Manage/VerificationSuccess");
-            }
+            var isVerified = await _verificationService.VerifyUserAsync(userId);
+            TempData["ConfirmationResult"] = isVerified
+                ? "Ваш email успешно подтверждён. Вы прошли верификацию."
+                : "Ваш email успешно подтверждён, но данные профиля (ФИО) не заполнены. Пожалуйста, заполните их для завершения верификации.";
+
+            return RedirectToPage("/Account/Manage/Index");
         }
 
-        return BadRequest("Email confirmation failed");
+        TempData["ConfirmationResult"] = "Подтверждение email не удалось.";
+        return RedirectToPage("/Account/Manage/Index");
     }
 
 }

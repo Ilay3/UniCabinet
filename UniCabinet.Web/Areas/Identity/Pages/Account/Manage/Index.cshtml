@@ -6,6 +6,13 @@
 
 <h1>@ViewData["Title"]</h1>
 
+@if (TempData["ConfirmationResult"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["ConfirmationResult"]
+    </div>
+}
+
 <div class="row">
     <div class="col-md-4">
         <section>
