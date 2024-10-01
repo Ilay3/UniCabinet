@@ -51,7 +51,8 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account
                 var user = new User { 
                     UserName = Input.Email, 
                     Email = Input.Email,
-                    Id = Guid.NewGuid().ToString() // Явная генерация Id
+                    Id = Guid.NewGuid().ToString(), // Явная генерация Id
+                    LockoutEnabled = true
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);

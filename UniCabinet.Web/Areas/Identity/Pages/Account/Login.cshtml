@@ -1,5 +1,6 @@
 ﻿@page
-@model UniCabinet.Web.Areas.Identity.Pages.Account.LoginModel
+@model LoginModel
+@using System.Globalization
 @{
     ViewData["Title"] = "Вход";
 }
@@ -12,7 +13,7 @@
             <h4>Используйте свою учетную запись</h4>
             <hr />
             @Html.ValidationSummary("", new { @class = "text-danger" })
-            
+
             @if (Model.IsLockedOut)
             {
                 <div class="alert alert-danger">
@@ -42,46 +43,51 @@
             <div class="form-group">
                 <a asp-page="./ForgotPassword">Забыли пароль?</a>
             </div>
+            <div class="form-group">
+                <a asp-page="./Register">Зарегестрироваться</a>
+            </div>
         </form>
     </div>
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-
-    @if (Model.IsLockedOut && Model.RemainingLockoutTime > TimeSpan.Zero)
+    @if (Model.IsLockedOut && Model.RemainingLockoutTime.TotalSeconds > 0)
     {
         <script>
-            // Функция для форматирования времени
-            function formatTime(ts) {
-                var totalSeconds = Math.floor(ts / 1000);
+            // Получение времени блокировки с сервера в миллисекундах
+            var remainingTime = @Model.RemainingLockoutTime.TotalMilliseconds.ToString("F0", CultureInfo.InvariantCulture);
+
+            function updateTimer() {
+                // Преобразуем время в секунды и минуты
+                var totalSeconds = Math.floor(remainingTime / 1000);
                 var minutes = Math.floor(totalSeconds / 60);
                 var seconds = totalSeconds % 60;
-                return minutes + " минут " + seconds + " секунд";
-            }
 
-            // Получение оставшегося времени из серверной модели
-            var remainingTime = @Model.RemainingLockoutTime.TotalMilliseconds;
-
-            // Отображение оставшегося времени
-            var timerElement = document.getElementById("lockout-timer");
-            if (timerElement) {
-                function updateTimer() {
-                    if (remainingTime <= 0) {
-                        timerElement.textContent = "0 секунд";
-                        // Перезагрузка страницы после окончания блокировки
-                        setTimeout(function () {
-                            location.reload();
-                        }, 1000);
-                    } else {
-                        timerElement.textContent = formatTime(remainingTime);
-                        remainingTime -= 1000;
-                        setTimeout(updateTimer, 1000);
-                    }
+                // Форматируем время для отображения
+                var formattedTime = "";
+                if (minutes > 0) {
+                    formattedTime = minutes + " минут " + seconds + " секунд";
+                } else {
+                    formattedTime = seconds + " секунд";
                 }
 
-                updateTimer();
+                // Отображаем на странице
+                document.getElementById("lockout-timer").textContent = formattedTime;
+
+                // Уменьшаем время на 1 секунду (1000 мс)
+                remainingTime -= 1000;
+
+                // Если время закончилось, перезагружаем страницу
+                if (remainingTime <= 0) {
+                    location.reload();
+                } else {
+                    // Обновляем таймер каждую секунду
+                    setTimeout(updateTimer, 1000);
+                }
             }
+
+            // Инициализируем таймер при загрузке страницы
+            updateTimer();
         </script>
     }
 }

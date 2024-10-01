@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -18,13 +15,11 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-        private readonly UserManager<User> _userManager;
 
-        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger, UserManager<User> userManager)
+        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;
-            _userManager = userManager;
         }
 
         [BindProperty]
@@ -34,24 +29,24 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account
 
         public string ReturnUrl { get; set; }
 
-        [TempData]
-        public string ErrorMessage { get; set; }
-
-        // Свойства для обработки состояния блокировки
+        // Properties for lockout state
         public bool IsLockedOut { get; set; }
         public TimeSpan RemainingLockoutTime { get; set; }
 
+        [TempData]
+        public string ErrorMessage { get; set; }
+
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "Email is required.")]
+            [EmailAddress(ErrorMessage = "Invalid email address.")]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Password is required.")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Remember me")]
             public bool RememberMe { get; set; }
         }
 
@@ -64,6 +59,7 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account
 
             returnUrl ??= Url.Content("~/");
 
+            // Clear existing external cookies to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -79,49 +75,58 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                // Включение блокировки при неудачной попытке
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+                // Attempt to sign in the user regardless of whether they exist
+                var result = await _signInManager.PasswordSignInAsync(
+                    Input.Email,
+                    Input.Password,
+                    Input.RememberMe,
+                    lockoutOnFailure: true);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-
-                    // Получение пользователя по email
-                    var user = await _userManager.FindByEmailAsync(Input.Email);
-                    if (user != null)
-                    {
-                        var lockoutEnd = await _userManager.GetLockoutEndDateAsync(user);
-                        if (lockoutEnd.HasValue)
-                        {
-                            var currentTime = DateTimeOffset.UtcNow;
-                            if (lockoutEnd.Value > currentTime)
-                            {
-                                RemainingLockoutTime = lockoutEnd.Value - currentTime;
-                                IsLockedOut = true;
-                            }
-                        }
-                    }
-
-                    // Вместо перенаправления на страницу блокировки, отображаем сообщение на текущей странице
-                    ModelState.AddModelError(string.Empty, "Ваш аккаунт заблокирован. Пожалуйста, попробуйте позже.");
-                    return Page();
-                }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Неверная попытка входа.");
+                    if (result.IsLockedOut)
+                    {
+                        _logger.LogWarning("User account locked out.");
+
+                        // Retrieve lockout end time
+                        var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+                        if (user != null)
+                        {
+                            var lockoutEnd = await _signInManager.UserManager.GetLockoutEndDateAsync(user);
+                            if (lockoutEnd.HasValue)
+                            {
+                                var currentTime = DateTimeOffset.UtcNow;
+                                if (lockoutEnd.Value > currentTime)
+                                {
+                                    RemainingLockoutTime = lockoutEnd.Value - currentTime;
+                                    IsLockedOut = true;
+                                }
+                            }
+                        }
+
+                        // Display lockout message
+                        ModelState.AddModelError(string.Empty, "Your account is locked. Please try again later.");
+                    }
+                    else if (result.RequiresTwoFactor)
+                    {
+                        return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, Input.RememberMe });
+                    }
+                    else
+                    {
+                        // Display a generic error message
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    }
+
                     return Page();
                 }
             }
 
-            // Если мы добрались до этого момента, что-то пошло не так, повторно отображаем форму
+            // If we got this far, something failed; redisplay form
             return Page();
         }
     }
