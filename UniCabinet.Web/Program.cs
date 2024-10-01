@@ -19,12 +19,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
+    options.LoginPath = "/Identity/Account/Login";  // Путь к странице входа
+    options.LogoutPath = "/Identity/Account/Logout";  // Путь к странице выхода
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";  // Путь для доступа, если не хватает прав
+
     options.ExpireTimeSpan = TimeSpan.FromDays(10); // Время жизни куки
     options.SlidingExpiration = true; // Обновлять время действия при каждом запросе
+    options.Cookie.HttpOnly = true; // Куки должны быть доступны только для HTTP-запросов (без JavaScript)
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Использовать куки только по HTTPS
 });
+
 
 builder.Services.AddDefaultIdentity<User>(options =>
 {
+
     // Настройки блокировки
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15); // Время блокировки
     options.Lockout.MaxFailedAccessAttempts = 5; // Максимальное количество попыток

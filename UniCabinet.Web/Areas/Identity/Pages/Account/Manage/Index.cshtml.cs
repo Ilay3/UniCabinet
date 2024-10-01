@@ -62,6 +62,8 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
+            await LoadAsync(user);
+
             IsProfileComplete = !string.IsNullOrEmpty(user.FirstName) &&
                                 !string.IsNullOrEmpty(user.LastName) &&
                                 !string.IsNullOrEmpty(user.Patronymic) &&
@@ -106,6 +108,8 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account.Manage
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
+
+            await LoadAsync(user);
 
             return Page();
         }

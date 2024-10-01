@@ -1,7 +1,7 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Your Profile";
+    ViewData["Title"] = "Ваш профиль";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -17,31 +17,29 @@
     <div class="col-md-4">
         <section>
             <form method="post">
-                <h4>Your Profile</h4>
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
-
-                <div class="form-group">
-                    <label asp-for="Input.FirstName"></label>
-                    <input asp-for="Input.FirstName" class="form-control" />
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.FirstName" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Введите ваше имя" />
+                    <label asp-for="Input.FirstName" class="form-label">Имя</label>
                     <span asp-validation-for="Input.FirstName" class="text-danger"></span>
                 </div>
-
-                <div class="form-group">
-                    <label asp-for="Input.LastName"></label>
-                    <input asp-for="Input.LastName" class="form-control" />
+                
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.LastName" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Введите вашу фамилию" />
+                    <label asp-for="Input.LastName" class="form-label">Фамилия</label>
                     <span asp-validation-for="Input.LastName" class="text-danger"></span>
                 </div>
-
-                <div class="form-group">
-                    <label asp-for="Input.Patronymic"></label>
-                    <input asp-for="Input.Patronymic" class="form-control" />
+                
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Patronymic" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Введите ваше отчество" />
+                    <label asp-for="Input.Patronymic" class="form-label">Отчество</label>
                     <span asp-validation-for="Input.Patronymic" class="text-danger"></span>
                 </div>
 
-                <div class="form-group">
-                    <label asp-for="Input.DateBirthday"></label>
-                    <input asp-for="Input.DateBirthday" type="date" class="form-control" />
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.DateBirthday" class="form-control" autocomplete="current-password" type="date" aria-required="true" placeholder="Введите вашу дату рождения" />
+                    <label asp-for="Input.DateBirthday" class="form-label">Дата рождения</label>
                     <span asp-validation-for="Input.DateBirthday" class="text-danger"></span>
                 </div>
 
