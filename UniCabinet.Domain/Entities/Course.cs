@@ -5,8 +5,13 @@ namespace UniCabinet.Domain.Entities
 {
     public class Course
     {
-        public int CourseId { get; set; }
-        public int CourseNumber { get; set; }
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Номер курса
+        /// </summary>
+        public int Number { get; set; }
+
         public string Description { get; set; }
 
         // Навигационные свойства

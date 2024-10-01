@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using UniCabinet.Infrastructure.Persistence;
+using UniCabinet.Infrastructure.Data;
 
 #nullable disable
 
-namespace UniCabinet.Infrastructure.Migrations
+namespace UniCabinet.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -146,31 +146,31 @@ namespace UniCabinet.Infrastructure.Migrations
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Course", b =>
                 {
-                    b.Property<int>("CourseId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CourseId"));
-
-                    b.Property<int>("CourseNumber")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CourseId");
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Discipline", b =>
                 {
-                    b.Property<int>("DisciplineId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DisciplineId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -180,23 +180,20 @@ namespace UniCabinet.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("DisciplineId");
+                    b.HasKey("Id");
 
                     b.ToTable("Disciplines");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.DisciplineOffering", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.DisciplineDetail", b =>
                 {
-                    b.Property<int>("DisciplineOfferingId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DisciplineOfferingId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AutoExamThreshold")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CreditCount")
                         .HasColumnType("int");
 
                     b.Property<int>("DisciplineId")
@@ -217,7 +214,7 @@ namespace UniCabinet.Infrastructure.Migrations
                     b.Property<int>("MinPracticalsRequired")
                         .HasColumnType("int");
 
-                    b.Property<int>("PassingScore")
+                    b.Property<int>("PassCount")
                         .HasColumnType("int");
 
                     b.Property<int>("PracticalCount")
@@ -226,11 +223,14 @@ namespace UniCabinet.Infrastructure.Migrations
                     b.Property<int>("SemesterId")
                         .HasColumnType("int");
 
+                    b.Property<int>("SubExamCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("TeacherId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("DisciplineOfferingId");
+                    b.HasKey("Id");
 
                     b.HasIndex("DisciplineId");
 
@@ -240,55 +240,55 @@ namespace UniCabinet.Infrastructure.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("DisciplineOfferings");
+                    b.ToTable("DisciplineDetails");
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Exam", b =>
                 {
-                    b.Property<int>("ExamId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExamId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DisciplineOfferingId")
+                    b.Property<int>("DisciplineDetailId")
                         .HasColumnType("int");
 
-                    b.HasKey("ExamId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("DisciplineOfferingId");
+                    b.HasIndex("DisciplineDetailId");
 
                     b.ToTable("Exams");
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.ExamResult", b =>
                 {
-                    b.Property<int>("ExamResultId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExamResultId"));
-
-                    b.Property<decimal>("CalculatedGrade")
-                        .HasColumnType("decimal(18,2)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ExamId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FinalGrade")
-                        .HasColumnType("int");
+                    b.Property<decimal>("FinalPoint")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("IsAutomatic")
                         .HasColumnType("bit");
+
+                    b.Property<decimal>("PointAvarage")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("StudentId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("ExamResultId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ExamId");
 
@@ -299,11 +299,11 @@ namespace UniCabinet.Infrastructure.Migrations
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Group", b =>
                 {
-                    b.Property<int>("GroupId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GroupId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CurrentCourseId")
                         .HasColumnType("int");
@@ -311,14 +311,14 @@ namespace UniCabinet.Infrastructure.Migrations
                     b.Property<int>("CurrentSemesterId")
                         .HasColumnType("int");
 
-                    b.Property<string>("GroupName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("StartYear")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("StartYear")
+                        .HasColumnType("datetime2");
 
-                    b.HasKey("GroupId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CurrentCourseId");
 
@@ -329,94 +329,94 @@ namespace UniCabinet.Infrastructure.Migrations
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Lecture", b =>
                 {
-                    b.Property<int>("LectureId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LectureId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DisciplineOfferingId")
+                    b.Property<int>("DisciplineDetailId")
                         .HasColumnType("int");
 
-                    b.Property<int>("LectureNumber")
-                        .HasColumnType("int");
+                    b.Property<decimal>("LectureNumber")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("LectureId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("DisciplineOfferingId");
+                    b.HasIndex("DisciplineDetailId");
 
                     b.ToTable("Lectures");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.LectureAttendance", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.LectureVisit", b =>
                 {
-                    b.Property<int>("AttendanceId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AttendanceId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("LectureId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PointsAwarded")
-                        .HasColumnType("int");
+                    b.Property<decimal>("PointsCount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("StudentId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("WasPresent")
+                    b.Property<bool>("Visits")
                         .HasColumnType("bit");
 
-                    b.HasKey("AttendanceId");
+                    b.HasKey("Id");
 
                     b.HasIndex("LectureId");
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("LectureAttendances");
+                    b.ToTable("LectureVisits");
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Practical", b =>
                 {
-                    b.Property<int>("PracticalId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PracticalId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DisciplineOfferingId")
+                    b.Property<int>("DisciplineDetailId")
                         .HasColumnType("int");
 
                     b.Property<int>("PracticalNumber")
                         .HasColumnType("int");
 
-                    b.HasKey("PracticalId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("DisciplineOfferingId");
+                    b.HasIndex("DisciplineDetailId");
 
                     b.ToTable("Practicals");
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.PracticalResult", b =>
                 {
-                    b.Property<int>("ResultId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResultId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Grade")
                         .HasColumnType("int");
 
-                    b.Property<int>("PointsAwarded")
+                    b.Property<int>("Point")
                         .HasColumnType("int");
 
                     b.Property<int>("PracticalId")
@@ -426,7 +426,7 @@ namespace UniCabinet.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("ResultId");
+                    b.HasKey("Id");
 
                     b.HasIndex("PracticalId");
 
@@ -456,11 +456,11 @@ namespace UniCabinet.Infrastructure.Migrations
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Semester", b =>
                 {
-                    b.Property<int>("SemesterId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SemesterId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
@@ -468,13 +468,13 @@ namespace UniCabinet.Infrastructure.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SemesterNumber")
+                    b.Property<int>("Number")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("SemesterId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CourseId");
 
@@ -483,13 +483,13 @@ namespace UniCabinet.Infrastructure.Migrations
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.StudentProgress", b =>
                 {
-                    b.Property<int>("StudentProgressId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentProgressId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DisciplineOfferingId")
+                    b.Property<int>("DisciplineDetailId")
                         .HasColumnType("int");
 
                     b.Property<int>("FinalGrade")
@@ -511,9 +511,9 @@ namespace UniCabinet.Infrastructure.Migrations
                     b.Property<int>("TotalPracticalPoints")
                         .HasColumnType("int");
 
-                    b.HasKey("StudentProgressId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("DisciplineOfferingId");
+                    b.HasIndex("DisciplineDetailId");
 
                     b.HasIndex("StudentId");
 
@@ -653,22 +653,22 @@ namespace UniCabinet.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.DisciplineOffering", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.DisciplineDetail", b =>
                 {
                     b.HasOne("UniCabinet.Domain.Entities.Discipline", "Discipline")
-                        .WithMany("DisciplineOfferings")
+                        .WithMany("DisciplineDetails")
                         .HasForeignKey("DisciplineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("UniCabinet.Domain.Entities.Group", "Group")
-                        .WithMany("DisciplineOfferings")
+                        .WithMany("DisciplineDetails")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("UniCabinet.Domain.Entities.Semester", "Semester")
-                        .WithMany("DisciplineOfferings")
+                        .WithMany("DisciplineDetials")
                         .HasForeignKey("SemesterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -690,13 +690,13 @@ namespace UniCabinet.Infrastructure.Migrations
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Exam", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.DisciplineOffering", "DisciplineOffering")
+                    b.HasOne("UniCabinet.Domain.Entities.DisciplineDetail", "DisciplineDetails")
                         .WithMany("Exams")
-                        .HasForeignKey("DisciplineOfferingId")
+                        .HasForeignKey("DisciplineDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DisciplineOffering");
+                    b.Navigation("DisciplineDetails");
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.ExamResult", b =>
@@ -739,25 +739,25 @@ namespace UniCabinet.Infrastructure.Migrations
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Lecture", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.DisciplineOffering", "DisciplineOffering")
+                    b.HasOne("UniCabinet.Domain.Entities.DisciplineDetail", "DisciplineDetails")
                         .WithMany("Lectures")
-                        .HasForeignKey("DisciplineOfferingId")
+                        .HasForeignKey("DisciplineDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DisciplineOffering");
+                    b.Navigation("DisciplineDetails");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.LectureAttendance", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.LectureVisit", b =>
                 {
                     b.HasOne("UniCabinet.Domain.Entities.Lecture", "Lecture")
-                        .WithMany("LectureAttendances")
+                        .WithMany("LectureVisits")
                         .HasForeignKey("LectureId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("UniCabinet.Domain.Entities.User", "Student")
-                        .WithMany("LectureAttendances")
+                        .WithMany("LectureVisits")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -769,13 +769,13 @@ namespace UniCabinet.Infrastructure.Migrations
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Practical", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.DisciplineOffering", "DisciplineOffering")
+                    b.HasOne("UniCabinet.Domain.Entities.DisciplineDetail", "DisciplineDetails")
                         .WithMany("Practicals")
-                        .HasForeignKey("DisciplineOfferingId")
+                        .HasForeignKey("DisciplineDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DisciplineOffering");
+                    b.Navigation("DisciplineDetails");
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.PracticalResult", b =>
@@ -810,9 +810,9 @@ namespace UniCabinet.Infrastructure.Migrations
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.StudentProgress", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.DisciplineOffering", "DisciplineOffering")
+                    b.HasOne("UniCabinet.Domain.Entities.DisciplineDetail", "DisciplineDetails")
                         .WithMany("StudentProgresses")
-                        .HasForeignKey("DisciplineOfferingId")
+                        .HasForeignKey("DisciplineDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -822,7 +822,7 @@ namespace UniCabinet.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DisciplineOffering");
+                    b.Navigation("DisciplineDetails");
 
                     b.Navigation("Student");
                 });
@@ -871,10 +871,10 @@ namespace UniCabinet.Infrastructure.Migrations
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Discipline", b =>
                 {
-                    b.Navigation("DisciplineOfferings");
+                    b.Navigation("DisciplineDetails");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.DisciplineOffering", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.DisciplineDetail", b =>
                 {
                     b.Navigation("Exams");
 
@@ -892,14 +892,14 @@ namespace UniCabinet.Infrastructure.Migrations
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Group", b =>
                 {
-                    b.Navigation("DisciplineOfferings");
+                    b.Navigation("DisciplineDetails");
 
                     b.Navigation("Users");
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Lecture", b =>
                 {
-                    b.Navigation("LectureAttendances");
+                    b.Navigation("LectureVisits");
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Practical", b =>
@@ -914,7 +914,7 @@ namespace UniCabinet.Infrastructure.Migrations
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Semester", b =>
                 {
-                    b.Navigation("DisciplineOfferings");
+                    b.Navigation("DisciplineDetials");
 
                     b.Navigation("Groups");
                 });
@@ -923,7 +923,7 @@ namespace UniCabinet.Infrastructure.Migrations
                 {
                     b.Navigation("ExamResults");
 
-                    b.Navigation("LectureAttendances");
+                    b.Navigation("LectureVisits");
 
                     b.Navigation("PracticalResults");
 

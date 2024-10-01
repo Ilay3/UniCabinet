@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using UniCabinet.Application.Interfaces;
 using UniCabinet.Application.Services;
 using UniCabinet.Domain.Entities;
-using UniCabinet.Infrastructure.Persistence;
+using UniCabinet.Infrastructure.Data;
 using UniCabinet.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);

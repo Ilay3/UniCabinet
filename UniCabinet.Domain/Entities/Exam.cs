@@ -5,9 +5,10 @@ namespace UniCabinet.Domain.Entities
 {
     public class Exam
     {
-        public int ExamId { get; set; }
-        public int DisciplineOfferingId { get; set; }
-        public DisciplineOffering DisciplineOffering { get; set; }
+        public int Id { get; set; }
+
+        public int DisciplineDetailId { get; set; }
+        public DisciplineDetail DisciplineDetails { get; set; }
 
         public DateTime Date { get; set; }
 

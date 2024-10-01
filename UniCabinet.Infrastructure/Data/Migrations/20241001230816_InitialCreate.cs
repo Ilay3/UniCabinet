@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace UniCabinet.Infrastructure.Migrations
+namespace UniCabinet.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class _12 : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,28 +29,28 @@ namespace UniCabinet.Infrastructure.Migrations
                 name: "Courses",
                 columns: table => new
                 {
-                    CourseId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CourseNumber = table.Column<int>(type: "int", nullable: false),
+                    Number = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Courses", x => x.CourseId);
+                    table.PrimaryKey("PK_Courses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Disciplines",
                 columns: table => new
                 {
-                    DisciplineId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Disciplines", x => x.DisciplineId);
+                    table.PrimaryKey("PK_Disciplines", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -92,21 +92,21 @@ namespace UniCabinet.Infrastructure.Migrations
                 name: "Semesters",
                 columns: table => new
                 {
-                    SemesterId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SemesterNumber = table.Column<int>(type: "int", nullable: false),
+                    Number = table.Column<int>(type: "int", nullable: false),
                     CourseId = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Semesters", x => x.SemesterId);
+                    table.PrimaryKey("PK_Semesters", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Semesters_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "CourseId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -114,27 +114,27 @@ namespace UniCabinet.Infrastructure.Migrations
                 name: "Groups",
                 columns: table => new
                 {
-                    GroupId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    GroupName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartYear = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartYear = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CurrentCourseId = table.Column<int>(type: "int", nullable: false),
                     CurrentSemesterId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Groups", x => x.GroupId);
+                    table.PrimaryKey("PK_Groups", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Groups_Courses_CurrentCourseId",
                         column: x => x.CurrentCourseId,
                         principalTable: "Courses",
-                        principalColumn: "CourseId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Groups_Semesters_CurrentSemesterId",
                         column: x => x.CurrentSemesterId,
                         principalTable: "Semesters",
-                        principalColumn: "SemesterId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -170,7 +170,7 @@ namespace UniCabinet.Infrastructure.Migrations
                         name: "FK_AspNetUsers_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
-                        principalColumn: "GroupId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                 });
 
@@ -266,10 +266,10 @@ namespace UniCabinet.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DisciplineOfferings",
+                name: "DisciplineDetails",
                 columns: table => new
                 {
-                    DisciplineOfferingId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DisciplineId = table.Column<int>(type: "int", nullable: false),
                     GroupId = table.Column<int>(type: "int", nullable: false),
@@ -277,39 +277,39 @@ namespace UniCabinet.Infrastructure.Migrations
                     TeacherId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LectureCount = table.Column<int>(type: "int", nullable: false),
                     PracticalCount = table.Column<int>(type: "int", nullable: false),
-                    CreditCount = table.Column<int>(type: "int", nullable: false),
+                    SubExamCount = table.Column<int>(type: "int", nullable: false),
                     ExamCount = table.Column<int>(type: "int", nullable: false),
                     MinLecturesRequired = table.Column<int>(type: "int", nullable: false),
                     MinPracticalsRequired = table.Column<int>(type: "int", nullable: false),
                     AutoExamThreshold = table.Column<int>(type: "int", nullable: false),
-                    PassingScore = table.Column<int>(type: "int", nullable: false)
+                    PassCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DisciplineOfferings", x => x.DisciplineOfferingId);
+                    table.PrimaryKey("PK_DisciplineDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DisciplineOfferings_AspNetUsers_TeacherId",
+                        name: "FK_DisciplineDetails_AspNetUsers_TeacherId",
                         column: x => x.TeacherId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_DisciplineOfferings_Disciplines_DisciplineId",
+                        name: "FK_DisciplineDetails_Disciplines_DisciplineId",
                         column: x => x.DisciplineId,
                         principalTable: "Disciplines",
-                        principalColumn: "DisciplineId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DisciplineOfferings_Groups_GroupId",
+                        name: "FK_DisciplineDetails_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
-                        principalColumn: "GroupId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DisciplineOfferings_Semesters_SemesterId",
+                        name: "FK_DisciplineDetails_Semesters_SemesterId",
                         column: x => x.SemesterId,
                         principalTable: "Semesters",
-                        principalColumn: "SemesterId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -317,19 +317,19 @@ namespace UniCabinet.Infrastructure.Migrations
                 name: "Exams",
                 columns: table => new
                 {
-                    ExamId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DisciplineOfferingId = table.Column<int>(type: "int", nullable: false),
+                    DisciplineDetailId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Exams", x => x.ExamId);
+                    table.PrimaryKey("PK_Exams", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Exams_DisciplineOfferings_DisciplineOfferingId",
-                        column: x => x.DisciplineOfferingId,
-                        principalTable: "DisciplineOfferings",
-                        principalColumn: "DisciplineOfferingId",
+                        name: "FK_Exams_DisciplineDetails_DisciplineDetailId",
+                        column: x => x.DisciplineDetailId,
+                        principalTable: "DisciplineDetails",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -337,20 +337,20 @@ namespace UniCabinet.Infrastructure.Migrations
                 name: "Lectures",
                 columns: table => new
                 {
-                    LectureId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DisciplineOfferingId = table.Column<int>(type: "int", nullable: false),
-                    LectureNumber = table.Column<int>(type: "int", nullable: false),
+                    DisciplineDetailId = table.Column<int>(type: "int", nullable: false),
+                    LectureNumber = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Lectures", x => x.LectureId);
+                    table.PrimaryKey("PK_Lectures", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Lectures_DisciplineOfferings_DisciplineOfferingId",
-                        column: x => x.DisciplineOfferingId,
-                        principalTable: "DisciplineOfferings",
-                        principalColumn: "DisciplineOfferingId",
+                        name: "FK_Lectures_DisciplineDetails_DisciplineDetailId",
+                        column: x => x.DisciplineDetailId,
+                        principalTable: "DisciplineDetails",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -358,20 +358,20 @@ namespace UniCabinet.Infrastructure.Migrations
                 name: "Practicals",
                 columns: table => new
                 {
-                    PracticalId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DisciplineOfferingId = table.Column<int>(type: "int", nullable: false),
+                    DisciplineDetailId = table.Column<int>(type: "int", nullable: false),
                     PracticalNumber = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Practicals", x => x.PracticalId);
+                    table.PrimaryKey("PK_Practicals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Practicals_DisciplineOfferings_DisciplineOfferingId",
-                        column: x => x.DisciplineOfferingId,
-                        principalTable: "DisciplineOfferings",
-                        principalColumn: "DisciplineOfferingId",
+                        name: "FK_Practicals_DisciplineDetails_DisciplineDetailId",
+                        column: x => x.DisciplineDetailId,
+                        principalTable: "DisciplineDetails",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -379,10 +379,10 @@ namespace UniCabinet.Infrastructure.Migrations
                 name: "StudentProgresses",
                 columns: table => new
                 {
-                    StudentProgressId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DisciplineOfferingId = table.Column<int>(type: "int", nullable: false),
+                    DisciplineDetailId = table.Column<int>(type: "int", nullable: false),
                     TotalLecturePoints = table.Column<int>(type: "int", nullable: false),
                     TotalPracticalPoints = table.Column<int>(type: "int", nullable: false),
                     TotalPoints = table.Column<int>(type: "int", nullable: false),
@@ -391,7 +391,7 @@ namespace UniCabinet.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentProgresses", x => x.StudentProgressId);
+                    table.PrimaryKey("PK_StudentProgresses", x => x.Id);
                     table.ForeignKey(
                         name: "FK_StudentProgresses_AspNetUsers_StudentId",
                         column: x => x.StudentId,
@@ -399,10 +399,10 @@ namespace UniCabinet.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StudentProgresses_DisciplineOfferings_DisciplineOfferingId",
-                        column: x => x.DisciplineOfferingId,
-                        principalTable: "DisciplineOfferings",
-                        principalColumn: "DisciplineOfferingId",
+                        name: "FK_StudentProgresses_DisciplineDetails_DisciplineDetailId",
+                        column: x => x.DisciplineDetailId,
+                        principalTable: "DisciplineDetails",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -410,17 +410,17 @@ namespace UniCabinet.Infrastructure.Migrations
                 name: "ExamResults",
                 columns: table => new
                 {
-                    ExamResultId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ExamId = table.Column<int>(type: "int", nullable: false),
-                    CalculatedGrade = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    FinalGrade = table.Column<int>(type: "int", nullable: false),
+                    PointAvarage = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    FinalPoint = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsAutomatic = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExamResults", x => x.ExamResultId);
+                    table.PrimaryKey("PK_ExamResults", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ExamResults_AspNetUsers_StudentId",
                         column: x => x.StudentId,
@@ -431,35 +431,35 @@ namespace UniCabinet.Infrastructure.Migrations
                         name: "FK_ExamResults_Exams_ExamId",
                         column: x => x.ExamId,
                         principalTable: "Exams",
-                        principalColumn: "ExamId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "LectureAttendances",
+                name: "LectureVisits",
                 columns: table => new
                 {
-                    AttendanceId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LectureId = table.Column<int>(type: "int", nullable: false),
-                    WasPresent = table.Column<bool>(type: "bit", nullable: false),
-                    PointsAwarded = table.Column<int>(type: "int", nullable: false)
+                    Visits = table.Column<bool>(type: "bit", nullable: false),
+                    PointsCount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LectureAttendances", x => x.AttendanceId);
+                    table.PrimaryKey("PK_LectureVisits", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LectureAttendances_AspNetUsers_StudentId",
+                        name: "FK_LectureVisits_AspNetUsers_StudentId",
                         column: x => x.StudentId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_LectureAttendances_Lectures_LectureId",
+                        name: "FK_LectureVisits_Lectures_LectureId",
                         column: x => x.LectureId,
                         principalTable: "Lectures",
-                        principalColumn: "LectureId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -467,16 +467,16 @@ namespace UniCabinet.Infrastructure.Migrations
                 name: "PracticalResults",
                 columns: table => new
                 {
-                    ResultId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PracticalId = table.Column<int>(type: "int", nullable: false),
                     Grade = table.Column<int>(type: "int", nullable: false),
-                    PointsAwarded = table.Column<int>(type: "int", nullable: false)
+                    Point = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PracticalResults", x => x.ResultId);
+                    table.PrimaryKey("PK_PracticalResults", x => x.Id);
                     table.ForeignKey(
                         name: "FK_PracticalResults_AspNetUsers_StudentId",
                         column: x => x.StudentId,
@@ -487,7 +487,7 @@ namespace UniCabinet.Infrastructure.Migrations
                         name: "FK_PracticalResults_Practicals_PracticalId",
                         column: x => x.PracticalId,
                         principalTable: "Practicals",
-                        principalColumn: "PracticalId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -536,23 +536,23 @@ namespace UniCabinet.Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DisciplineOfferings_DisciplineId",
-                table: "DisciplineOfferings",
+                name: "IX_DisciplineDetails_DisciplineId",
+                table: "DisciplineDetails",
                 column: "DisciplineId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DisciplineOfferings_GroupId",
-                table: "DisciplineOfferings",
+                name: "IX_DisciplineDetails_GroupId",
+                table: "DisciplineDetails",
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DisciplineOfferings_SemesterId",
-                table: "DisciplineOfferings",
+                name: "IX_DisciplineDetails_SemesterId",
+                table: "DisciplineDetails",
                 column: "SemesterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DisciplineOfferings_TeacherId",
-                table: "DisciplineOfferings",
+                name: "IX_DisciplineDetails_TeacherId",
+                table: "DisciplineDetails",
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
@@ -566,9 +566,9 @@ namespace UniCabinet.Infrastructure.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Exams_DisciplineOfferingId",
+                name: "IX_Exams_DisciplineDetailId",
                 table: "Exams",
-                column: "DisciplineOfferingId");
+                column: "DisciplineDetailId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Groups_CurrentCourseId",
@@ -581,19 +581,19 @@ namespace UniCabinet.Infrastructure.Migrations
                 column: "CurrentSemesterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LectureAttendances_LectureId",
-                table: "LectureAttendances",
+                name: "IX_Lectures_DisciplineDetailId",
+                table: "Lectures",
+                column: "DisciplineDetailId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LectureVisits_LectureId",
+                table: "LectureVisits",
                 column: "LectureId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LectureAttendances_StudentId",
-                table: "LectureAttendances",
+                name: "IX_LectureVisits_StudentId",
+                table: "LectureVisits",
                 column: "StudentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Lectures_DisciplineOfferingId",
-                table: "Lectures",
-                column: "DisciplineOfferingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PracticalResults_PracticalId",
@@ -606,9 +606,9 @@ namespace UniCabinet.Infrastructure.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Practicals_DisciplineOfferingId",
+                name: "IX_Practicals_DisciplineDetailId",
                 table: "Practicals",
-                column: "DisciplineOfferingId");
+                column: "DisciplineDetailId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Semesters_CourseId",
@@ -616,9 +616,9 @@ namespace UniCabinet.Infrastructure.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentProgresses_DisciplineOfferingId",
+                name: "IX_StudentProgresses_DisciplineDetailId",
                 table: "StudentProgresses",
-                column: "DisciplineOfferingId");
+                column: "DisciplineDetailId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudentProgresses_StudentId",
@@ -648,7 +648,7 @@ namespace UniCabinet.Infrastructure.Migrations
                 name: "ExamResults");
 
             migrationBuilder.DropTable(
-                name: "LectureAttendances");
+                name: "LectureVisits");
 
             migrationBuilder.DropTable(
                 name: "PracticalResults");
@@ -672,7 +672,7 @@ namespace UniCabinet.Infrastructure.Migrations
                 name: "Practicals");
 
             migrationBuilder.DropTable(
-                name: "DisciplineOfferings");
+                name: "DisciplineDetails");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

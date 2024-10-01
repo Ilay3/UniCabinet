@@ -6,15 +6,29 @@ namespace UniCabinet.Domain.Entities
 {
     public class Semester
     {
-        public int SemesterId { get; set; }
-        public int SemesterNumber { get; set; }
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Номер семестра
+        /// </summary>
+        public int Number { get; set; }
+
         public int CourseId { get; set; }
+
         public Course Course { get; set; }
+
+        /// <summary>
+        /// Начало семестра
+        /// </summary>
         public DateTime StartDate { get; set; }
+
+        /// <summary>
+        /// Конец семестра
+        /// </summary>
         public DateTime EndDate { get; set; }
 
         // Навигационные свойства
-        public ICollection<DisciplineOffering> DisciplineOfferings { get; set; }
+        public ICollection<DisciplineDetail> DisciplineDetials { get; set; }
         public ICollection<Group> Groups { get; set; }
     }
 }

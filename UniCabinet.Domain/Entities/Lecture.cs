@@ -5,14 +5,19 @@ namespace UniCabinet.Domain.Entities
 {
     public class Lecture
     {
-        public int LectureId { get; set; }
-        public int DisciplineOfferingId { get; set; }
-        public DisciplineOffering DisciplineOffering { get; set; }
+        public int Id { get; set; }
 
-        public int LectureNumber { get; set; }
+        public int DisciplineDetailId { get; set; }
+        public DisciplineDetail DisciplineDetails { get; set; }
+
+        /// <summary>
+        /// Номер лекции
+        /// </summary>
+        public decimal LectureNumber { get; set; }
+
         public DateTime Date { get; set; }
 
         // Навигационные свойства
-        public ICollection<LectureAttendance> LectureAttendances { get; set; }
+        public ICollection<LectureVisit> LectureVisits { get; set; }
     }
 }

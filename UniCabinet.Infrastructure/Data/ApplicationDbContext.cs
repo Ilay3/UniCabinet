@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using UniCabinet.Domain.Entities;
 
-namespace UniCabinet.Infrastructure.Persistence
+namespace UniCabinet.Infrastructure.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string,
         IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>,
@@ -22,11 +22,11 @@ namespace UniCabinet.Infrastructure.Persistence
         public DbSet<Semester> Semesters { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Discipline> Disciplines { get; set; }
-        public DbSet<DisciplineOffering> DisciplineOfferings { get; set; }
+        public DbSet<DisciplineDetail> DisciplineDetails { get; set; }
         public DbSet<Lecture> Lectures { get; set; }
         public DbSet<Practical> Practicals { get; set; }
         public DbSet<Exam> Exams { get; set; }
-        public DbSet<LectureAttendance> LectureAttendances { get; set; }
+        public DbSet<LectureVisit> LectureVisits { get; set; }
         public DbSet<PracticalResult> PracticalResults { get; set; }
         public DbSet<ExamResult> ExamResults { get; set; }
         public DbSet<StudentProgress> StudentProgresses { get; set; }
@@ -34,9 +34,6 @@ namespace UniCabinet.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-
-
 
             // Конфигурация для UserRole (многие-ко-многим между User и Role)
             builder.Entity<UserRole>(userRole =>
@@ -54,25 +51,25 @@ namespace UniCabinet.Infrastructure.Persistence
                     .IsRequired();
             });
 
-            // Конфигурация для LectureAttendance
-            builder.Entity<LectureAttendance>(entity =>
+            // Конфигурация для LectureVisits
+            builder.Entity<LectureVisit>(entity =>
             {
-                entity.HasKey(e => e.AttendanceId); // Явное определение первичного ключа
+                entity.HasKey(e => e.Id); // Явное определение первичного ключа
 
                 entity.HasOne(e => e.Student)
-                    .WithMany(u => u.LectureAttendances)
+                    .WithMany(u => u.LectureVisits)
                     .HasForeignKey(e => e.StudentId)
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(e => e.Lecture)
-                    .WithMany(l => l.LectureAttendances)
+                    .WithMany(l => l.LectureVisits)
                     .HasForeignKey(e => e.LectureId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<PracticalResult>(entity =>
             {
-                entity.HasKey(e => e.ResultId); // Первичный ключ
+                entity.HasKey(e => e.Id); // Первичный ключ
 
                 entity.HasOne(e => e.Student)
                     .WithMany(u => u.PracticalResults)
@@ -87,7 +84,7 @@ namespace UniCabinet.Infrastructure.Persistence
 
             builder.Entity<ExamResult>(entity =>
             {
-                entity.HasKey(e => e.ExamResultId); // Первичный ключ
+                entity.HasKey(e => e.Id); // Первичный ключ
 
                 entity.HasOne(e => e.Student)
                     .WithMany(u => u.ExamResults)
@@ -115,8 +112,8 @@ namespace UniCabinet.Infrastructure.Persistence
                 .HasForeignKey(g => g.CurrentSemesterId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Конфигурация для DisciplineOffering → Teacher (многие-ко-одному)
-            builder.Entity<DisciplineOffering>()
+            // Конфигурация для DisciplineDetails → Teacher (многие-ко-одному)
+            builder.Entity<DisciplineDetail>()
                 .HasOne(d => d.Teacher)
                 .WithMany()
                 .HasForeignKey(d => d.TeacherId)
@@ -129,53 +126,53 @@ namespace UniCabinet.Infrastructure.Persistence
                 .HasForeignKey(u => u.GroupId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // Конфигурация для DisciplineOffering → Discipline (многие-ко-одному)
-            builder.Entity<DisciplineOffering>()
+            // Конфигурация для DisciplineDetail → Discipline (многие-ко-одному)
+            builder.Entity<DisciplineDetail>()
                 .HasOne(d => d.Discipline)
-                .WithMany(d => d.DisciplineOfferings)
+                .WithMany(d => d.DisciplineDetails)
                 .HasForeignKey(d => d.DisciplineId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Конфигурация для DisciplineOffering → Group (многие-ко-одному)
-            builder.Entity<DisciplineOffering>()
+            // Конфигурация для DisciplineDetails → Group (многие-ко-одному)
+            builder.Entity<DisciplineDetail>()
                 .HasOne(d => d.Group)
-                .WithMany(g => g.DisciplineOfferings)
+                .WithMany(g => g.DisciplineDetails)
                 .HasForeignKey(d => d.GroupId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Конфигурация для DisciplineOffering → Semester (многие-ко-одному)
-            builder.Entity<DisciplineOffering>()
+            // Конфигурация для DisciplineDetails → Semester (многие-ко-одному)
+            builder.Entity<DisciplineDetail>()
                 .HasOne(d => d.Semester)
-                .WithMany(s => s.DisciplineOfferings)
+                .WithMany(s => s.DisciplineDetials)
                 .HasForeignKey(d => d.SemesterId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Конфигурация для Lecture → DisciplineOffering (многие-ко-одному)
+            // Конфигурация для Lecture → DisciplineDetails (многие-ко-одному)
             builder.Entity<Lecture>()
-                .HasOne(l => l.DisciplineOffering)
+                .HasOne(l => l.DisciplineDetails)
                 .WithMany(d => d.Lectures)
-                .HasForeignKey(l => l.DisciplineOfferingId)
+                .HasForeignKey(l => l.DisciplineDetailId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Конфигурация для LectureAttendance → Lecture (многие-ко-одному)
-            builder.Entity<LectureAttendance>()
+            builder.Entity<LectureVisit>()
                 .HasOne(a => a.Lecture)
-                .WithMany(l => l.LectureAttendances)
+                .WithMany(l => l.LectureVisits)
                 .HasForeignKey(a => a.LectureId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Конфигурация для LectureAttendance → User (многие-ко-одному)
-            builder.Entity<LectureAttendance>()
+            builder.Entity<LectureVisit>()
                 .HasOne(a => a.Student)
-                .WithMany(u => u.LectureAttendances)
+                .WithMany(u => u.LectureVisits)
                 .HasForeignKey(a => a.StudentId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Конфигурация для Practical → DisciplineOffering (многие-ко-одному)
+            // Конфигурация для Practical → DisciplineDetails (многие-ко-одному)
             builder.Entity<Practical>()
-                .HasOne(p => p.DisciplineOffering)
+                .HasOne(p => p.DisciplineDetails)
                 .WithMany(d => d.Practicals)
-                .HasForeignKey(p => p.DisciplineOfferingId)
+                .HasForeignKey(p => p.DisciplineDetailId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Конфигурация для PracticalResult → Practical (многие-ко-одному)
@@ -192,11 +189,11 @@ namespace UniCabinet.Infrastructure.Persistence
                 .HasForeignKey(r => r.StudentId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Конфигурация для Exam → DisciplineOffering (многие-ко-одному)
+            // Конфигурация для Exam → DisciplineDetails (многие-ко-одному)
             builder.Entity<Exam>()
-                .HasOne(e => e.DisciplineOffering)
+                .HasOne(e => e.DisciplineDetails)
                 .WithMany(d => d.Exams)
-                .HasForeignKey(e => e.DisciplineOfferingId)
+                .HasForeignKey(e => e.DisciplineDetailId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Конфигурация для ExamResult → Exam (многие-ко-одному)
@@ -213,11 +210,11 @@ namespace UniCabinet.Infrastructure.Persistence
                 .HasForeignKey(r => r.StudentId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Конфигурация для StudentProgress → DisciplineOffering (многие-ко-одному)
+            // Конфигурация для StudentProgress → DisciplineDetails (многие-ко-одному)
             builder.Entity<StudentProgress>()
-                .HasOne(sp => sp.DisciplineOffering)
+                .HasOne(sp => sp.DisciplineDetails)
                 .WithMany(d => d.StudentProgresses)
-                .HasForeignKey(sp => sp.DisciplineOfferingId)
+                .HasForeignKey(sp => sp.DisciplineDetailId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Конфигурация для StudentProgress → User (многие-ко-одному)
@@ -227,9 +224,9 @@ namespace UniCabinet.Infrastructure.Persistence
                 .HasForeignKey(sp => sp.StudentId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Конфигурация для Discipline → DisciplineOfferings (один-ко-многим)
+            // Конфигурация для Discipline → DisciplineDetails (один-ко-многим)
             builder.Entity<Discipline>()
-                .HasMany(d => d.DisciplineOfferings)
+                .HasMany(d => d.DisciplineDetails)
                 .WithOne(o => o.Discipline)
                 .HasForeignKey(o => o.DisciplineId)
                 .OnDelete(DeleteBehavior.Cascade);
