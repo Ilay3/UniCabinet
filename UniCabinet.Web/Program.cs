@@ -17,6 +17,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
            .EnableSensitiveDataLogging()
            .LogTo(Console.WriteLine, LogLevel.Information));
 
+// Настройка куки аутентификации
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Identity/Account/Login";  // Путь к странице входа
@@ -25,14 +26,22 @@ builder.Services.ConfigureApplicationCookie(options =>
 
     options.ExpireTimeSpan = TimeSpan.FromDays(10); // Время жизни куки
     options.SlidingExpiration = true; // Обновлять время действия при каждом запросе
-    options.Cookie.HttpOnly = true; // Куки должны быть доступны только для HTTP-запросов (без JavaScript)
+    options.Cookie.HttpOnly = true; // Куки доступны только через HTTP
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Использовать куки только по HTTPS
 });
 
+// Настройка сессий
+builder.Services.AddDistributedMemoryCache();  // Для использования в памяти
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Время жизни сессии
+    options.Cookie.HttpOnly = true; // Куки доступны только через HTTP
+    options.Cookie.IsEssential = true; // Куки обязательны для работы приложения
+});
 
+// Настройка Identity
 builder.Services.AddDefaultIdentity<User>(options =>
 {
-
     // Настройки блокировки
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15); // Время блокировки
     options.Lockout.MaxFailedAccessAttempts = 5; // Максимальное количество попыток
@@ -42,6 +51,7 @@ builder.Services.AddDefaultIdentity<User>(options =>
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+// Другие сервисы
 builder.Services.AddScoped<IUserVerificationService, UserVerificationService>();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
@@ -52,6 +62,7 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+// Инициализация ролей
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -65,7 +76,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Middleware configuration...
+// Middleware конфигурация
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -76,11 +87,13 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.MapRazorPages();
+
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
