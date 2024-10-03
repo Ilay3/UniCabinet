@@ -9,18 +9,17 @@ namespace UniCabinet.Domain.Entities
         public int Id { get; set; }
 
         public string Name { get; set; }
-
+        
         /// <summary>
-        /// Начало обучениея
+        /// Очно/Заочно 
         /// </summary>
-        [DisplayFormat(DataFormatString = "{0:yyyy.MM.dd}")]
-        public DateTime StartYear { get; set; }
+        public string TypeGroup { get; set; }
 
-        public int CurrentCourseId { get; set; }
-        public Course CurrentCourse { get; set; }
+        public int CourseId { get; set; }
+        public Course Course { get; set; }
 
-        public int CurrentSemesterId { get; set; }
-        public Semester CurrentSemester { get; set; }
+        public int SemesterId { get; set; }
+        public Semester Semester { get; set; }
 
         // Навигационные свойства
         public ICollection<User> Users { get; set; }

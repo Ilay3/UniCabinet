@@ -15,7 +15,7 @@
         /// <summary>
         /// Посещаемость
         /// </summary>
-        public bool Visits { get; set; }
+        public bool IsVisit { get; set; }
 
         /// <summary>
         /// Начисленные баллы

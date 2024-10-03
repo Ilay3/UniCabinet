@@ -12,8 +12,6 @@ namespace UniCabinet.Domain.Entities
         /// </summary>
         public int Number { get; set; }
 
-        public string Description { get; set; }
-
         // Навигационные свойства
         public ICollection<Semester> Semesters { get; set; }
         public ICollection<Group> Groups { get; set; }
