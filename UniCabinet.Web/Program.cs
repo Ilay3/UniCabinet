@@ -62,19 +62,15 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Инициализация ролей
+
+// Инициализация ролей и администратора при запуске приложения
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var roles = new[] { "Not Verified", "Verified" };
-    foreach (var role in roles)
-    {
-        if (!await roleManager.RoleExistsAsync(role))
-        {
-            await roleManager.CreateAsync(new IdentityRole(role));
-        }
-    }
+    var services = scope.ServiceProvider;
+    await DataInitializer.SeedRolesAndAdmin(services);
 }
+
+
 
 // Middleware конфигурация
 if (!app.Environment.IsDevelopment())

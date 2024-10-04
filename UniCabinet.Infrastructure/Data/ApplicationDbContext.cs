@@ -5,9 +5,7 @@ using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Infrastructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string,
-        IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>,
-        IdentityRoleClaim<string>, IdentityUserToken<string>>
+    public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -35,21 +33,16 @@ namespace UniCabinet.Infrastructure.Data
         {
             base.OnModelCreating(builder);
 
-            // Конфигурация для UserRole (многие-ко-многим между User и Role)
-            builder.Entity<UserRole>(userRole =>
-            {
-                userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
 
-                userRole.HasOne(ur => ur.User)
-                    .WithMany(u => u.UserRoles)
-                    .HasForeignKey(ur => ur.UserId)
-                    .IsRequired();
+            // Переименовываем таблицы
+            builder.Entity<User>(b => b.ToTable("Users"));
+            builder.Entity<IdentityRole>(b => b.ToTable("Roles"));
+            builder.Entity<IdentityUserRole<string>>(b => b.ToTable("UserRoles"));
+            builder.Entity<IdentityUserClaim<string>>(b => b.ToTable("UserClaims"));
+            builder.Entity<IdentityUserLogin<string>>(b => b.ToTable("UserLogins"));
+            builder.Entity<IdentityRoleClaim<string>>(b => b.ToTable("RoleClaims"));
+            builder.Entity<IdentityUserToken<string>>(b => b.ToTable("UserTokens"));
 
-                userRole.HasOne(ur => ur.Role)
-                    .WithMany(r => r.UserRoles)
-                    .HasForeignKey(ur => ur.RoleId)
-                    .IsRequired();
-            });
 
             // Конфигурация для LectureVisits
             builder.Entity<LectureVisit>(entity =>

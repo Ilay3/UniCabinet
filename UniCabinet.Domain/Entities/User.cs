@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UniCabinet.Domain.Entities
 {
@@ -22,12 +22,21 @@ namespace UniCabinet.Domain.Entities
                    EmailConfirmed;
         }
 
+        [NotMapped]
+        public override string PhoneNumber { get; set; }
+
+        [NotMapped]
+        public override bool TwoFactorEnabled { get; set; }
+
+        [NotMapped]
+        public override bool PhoneNumberConfirmed { get; set; }
+
+
         public int? GroupId { get; set; }
 
         public Group Group { get; set; }
 
         // Навигационные свойства
-        public ICollection<UserRole> UserRoles { get; set; }
         public ICollection<LectureVisit> LectureVisits { get; set; }
         public ICollection<PracticalResult> PracticalResults { get; set; }
         public ICollection<ExamResult> ExamResults { get; set; }
