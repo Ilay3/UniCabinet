@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Threading.Tasks;
 using UniCabinet.Domain.Entities;
-using UniCabinet.Application.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using UniCabinet.Application.Interfaces.Services;
 
 namespace UniCabinet.Web.Areas.Identity.Pages.Account
 {

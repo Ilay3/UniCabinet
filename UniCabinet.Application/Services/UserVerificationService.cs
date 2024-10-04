@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using UniCabinet.Application.Interfaces;
 using UniCabinet.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using UniCabinet.Application.Interfaces.Services;
 
 namespace UniCabinet.Application.Services
 {

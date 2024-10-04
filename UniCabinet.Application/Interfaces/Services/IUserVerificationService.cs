@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace UniCabinet.Application.Interfaces
+namespace UniCabinet.Application.Interfaces.Services
 {
     public interface IUserVerificationService
     {

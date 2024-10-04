@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using UniCabinet.Application.Interfaces;
+using UniCabinet.Application.Interfaces.Services;
 using UniCabinet.Application.Services;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
