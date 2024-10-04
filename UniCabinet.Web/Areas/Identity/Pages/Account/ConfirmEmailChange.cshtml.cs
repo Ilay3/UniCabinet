@@ -24,10 +24,6 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account
             _signInManager = signInManager;
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [TempData]
         public string StatusMessage { get; set; }
 
@@ -52,8 +48,6 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account
                 return Page();
             }
 
-            // In our UI email and user name are one and the same, so when we update the email
-            // we need to update the user name.
             var setUserNameResult = await _userManager.SetUserNameAsync(user, email);
             if (!setUserNameResult.Succeeded)
             {

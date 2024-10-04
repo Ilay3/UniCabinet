@@ -17,7 +17,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
            .EnableSensitiveDataLogging()
            .LogTo(Console.WriteLine, LogLevel.Information));
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<User>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+
+    // Настройки блокировки
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15); // Время блокировки
+    options.Lockout.MaxFailedAccessAttempts = 5; // Максимальное количество попыток
+    options.Lockout.AllowedForNewUsers = true; // Разрешить блокировку для новых пользователей
+})
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -44,7 +53,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// middleware
+// Middleware configuration...
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
