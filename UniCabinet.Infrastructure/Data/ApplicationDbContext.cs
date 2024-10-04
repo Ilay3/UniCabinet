@@ -12,9 +12,6 @@ namespace UniCabinet.Infrastructure.Data
         {
         }
 
-
-
-
         // DbSet для остальных сущностей
         public DbSet<Course> Courses { get; set; }
         public DbSet<Semester> Semesters { get; set; }

@@ -1,0 +1,23 @@
+﻿@model IEnumerable<UniCabinet.Domain.DTO.UserDTO>
+
+<h2>Список верифицированных пользователей</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Полное Имя</th>
+            <th>Роли</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.FullName</td>
+                <td>@string.Join(", ", user.Roles)</td>
+            </tr>
+        }
+    </tbody>
+</table>

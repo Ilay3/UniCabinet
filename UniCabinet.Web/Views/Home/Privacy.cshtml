@@ -1,6 +1,12 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Панель Администратора";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<h1>Панель Администратора</h1>
+
+<!-- Ваша логика и кнопки панели управления -->
+<p>
+    Добро пожаловать в панель администратора!
+</p>
+
+<a href="@Url.Action("VerifiedUsers", "Admin")" class="btn btn-primary">Список верифицированных пользователей</a>
