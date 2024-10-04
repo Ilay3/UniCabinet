@@ -12,7 +12,7 @@ using UniCabinet.Infrastructure.Data;
 namespace UniCabinet.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241001230816_InitialCreate")]
+    [Migration("20241003234826_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -154,10 +154,6 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
@@ -308,24 +304,25 @@ namespace UniCabinet.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CurrentCourseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CurrentSemesterId")
+                    b.Property<int>("CourseId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("StartYear")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("SemesterId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TypeGroup")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CurrentCourseId");
+                    b.HasIndex("CourseId");
 
-                    b.HasIndex("CurrentSemesterId");
+                    b.HasIndex("SemesterId");
 
                     b.ToTable("Groups");
                 });
@@ -362,6 +359,9 @@ namespace UniCabinet.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsVisit")
+                        .HasColumnType("bit");
+
                     b.Property<int>("LectureId")
                         .HasColumnType("int");
 
@@ -371,9 +371,6 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Property<string>("StudentId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("Visits")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -723,21 +720,21 @@ namespace UniCabinet.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Group", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.Course", "CurrentCourse")
+                    b.HasOne("UniCabinet.Domain.Entities.Course", "Course")
                         .WithMany("Groups")
-                        .HasForeignKey("CurrentCourseId")
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("UniCabinet.Domain.Entities.Semester", "CurrentSemester")
+                    b.HasOne("UniCabinet.Domain.Entities.Semester", "Semester")
                         .WithMany("Groups")
-                        .HasForeignKey("CurrentSemesterId")
+                        .HasForeignKey("SemesterId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("CurrentCourse");
+                    b.Navigation("Course");
 
-                    b.Navigation("CurrentSemester");
+                    b.Navigation("Semester");
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Lecture", b =>

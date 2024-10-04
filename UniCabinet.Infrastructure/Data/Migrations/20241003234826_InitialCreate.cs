@@ -31,8 +31,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Number = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Number = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -117,22 +116,22 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartYear = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CurrentCourseId = table.Column<int>(type: "int", nullable: false),
-                    CurrentSemesterId = table.Column<int>(type: "int", nullable: false)
+                    TypeGroup = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
+                    SemesterId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Groups", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Groups_Courses_CurrentCourseId",
-                        column: x => x.CurrentCourseId,
+                        name: "FK_Groups_Courses_CourseId",
+                        column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Groups_Semesters_CurrentSemesterId",
-                        column: x => x.CurrentSemesterId,
+                        name: "FK_Groups_Semesters_SemesterId",
+                        column: x => x.SemesterId,
                         principalTable: "Semesters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -443,7 +442,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LectureId = table.Column<int>(type: "int", nullable: false),
-                    Visits = table.Column<bool>(type: "bit", nullable: false),
+                    IsVisit = table.Column<bool>(type: "bit", nullable: false),
                     PointsCount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
@@ -571,14 +570,14 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                 column: "DisciplineDetailId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Groups_CurrentCourseId",
+                name: "IX_Groups_CourseId",
                 table: "Groups",
-                column: "CurrentCourseId");
+                column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Groups_CurrentSemesterId",
+                name: "IX_Groups_SemesterId",
                 table: "Groups",
-                column: "CurrentSemesterId");
+                column: "SemesterId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lectures_DisciplineDetailId",

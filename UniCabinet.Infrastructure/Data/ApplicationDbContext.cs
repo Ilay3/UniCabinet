@@ -100,16 +100,16 @@ namespace UniCabinet.Infrastructure.Data
 
             // Конфигурация для Group → Course (многие-ко-одному)
             builder.Entity<Group>()
-                .HasOne(g => g.CurrentCourse)
+                .HasOne(g => g.Course)
                 .WithMany(c => c.Groups)
-                .HasForeignKey(g => g.CurrentCourseId)
+                .HasForeignKey(g => g.CourseId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Конфигурация для Group → Semester (многие-ко-одному)
             builder.Entity<Group>()
-                .HasOne(g => g.CurrentSemester)
+                .HasOne(g => g.Semester)
                 .WithMany(s => s.Groups)
-                .HasForeignKey(g => g.CurrentSemesterId)
+                .HasForeignKey(g => g.SemesterId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Конфигурация для DisciplineDetails → Teacher (многие-ко-одному)
@@ -241,15 +241,15 @@ namespace UniCabinet.Infrastructure.Data
             // Конфигурация для Course → Groups (один-ко-многим)
             builder.Entity<Course>()
                 .HasMany(c => c.Groups)
-                .WithOne(g => g.CurrentCourse)
-                .HasForeignKey(g => g.CurrentCourseId)
+                .WithOne(g => g.Course)
+                .HasForeignKey(g => g.CourseId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Конфигурация для Semester → Groups (один-ко-многим)
             builder.Entity<Semester>()
                 .HasMany(s => s.Groups)
-                .WithOne(g => g.CurrentSemester)
-                .HasForeignKey(g => g.CurrentSemesterId)
+                .WithOne(g => g.Semester)
+                .HasForeignKey(g => g.SemesterId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
