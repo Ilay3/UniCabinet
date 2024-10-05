@@ -18,33 +18,35 @@
         @foreach (var user in Model.Students)
         {
             <form method="post" asp-action="UpdateUserGroup">
-                <tr>
-                    <td>@user.Email</td>
-                    <td>@user.FullName</td>
-                    <td>@string.Join(", ", user.Roles)</td> 
-                    <td>@user.GroupName</td>
-                    <td>
-                        @if (user.Roles.Contains("Student")) 
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.FullName</td>
+                <td>@string.Join(", ", user.Roles)</td>
+                <td>@user.GroupName</td>
+                <td>
+                        @if (user.Roles.Contains("Student") && user.Roles.Contains("Verified"))
                         {
-                            @Html.DropDownList("groupId", (SelectList)ViewBag.Groups, "Выберите группу", new { @class = "form-control", @value = user.SelectedGroupId })
+                            @Html.DropDownList("groupId", (SelectList)ViewBag.Groups, "Выберите группу", new { @class = "form-control" })
                         }
                         else
                         {
-                            <span>Группы не доступны</span> 
+                        <span>Группы не доступны</span>
                         }
-                    </td>
-                    <td>
-                        @if (user.Roles.Contains("Student"))
+                </td>
+                <td>
+                    <input type="hidden" name="userId" value="@user.Id" />
+                        @if (user.Roles.Contains("Student") && user.Roles.Contains("Verified"))
                         {
-                            <button type="submit" class="btn btn-primary">Изменить</button>
+                        <button type="submit" class="btn btn-primary">Изменить</button>
                         }
                         else
                         {
-                            <span>Изменение недоступно</span>
+                        <span>Изменение недоступно</span>
                         }
-                    </td>
-                </tr>
+                </td>
+            </tr>
             </form>
+
         }
     </tbody>
 </table>
