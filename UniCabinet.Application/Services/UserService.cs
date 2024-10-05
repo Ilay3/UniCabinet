@@ -25,7 +25,8 @@ namespace UniCabinet.Application.Services
                 Id = user.Id,
                 Email = user.Email,
                 FullName = $"{user.FirstName} {user.LastName} {user.Patronymic}",
-                Roles = new List<string> { "Verified"}
+                Roles = new List<string> { "Verified"},
+
             }).ToList();
 
             return verifiedUsers;

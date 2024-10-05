@@ -20,18 +20,18 @@ namespace UniCabinet.Infrastructure.Repositories
         {
             // Получение всех пользователей с ролью "Verified"
             var users = await _userManager.Users.ToListAsync();
-            var verifiedAndStudentUsers = new List<User>();
+            var filteredUsers = new List<User>();
 
             foreach (var user in users)
             {
-                if (await _userManager.IsInRoleAsync(user, "Verified") && await _userManager.IsInRoleAsync(user, "Student"))
+                if (await _userManager.IsInRoleAsync(user, "Verified"))
                 {
-                    verifiedAndStudentUsers.Add(user);
+                    filteredUsers.Add(user);
                 }
 
             }
 
-            return verifiedAndStudentUsers;
+            return filteredUsers;
         }
     }
 }

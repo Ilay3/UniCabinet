@@ -8,6 +8,7 @@
             <th>Email</th>
             <th>Полное Имя</th>
             <th>Роли</th>
+            <th>Группы</th>
         </tr>
     </thead>
     <tbody>
@@ -17,6 +18,17 @@
                 <td>@user.Email</td>
                 <td>@user.FullName</td>
                 <td>@string.Join(", ", user.Roles)</td>
+            </tr>
+            <tr>
+                    @if (user.Roles.Contains("Student"))
+                    {
+                        <select class="form-control">
+                            @foreach (var group in ViewBag.Groups)
+                            {
+                                <option value="@group">@group.Name</option>
+                            }
+                        </select>
+                    }
             </tr>
         }
     </tbody>

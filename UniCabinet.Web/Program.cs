@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using UniCabinet.Application.Interfaces;
+using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Application.Interfaces.Services;
 using UniCabinet.Application.Services;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
 using UniCabinet.Infrastructure.Repositories;
+using UniCabinet.Infrastructure.Repository;
 using UniCabinet.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -58,6 +60,8 @@ builder.Services.AddScoped<IUserVerificationService, UserVerificationService>();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+
 
 builder.Services.AddRazorPages();
 
