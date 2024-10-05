@@ -7,6 +7,6 @@ namespace UniCabinet.Application.Interfaces
 {
     public interface IUserRepository
     {
-        Task<IEnumerable<User>> GetVerifiedUsersAsync();
+        Task<IEnumerable<User>> GetAllUsersWithRolesAsync();
     }
 }

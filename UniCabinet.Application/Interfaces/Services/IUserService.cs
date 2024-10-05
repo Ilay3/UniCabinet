@@ -7,6 +7,6 @@ namespace UniCabinet.Application.Interfaces
 {
     public interface IUserService
     {
-        Task<IEnumerable<UserDTO>> GetVerifiedUsersAsync();
+        Task<IEnumerable<UserDTO>> GetAllUsersAsync();
     }
 }

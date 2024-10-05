@@ -20,11 +20,8 @@ public class AdminController : Controller
 
     public async Task<IActionResult> VerifiedUsers()
     {
-        var users = await _userService.GetVerifiedUsersAsync();
-        var groups = _groupRepository.GetAllGroups().ToDictionary(b => b.Id, b => b.Name);
+        var users = await _userService.GetAllUsersAsync();
 
-        ViewBag.Groups = groups.Values;
-        ViewBag.SelectedGroup = groups;
         return View(users);
     }
 }

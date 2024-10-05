@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UniCabinet.Application.Interfaces;
 using UniCabinet.Domain.Entities;
+using UniCabinet.Infrastructure.Data;
 
 
 namespace UniCabinet.Infrastructure.Repositories
@@ -10,28 +11,38 @@ namespace UniCabinet.Infrastructure.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly UserManager<User> _userManager;
+        private readonly ApplicationDbContext _applicationDbContext;
 
-        public UserRepository(UserManager<User> userManager)
+        public UserRepository(UserManager<User> userManager, ApplicationDbContext applicationDbContext)
         {
             _userManager = userManager;
+            _applicationDbContext = applicationDbContext;
         }
 
-        public async Task<IEnumerable<User>> GetVerifiedUsersAsync()
+        public async Task<IEnumerable<User>> GetAllUsersWithRolesAsync()
         {
-            // Получение всех пользователей с ролью "Verified"
             var users = await _userManager.Users.ToListAsync();
-            var filteredUsers = new List<User>();
+            var usersWithRoles = new List<User>();
 
             foreach (var user in users)
             {
-                if (await _userManager.IsInRoleAsync(user, "Verified"))
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if (roles.Contains("Student"))
                 {
-                    filteredUsers.Add(user);
+                    // Загрузить информацию о группе студента
+                    var group = await _applicationDbContext.Groups.FirstOrDefaultAsync(g => g.Users.Any(s => s.Id == user.Id));
+                    if (group != null)
+                    {
+                        user.Group = group;  // Добавляем группу к пользователю
+                    }
                 }
 
+                usersWithRoles.Add(user);
             }
 
-            return filteredUsers;
+            return usersWithRoles;
         }
+
     }
 }
