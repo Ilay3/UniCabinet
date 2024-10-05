@@ -11,12 +11,12 @@ namespace UniCabinet.Infrastructure.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly UserManager<User> _userManager;
-        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly ApplicationDbContext _context;
 
         public UserRepository(UserManager<User> userManager, ApplicationDbContext applicationDbContext)
         {
             _userManager = userManager;
-            _applicationDbContext = applicationDbContext;
+            _context = applicationDbContext;
         }
 
         public async Task<IEnumerable<User>> GetAllUsersWithRolesAsync()
@@ -31,7 +31,7 @@ namespace UniCabinet.Infrastructure.Repositories
                 if (roles.Contains("Student"))
                 {
                     // Загрузить информацию о группе студента
-                    var group = await _applicationDbContext.Groups.FirstOrDefaultAsync(g => g.Users.Any(s => s.Id == user.Id));
+                    var group = await _context.Groups.FirstOrDefaultAsync(g => g.Users.Any(s => s.Id == user.Id));
                     if (group != null)
                     {
                         user.Group = group;  // Добавляем группу к пользователю
@@ -43,6 +43,32 @@ namespace UniCabinet.Infrastructure.Repositories
 
             return usersWithRoles;
         }
+
+        public async Task<IEnumerable<User>> GetUsersByRoleAsync(string role)
+        {
+            return await _userManager.GetUsersInRoleAsync(role);
+        }
+
+        public async Task UpdateUserGroupAsync(string userId, int groupId)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user != null)
+            {
+                var group = await _context.Groups.FindAsync(groupId);
+                if (group != null)
+                {
+                    user.GroupId = groupId;
+                    _context.Users.Update(user);  // Обновляем пользователя в базе
+                    await _context.SaveChangesAsync();  // Сохраняем изменения
+                }
+            }
+        }
+
+        public async Task<IEnumerable<Group>> GetAllGroupsAsync()
+        {
+            return await _context.Groups.ToListAsync();
+        }
+
 
     }
 }

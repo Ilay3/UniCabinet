@@ -1,25 +1,50 @@
-﻿@model IEnumerable<UniCabinet.Domain.DTO.UserDTO>
+﻿@using UniCabinet.Web.ViewModel
+@model StudentGroupViewModel
 
-<h2>Список пользователей</h2>
+<h2>Изменение группы у пользователей</h2>
 
 <table class="table">
     <thead>
         <tr>
             <th>Email</th>
             <th>Полное Имя</th>
-            <th>Роли</th>
-            <th>Группа</th>
+            <th>Роли</th> <!-- Добавляем столбец для ролей -->
+            <th>Текущая Группа</th>
+            <th>Новая Группа</th>
+            <th>Изменить</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var user in Model)
+        @foreach (var user in Model.Students)
         {
-            <tr>
-                <td>@user.Email</td>
-                <td>@user.FullName</td>
-                <td>@string.Join(", ", user.Roles)</td>
-                <td>@user.GroupName</td>
-            </tr>
+            <form method="post" asp-action="UpdateUserGroup">
+                <tr>
+                    <td>@user.Email</td>
+                    <td>@user.FullName</td>
+                    <td>@string.Join(", ", user.Roles)</td> 
+                    <td>@user.GroupName</td>
+                    <td>
+                        @if (user.Roles.Contains("Student")) 
+                        {
+                            @Html.DropDownList("groupId", (SelectList)ViewBag.Groups, "Выберите группу", new { @class = "form-control", @value = user.SelectedGroupId })
+                        }
+                        else
+                        {
+                            <span>Группы не доступны</span> 
+                        }
+                    </td>
+                    <td>
+                        @if (user.Roles.Contains("Student"))
+                        {
+                            <button type="submit" class="btn btn-primary">Изменить</button>
+                        }
+                        else
+                        {
+                            <span>Изменение недоступно</span>
+                        }
+                    </td>
+                </tr>
+            </form>
         }
     </tbody>
 </table>

@@ -8,5 +8,7 @@ namespace UniCabinet.Application.Interfaces
     public interface IUserService
     {
         Task<IEnumerable<UserDTO>> GetAllUsersAsync();
+        Task UpdateStudentGroupAsync(string userId, int groupId);
+        Task<IEnumerable<GroupDTO>> GetAllGroupsAsync();
     }
 }

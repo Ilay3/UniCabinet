@@ -42,6 +42,25 @@ namespace UniCabinet.Application.Services
             return userDTOs;
         }
 
+        public async Task UpdateStudentGroupAsync(string userId, int groupId)
+        {
+            await _userRepository.UpdateUserGroupAsync(userId, groupId);
+        }
+
+        public async Task<IEnumerable<GroupDTO>> GetAllGroupsAsync()
+        {
+            var groups = await _userRepository.GetAllGroupsAsync();
+
+            return groups.Select(g => new GroupDTO
+            {
+                Id = g.Id,
+                Name = g.Name,
+                TypeGroup = g.TypeGroup,
+                CourseId = g.CourseId,
+                SemesterId = g.SemesterId
+            }).ToList();
+        }
+
     }
 
 
