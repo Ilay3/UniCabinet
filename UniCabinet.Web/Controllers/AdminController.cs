@@ -34,9 +34,15 @@ public class AdminController : Controller
 
         var users = new List<UserDTO>();
 
-        // Если выбрана роль, фильтруем пользователей
-        if (!string.IsNullOrEmpty(role))
+        if (role == "Verified")
         {
+            users = (await _userService.GetAllUsersAsync())
+                    .Where(user => user.Roles.Count == 1 && user.Roles.Contains("Verified"))
+                    .ToList();
+        }
+        else
+        {
+            // Фильтрация пользователей по выбранной роли
             users = (await _userService.GetAllUsersAsync())
                     .Where(user => user.Roles.Contains(role))
                     .ToList();
@@ -46,9 +52,8 @@ public class AdminController : Controller
         ViewBag.SelectedRole = role;
 
         // Передаем список ролей для фильтрации
-        var roles = new List<string> { "Student", "Teacher", "Administrator" };
+        var roles = new List<string> { "Student", "Teacher", "Administrator", "Verified" };
         ViewBag.Roles = roles.Select(r => new SelectListItem { Value = r, Text = r }).ToList();
-
 
         var groups = await _userService.GetAllGroupsAsync();
         ViewBag.Groups = new SelectList(groups, "Id", "Name");
@@ -61,7 +66,6 @@ public class AdminController : Controller
 
         return View(model);
     }
-
 
     [HttpPost]
     public async Task<IActionResult> UpdateUserGroup(string userId, int groupId)
@@ -95,46 +99,47 @@ public class AdminController : Controller
         return RedirectToAction("VerifiedUsers");
     }
 
-
     [HttpPost]
     public async Task<IActionResult> UpdateUserRoles(string userId, string[] selectedRoles)
     {
-        if (string.IsNullOrEmpty(userId))
-        {
-            return RedirectToAction("VerifiedUsers");
-        }
-
         var user = await _userManager.FindByIdAsync(userId);
         if (user == null)
         {
-            return RedirectToAction("VerifiedUsers");
+            return NotFound();
         }
 
         // Получаем текущие роли пользователя
         var currentRoles = await _userManager.GetRolesAsync(user);
 
-        // Роли, которые нельзя изменять
-        var nonEditableRoles = new List<string> { "Verified" };
+        // Роли, которые нужно добавить
+        var rolesToAdd = selectedRoles.Except(currentRoles);
 
-        // Удаляем все изменяемые роли
-        var rolesToRemove = currentRoles.Where(r => !nonEditableRoles.Contains(r)).ToList();
-        if (rolesToRemove.Count > 0)
-        {
-            await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
-        }
+        // Роли, которые нужно удалить
+        var rolesToRemove = currentRoles.Except(selectedRoles);
 
-        // Добавляем новые роли, которые были отмечены, кроме "Verified"
-        if (selectedRoles != null && selectedRoles.Any())
+        // Удаление ролей, включая роль "Verified", если это необходимо
+        if (rolesToRemove.Any())
         {
-            var rolesToAdd = selectedRoles.Where(r => !nonEditableRoles.Contains(r)).ToList();
-            if (rolesToAdd.Count > 0)
+            var removeResult = await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
+            if (!removeResult.Succeeded)
             {
-                await _userManager.AddToRolesAsync(user, rolesToAdd);
+                ModelState.AddModelError("", "Ошибка при удалении ролей.");
+                return RedirectToAction("VerifiedUsers", new { role = "Student" });
             }
         }
 
-        return RedirectToAction("VerifiedUsers");
+        // Добавление новых ролей, включая роль "Verified"
+        if (rolesToAdd.Any())
+        {
+            var addResult = await _userManager.AddToRolesAsync(user, rolesToAdd);
+            if (!addResult.Succeeded)
+            {
+                ModelState.AddModelError("", "Ошибка при добавлении ролей.");
+                return RedirectToAction("VerifiedUsers", new { role = "Student" });
+            }
+        }
+
+        // Перенаправляем после успешного обновления
+        return RedirectToAction("VerifiedUsers", new { role = ViewBag.SelectedRole });
     }
-
-
 }
