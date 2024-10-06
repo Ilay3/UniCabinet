@@ -1,52 +1,94 @@
 ﻿@using UniCabinet.Web.ViewModel
 @model StudentGroupViewModel
 
-<h2>Изменение группы у пользователей</h2>
+<h3>Список пользователй</h3>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Email</th>
-            <th>Полное Имя</th>
-            <th>Роли</th> <!-- Добавляем столбец для ролей -->
-            <th>Текущая Группа</th>
-            <th>Новая Группа</th>
-            <th>Изменить</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model.Students)
-        {
-            <form method="post" asp-action="UpdateUserGroup">
+<form method="get" asp-action="VerifiedUsers" id="roleFilterForm">
+    <div class="form-group">
+        <label for="roleFilter">Выберите роль для фильтрации:</label>
+        <select class="form-control" id="roleFilter" name="role">
+           
+            @foreach (var role in (IEnumerable<SelectListItem>)ViewBag.Roles)
+            {
+                <option value="@role.Value" selected>@role.Text</option>
+            }
+        </select>
+    </div>
+</form>
+
+
+@if (Model.Users != null && Model.Users.Any())
+
+{
+    <h2>Результаты фильтрации</h2>
+    <table class="table">
+        <thead>
             <tr>
-                <td>@user.Email</td>
-                <td>@user.FullName</td>
-                <td>@string.Join(", ", user.Roles)</td>
-                <td>@user.GroupName</td>
-                <td>
-                        @if (user.Roles.Contains("Student") && user.Roles.Contains("Verified"))
-                        {
-                            @Html.DropDownList("groupId", (SelectList)ViewBag.Groups, "Выберите группу", new { @class = "form-control" })
-                        }
-                        else
-                        {
-                        <span>Группы не доступны</span>
-                        }
-                </td>
-                <td>
-                    <input type="hidden" name="userId" value="@user.Id" />
-                        @if (user.Roles.Contains("Student") && user.Roles.Contains("Verified"))
-                        {
-                        <button type="submit" class="btn btn-primary">Изменить</button>
-                        }
-                        else
-                        {
-                        <span>Изменение недоступно</span>
-                        }
-                </td>
+                <th>Email</th>
+                <th>Полное Имя</th>
+                <th>Роли</th>
+                <th>Текущая Группа</th>
+                <th>Изменить Группу</th>
+                <th>Изменить Роль</th>
             </tr>
-            </form>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
 
-        }
-    </tbody>
-</table>
+            {
+                <tr>
+                    <td>@user.Email</td>
+                    <td>@user.FullName</td>
+                    <td>@string.Join(", ", user.Roles)</td>
+                    <td>@user.GroupName</td>
+                    <td>
+                        @if (user.Roles.Contains("Student") && user.Roles.Contains("Verified"))
+
+                        {
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#groupModal_@user.Id">
+                                Изменить группу
+                            </button>
+                            @Html.Partial("_GroupModal", user)
+                        }
+
+                        else
+
+                        {
+                            <span class="text-muted">Изменение группы недоступно</span>
+                        }
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#roleModal_@user.Id">
+                            Изменить роль
+                        </button>
+                        @Html.Partial("_RoleModal", user)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+else
+
+{
+    <p>Нет пользователей, удовлетворяющих условиям фильтрации.</p>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var selectedRole = '@ViewBag.SelectedRole';
+
+            if (selectedRole && selectedRole !== '') {
+                $('#roleFilter').val(selectedRole);
+            } else {
+                $('#roleFilter').val('Student');
+            }
+
+            $('#roleFilter').change(function () {
+                $('#roleFilterForm').submit();
+            });
+        });
+    </script>
+}

@@ -4,7 +4,7 @@ namespace UniCabinet.Web.ViewModel
 {
     public class StudentGroupViewModel
     {
-        public IEnumerable<UserDTO> Students { get; set; }
+        public IEnumerable<UserDTO> Users { get; set; }
         public IEnumerable<GroupDTO> Groups { get; set; }
     }
 

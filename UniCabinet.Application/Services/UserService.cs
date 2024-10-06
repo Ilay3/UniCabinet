@@ -34,13 +34,14 @@ namespace UniCabinet.Application.Services
                     Id = user.Id,
                     Email = user.Email,
                     FullName = $"{user.FirstName} {user.LastName} {user.Patronymic}",
-                    Roles = roles.ToList(),  // Явное преобразование в List<string>
+                    Roles = roles.ToList(),
                     GroupName = user.Group != null ? user.Group.Name : "Без группы"
                 });
             }
 
             return userDTOs;
         }
+
 
         public async Task UpdateStudentGroupAsync(string userId, int groupId)
         {
@@ -61,7 +62,30 @@ namespace UniCabinet.Application.Services
             }).ToList();
         }
 
+        public async Task UpdateUserRoleAsync(string userId, string newRole)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                // Получаем все роли пользователя
+                var currentRoles = await _userManager.GetRolesAsync(user);
+
+                // Удаляем текущие роли, кроме "Verified"
+                var rolesToRemove = currentRoles.Where(r => r != "Verified").ToList();
+                if (rolesToRemove.Count > 0)
+                {
+                    await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
+                }
+
+                // Добавляем новую роль, если она не "Verified"
+                if (!string.IsNullOrEmpty(newRole) && newRole != "Verified")
+                {
+                    await _userManager.AddToRoleAsync(user, newRole);
+                }
+            }
+
+        }
+
+
     }
-
-
 }

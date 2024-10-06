@@ -1,0 +1,30 @@
+﻿@using UniCabinet.Domain.DTO
+@model UserDTO
+
+<div class="modal fade" id="groupModal_@Model.Id" tabindex="-1" role="dialog" aria-labelledby="groupModalLabel_@Model.Id" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="groupModalLabel_@Model.Id">Изменить группу для @Model.FullName</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-action="UpdateUserGroup">
+                    <input type="hidden" name="userId" value="@Model.Id" />
+                    <div class="form-group">
+                        <label for="groupSelect">Выберите новую группу:</label>
+                        <select name="groupId" class="form-control">
+                            @foreach (var group in (IEnumerable<SelectListItem>)ViewBag.Groups)
+                            {
+                                <option value="@group.Value">@group.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

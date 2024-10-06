@@ -10,7 +10,6 @@ namespace UniCabinet.Domain.DTO
         public string FullName { get; set; }
         public List<string> Roles { get; set; }
         public string GroupName { get; set; }
-        public int? SelectedGroupId { get; set; }
     }
 }
 
