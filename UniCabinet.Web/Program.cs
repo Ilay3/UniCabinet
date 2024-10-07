@@ -15,11 +15,26 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+// Настройка минимального уровня логирования для Entity Framework Core
+builder.Logging.ClearProviders(); // очищает все провайдеры логов
+builder.Logging.AddConsole();
+builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
+
 // ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString)
-           .EnableSensitiveDataLogging()
-           .LogTo(Console.WriteLine, LogLevel.Information));
+{
+    var environment = builder.Environment;
+
+    // Подключение к базе данных
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+    // Включить логирование чувствительных данных только в dev-среде
+    if (environment.IsDevelopment())
+    {
+        options.EnableSensitiveDataLogging();
+    }
+});
+
 
 // Настройка куки аутентификации
 builder.Services.ConfigureApplicationCookie(options =>
