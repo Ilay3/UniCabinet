@@ -12,6 +12,7 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
 
+
         public IndexModel(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
@@ -26,7 +27,8 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account.Manage
         public string StatusMessage { get; set; }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public required InputModel Input { get; set; }
+
 
         public class InputModel
         {
@@ -47,12 +49,15 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account.Manage
         {
             Input = new InputModel
             {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Patronymic = user.Patronymic,
-                DateBirthday = user.DateBirthday
+                FirstName = user?.FirstName ?? string.Empty,
+                LastName = user?.LastName ?? string.Empty,
+                Patronymic = user?.Patronymic ?? string.Empty,
+                DateBirthday = user?.DateBirthday ?? DateTime.MinValue
             };
+
+            await Task.CompletedTask;
         }
+
 
         public async Task<IActionResult> OnGetAsync()
         {

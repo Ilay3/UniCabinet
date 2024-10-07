@@ -64,11 +64,5 @@ namespace UniCabinet.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<Group>> GetAllGroupsAsync()
-        {
-            return await _context.Groups.ToListAsync();
-        }
-
-
     }
 }
