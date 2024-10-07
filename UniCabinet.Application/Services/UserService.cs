@@ -86,6 +86,17 @@ namespace UniCabinet.Application.Services
 
         }
 
+        public async Task<IEnumerable<User>> SearchUsersByNameOrEmailAndRoleAsync(string query, string role)
+        {
+            var users = await _userRepository.SearchUsersAsync(query);
+
+            if (!string.IsNullOrEmpty(role))
+            {
+                users = users.Where(u => _userManager.IsInRoleAsync(u, role).Result).ToList(); // Фильтрация по роли
+            }
+
+            return users;
+        }
 
     }
 }

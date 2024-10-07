@@ -1,0 +1,9 @@
+﻿
+.table-info {
+    background-color: #d1ecf1;
+    transition: background-color 0.5s ease-out; /* Плавное исчезновение подсветки */
+}
+
+.list-group-item {
+    cursor: pointer; /* Указываем, что элемент кликабельный */
+}

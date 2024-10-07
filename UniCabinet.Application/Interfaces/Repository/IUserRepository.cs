@@ -11,5 +11,6 @@ namespace UniCabinet.Application.Interfaces
         Task<IEnumerable<User>> GetUsersByRoleAsync(string role);
         Task UpdateUserGroupAsync(string userId, int groupId);
         Task<IEnumerable<Group>> GetAllGroupsAsync();
+        Task<IEnumerable<User>> SearchUsersAsync(string query);
     }
 }

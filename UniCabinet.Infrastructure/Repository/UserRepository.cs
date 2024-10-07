@@ -64,5 +64,16 @@ namespace UniCabinet.Infrastructure.Repositories
             }
         }
 
+        public async Task<IEnumerable<Group>> GetAllGroupsAsync()
+        {
+            return await _context.Groups.ToListAsync();
+        }
+
+        public async Task<IEnumerable<User>> SearchUsersAsync(string query)
+        {
+            return await _context.Users
+                .Where(u => u.FirstName.Contains(query) || u.LastName.Contains(query) || u.Patronymic.Contains(query) || u.Email.Contains(query))
+                .ToListAsync();
+        }
     }
 }

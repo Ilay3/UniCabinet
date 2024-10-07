@@ -6,8 +6,7 @@
 <form method="get" asp-action="VerifiedUsers" id="roleFilterForm">
     <div class="form-group">
         <label for="roleFilter">Выберите роль для фильтрации:</label>
-        <select class="form-control" id="roleFilter" name="role">
-           
+        <select class="form-control" id="roleFilter" name="role" data-selected-role="@ViewBag.SelectedRole">
             @foreach (var role in (IEnumerable<SelectListItem>)ViewBag.Roles)
             {
                 <option value="@role.Value" selected>@role.Text</option>
@@ -16,8 +15,12 @@
     </div>
 </form>
 
-@if (Model.Users != null && Model.Users.Any())
+<div>
+    <input type="text" id="searchBox" class="form-control" placeholder="Поиск по имени или email..." onkeyup="searchUsers()" />
+    <ul id="suggestionsList" class="list-group"></ul>
+</div>
 
+@if (Model.Users != null && Model.Users.Any())
 {
     <h2>Результаты фильтрации</h2>
     <table class="table">
@@ -31,27 +34,23 @@
                 <th>Изменить Роль</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="userTableBody">
             @foreach (var user in Model.Users)
-
             {
-                <tr>
+                <tr data-user-id="@user.Id" class="user-row">
                     <td>@user.Email</td>
                     <td>@user.FullName</td>
                     <td>@string.Join(", ", user.Roles)</td>
                     <td>@user.GroupName</td>
                     <td>
                         @if (user.Roles.Contains("Student") && user.Roles.Contains("Verified"))
-
                         {
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#groupModal_@user.Id">
                                 Изменить группу
                             </button>
                             <partial name="_GroupModal" model="user" />
                         }
-
                         else
-
                         {
                             <span class="text-muted">Изменение группы недоступно</span>
                         }
@@ -67,60 +66,10 @@
         </tbody>
     </table>
 }
-
 else
-
 {
     <p>Нет пользователей, удовлетворяющих условиям фильтрации.</p>
 }
 
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            var selectedRole = '@ViewBag.SelectedRole';
 
-            if (selectedRole && selectedRole !== '') {
-                $('#roleFilter').val(selectedRole);
-            } else {
-                $('#roleFilter').val('Student');
-            }
-
-            $('#roleFilter').change(function () {
-                $('#roleFilterForm').submit();
-            });
-        });
-    </script>
-}
-
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            $('#searchInput').on('input', function () {
-                var query = $(this).val();
-
-                if (query.length > 2) { // Начинаем поиск только если ввели больше 2 символов
-                    $.ajax({
-                        url: '@Url.Action("SearchUsers", "Admin")',  // Путь к методу поиска
-                        data: { term: query },
-                        success: function (data) {
-                            $('#suggestions').empty();
-                            if (data.length > 0) {
-                                $.each(data, function (index, value) {
-                                    $('#suggestions').append('<li class="list-group-item">' + value + '</li>');
-                                });
-                            }
-                        }
-                    });
-                } else {
-                    $('#suggestions').empty(); // Очищаем список, если мало символов
-                }
-            });
-
-            // При клике на элемент подсказки заполняем поле поиска
-            $(document).on('click', '#suggestions li', function () {
-                $('#searchInput').val($(this).text());
-                $('#suggestions').empty(); // Очищаем список после выбора
-            });
-        });
-    </script>
-}
+<script src="~/js/roleFilter.js"></script>

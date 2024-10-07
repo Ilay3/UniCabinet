@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UniCabinet.Domain.DTO;
+using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Application.Interfaces
 {
@@ -11,5 +12,6 @@ namespace UniCabinet.Application.Interfaces
         Task UpdateStudentGroupAsync(string userId, int groupId);
         Task<IEnumerable<GroupDTO>> GetAllGroupsAsync();
         Task UpdateUserRoleAsync(string userId, string role);
+        Task<IEnumerable<User>> SearchUsersByNameOrEmailAndRoleAsync(string query, string role);
     }
 }

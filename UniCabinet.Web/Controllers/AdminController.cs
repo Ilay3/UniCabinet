@@ -143,5 +143,25 @@ public class AdminController : Controller
         return RedirectToAction("VerifiedUsers", new { role = ViewBag.SelectedRole });
     }
 
+    [HttpGet]
+    public async Task<IActionResult> SearchUsers(string query, string role)
+    {
+        if (string.IsNullOrEmpty(query))
+        {
+            return Json(new List<object>());
+        }
+
+        var users = await _userService.SearchUsersByNameOrEmailAndRoleAsync(query, role);
+
+        // Возвращаем список пользователей для автодополнения
+        var result = users.Select(user => new
+        {
+            id = user.Id,
+            fullName = $"{user.FirstName} {user.LastName} {user.Patronymic}",
+            email = user.Email
+        }).ToList();
+
+        return Json(result);
+    }
 
 }
