@@ -13,6 +13,9 @@
             }
         </select>
     </div>
+
+    <input type="hidden" name="pageNumber" value="@Model.Pagination.CurrentPage" />
+    <input type="hidden" name="pageSize" value="@Model.Pagination.RouteValues.PageSize" />
 </form>
 
 <div>
@@ -65,6 +68,9 @@
             }
         </tbody>
     </table>
+
+    <!-- Постраничная навигация -->
+    @await Html.PartialAsync("_Pagination", Model.Pagination)
 }
 else
 {
@@ -72,5 +78,5 @@ else
 }
 
 <link rel="stylesheet" href="~/css/search.css" />
-
 <script src="~/js/roleFilter.js"></script>
+<script src="~/js/search.js"></script>

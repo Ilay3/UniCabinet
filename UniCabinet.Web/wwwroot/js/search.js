@@ -1,11 +1,10 @@
-﻿// wwwroot/js/search.js
-
-let suggestionIndex = -1;  // Индекс для навигации по списку предложений
+﻿let suggestionIndex = -1;  // Индекс для навигации по списку предложений
 
 // Функция для поиска пользователей с автопредложением
 function searchUsers() {
     var query = document.getElementById('searchBox').value;
     var selectedRole = document.getElementById('roleFilter').value; // Получаем выбранную роль
+    var pageSize = document.querySelector('input[name="pageSize"]').value; // Получаем размер страницы
 
     if (query.length >= 2) {  // Минимум 2 символа для запуска поиска
         fetch('/Admin/SearchUsers?query=' + query + '&role=' + selectedRole)  // Передаем также выбранную роль
@@ -19,8 +18,9 @@ function searchUsers() {
                     var listItem = document.createElement('li');
                     listItem.className = 'list-group-item';
                     listItem.textContent = user.fullName + ' (' + user.email + ')';
-                    listItem.setAttribute('data-index', index);  // Устанавливаем индекс для каждого элемента
-                    listItem.onclick = function () { selectUser(user.id); };
+                    listItem.setAttribute('data-user-id', user.id);  // Сохраняем ID пользователя
+                    listItem.setAttribute('data-index', index);  // Сохраняем индекс пользователя для вычисления страницы
+                    listItem.onclick = function () { selectUser(user.id, index, pageSize); };
 
                     // Добавляем обработчик для навигации по предложению
                     listItem.onmouseenter = function () {
@@ -38,24 +38,17 @@ function searchUsers() {
 }
 
 // Функция для выбора пользователя из списка
-function selectUser(userId) {
-    // Прокручиваем страницу к пользователю
-    document.getElementById('searchBox').value = '';
-    document.getElementById('suggestionsList').innerHTML = '';  // Очистка списка предложений
-    var rows = document.querySelectorAll('.user-row');
-    rows.forEach(row => {
-        row.classList.remove('table-info');  // Убираем подсветку
-    });
-    var selectedRow = document.querySelector(`tr[data-user-id="${userId}"]`);
-    if (selectedRow) {
-        selectedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });  // Прокрутка к пользователю
-        selectedRow.classList.add('table-info');  // Подсвечиваем выбранного пользователя
+function selectUser(userId, index, pageSize) {
+    // Вычисляем номер страницы на основе индекса и размера страницы
+    var pageNumber = Math.floor(index / pageSize) + 1;
+    var selectedRole = document.getElementById('roleFilter').value; // Получаем текущую роль
+    var query = document.getElementById('searchBox').value; // Получаем текущий запрос
 
-        // Убираем подсветку через 5 секунд
-        setTimeout(function () {
-            selectedRow.classList.remove('table-info');
-        }, 5000);  // 5000 миллисекунд = 5 секунд
-    }
+    // Сохраняем ID пользователя в sessionStorage, чтобы после перехода подсветить его
+    sessionStorage.setItem('selectedUserId', userId);
+
+    // Переадресация на нужную страницу с учетом роли, номера страницы и запроса
+    window.location.href = `/Admin/VerifiedUsers?pageNumber=${pageNumber}&role=${selectedRole}&query=${query}&pageSize=${pageSize}`;
 }
 
 // Обработчик нажатий клавиш для списка предложений
@@ -88,4 +81,22 @@ function clearSuggestionsHighlight() {
     var suggestionsList = document.getElementById('suggestionsList');
     var suggestions = suggestionsList.querySelectorAll('.list-group-item');
     suggestions.forEach(suggestion => suggestion.classList.remove('highlighted'));
+}
+
+// Функция для подсветки выбранного пользователя после перехода на нужную страницу
+window.onload = function () {
+    var selectedUserId = sessionStorage.getItem('selectedUserId');
+    if (selectedUserId) {
+        var selectedRow = document.querySelector(`tr[data-user-id="${selectedUserId}"]`);
+        if (selectedRow) {
+            selectedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });  // Прокрутка к пользователю
+            selectedRow.classList.add('table-info');  // Подсвечиваем выбранного пользователя
+
+            // Убираем подсветку через 5 секунд
+            setTimeout(function () {
+                selectedRow.classList.remove('table-info');
+                sessionStorage.removeItem('selectedUserId');  // Очищаем после использования
+            }, 5000);  // 5000 миллисекунд = 5 секунд
+        }
+    }
 }

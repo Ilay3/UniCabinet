@@ -9,6 +9,7 @@ using UniCabinet.Application.Interfaces;
 using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Domain.DTO;
 using UniCabinet.Domain.Entities;
+using UniCabinet.Web.Models;
 using UniCabinet.Web.ViewModel;
 
 [Authorize(Roles = "Administrator")]
@@ -25,7 +26,7 @@ public class AdminController : Controller
         _userManager = userManager;
     }
 
-    public async Task<IActionResult> VerifiedUsers(string role)
+    public async Task<IActionResult> VerifiedUsers(string role, int pageNumber = 1, int pageSize = 2)
     {
         if (string.IsNullOrEmpty(role))
         {
@@ -42,30 +43,52 @@ public class AdminController : Controller
         }
         else
         {
-            // Фильтрация пользователей по выбранной роли
             users = (await _userService.GetAllUsersAsync())
                     .Where(user => user.Roles.Contains(role))
                     .ToList();
         }
 
-        // Сохраняем выбранную роль в ViewBag
-        ViewBag.SelectedRole = role;
+        // Пагинация
+        var totalUsers = users.Count;
+        var paginatedUsers = users
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
 
-        // Передаем список ролей для фильтрации
-        var roles = new List<string> { "Student", "Teacher", "Administrator", "Verified" };
-        ViewBag.Roles = roles.Select(r => new SelectListItem { Value = r, Text = r }).ToList();
+        ViewBag.SelectedRole = role;
+        ViewBag.Roles = new List<string> { "Student", "Teacher", "Administrator", "Verified" }
+            .Select(r => new SelectListItem { Value = r, Text = r, Selected = r == role })
+            .ToList();
 
         var groups = await _userService.GetAllGroupsAsync();
         ViewBag.Groups = new SelectList(groups, "Id", "Name");
 
+        var paginationModel = new PaginationModel
+        {
+            CurrentPage = pageNumber,
+            TotalPages = (int)Math.Ceiling(totalUsers / (double)pageSize),
+            Action = nameof(VerifiedUsers),
+            Controller = "Admin",
+            RouteValues = new PaginationRouteValues
+            {
+                Role = role,
+                PageSize = pageSize
+            }
+        };
+
         var model = new StudentGroupViewModel
         {
-            Users = users,
-            Groups = groups
+            Users = paginatedUsers,
+            Groups = groups,
+            Pagination = paginationModel
         };
 
         return View(model);
     }
+
+
+
+
 
     [HttpPost]
     public async Task<IActionResult> UpdateUserGroup(string userId, int groupId)
