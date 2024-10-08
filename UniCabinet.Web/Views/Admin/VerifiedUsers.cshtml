@@ -16,10 +16,12 @@
 
     <input type="hidden" name="pageNumber" value="@Model.Pagination.CurrentPage" />
     <input type="hidden" name="pageSize" value="@Model.Pagination.RouteValues.PageSize" />
+    <input type="hidden" name="query" value="@Model.Pagination.RouteValues.Query" />
 </form>
 
-<div>
-    <input type="text" id="searchBox" class="form-control" placeholder="Поиск по имени или email..." onkeyup="searchUsers()" />
+<div id="searchContainer" class="d-flex align-items-center">
+    <input type="text" id="searchBox" class="form-control" placeholder="Поиск по имени или email..." onkeyup="searchUsers()" autocomplete="off" value="@Model.Pagination.RouteValues.Query" />
+    <button type="button" id="resetButton" class="btn btn-secondary ml-2" onclick="resetSearch()">Сбросить</button>
     <ul id="suggestionsList" class="list-group"></ul>
 </div>
 
@@ -69,14 +71,10 @@
         </tbody>
     </table>
 
-    <!-- Постраничная навигация -->
-    @await Html.PartialAsync("_Pagination", Model.Pagination)
+@await Html.PartialAsync("_Pagination", Model.Pagination)
+
 }
 else
 {
     <p>Нет пользователей, удовлетворяющих условиям фильтрации.</p>
 }
-
-<link rel="stylesheet" href="~/css/search.css" />
-<script src="~/js/roleFilter.js"></script>
-<script src="~/js/search.js"></script>

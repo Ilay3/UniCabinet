@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+﻿$(function () {
     var selectedRole = $('#roleFilter').data('selected-role');
 
     if (selectedRole && selectedRole !== '') {
@@ -7,7 +7,7 @@
         $('#roleFilter').val('Student');
     }
 
-    $('#roleFilter').change(function () {
-        $('#roleFilterForm').submit();
+    $('#roleFilter').on('change', function () { 
+        $('#roleFilterForm').trigger('submit');
     });
 });

@@ -26,13 +26,14 @@ public class AdminController : Controller
         _userManager = userManager;
     }
 
-    public async Task<IActionResult> VerifiedUsers(string role, int pageNumber = 1, int pageSize = 2)
+    public async Task<IActionResult> VerifiedUsers(string role, string query = null, int pageNumber = 1, int pageSize = 2)
     {
         if (string.IsNullOrEmpty(role))
         {
             return RedirectToAction("VerifiedUsers", new { role = "Student" });
         }
 
+        // Получаем всех пользователей, отфильтрованных по роли
         var users = new List<UserDTO>();
 
         if (role == "Verified")
@@ -47,6 +48,16 @@ public class AdminController : Controller
                     .Where(user => user.Roles.Contains(role))
                     .ToList();
         }
+
+        // Фильтрация по запросу, если он не пустой
+        if (!string.IsNullOrEmpty(query))
+        {
+            users = users
+                .Where(user => user.FullName.Contains(query, StringComparison.CurrentCultureIgnoreCase) ||
+                               user.Email.Contains(query, StringComparison.CurrentCultureIgnoreCase))
+                .ToList();
+        }
+
 
         // Пагинация
         var totalUsers = users.Count;
@@ -72,7 +83,8 @@ public class AdminController : Controller
             RouteValues = new PaginationRouteValues
             {
                 Role = role,
-                PageSize = pageSize
+                PageSize = pageSize,
+                Query = query
             }
         };
 
@@ -85,8 +97,6 @@ public class AdminController : Controller
 
         return View(model);
     }
-
-
 
 
 
@@ -169,22 +179,39 @@ public class AdminController : Controller
     [HttpGet]
     public async Task<IActionResult> SearchUsers(string query, string role)
     {
-        if (string.IsNullOrEmpty(query))
+        var users = await _userService.GetAllUsersAsync();
+
+        // Фильтрация по роли
+        if (role == "Verified")
         {
-            return Json(new List<object>());
+            users = users.Where(user => user.Roles.Count == 1 && user.Roles.Contains("Verified")).ToList();
+        }
+        else
+        {
+            users = users.Where(user => user.Roles.Contains(role)).ToList();
         }
 
-        var users = await _userService.SearchUsersByNameOrEmailAndRoleAsync(query, role);
+        // Фильтрация по запросу
+        if (!string.IsNullOrEmpty(query))
+        {
+            users = users.Where(user =>
+                user.FullName.Contains(query, StringComparison.CurrentCultureIgnoreCase) ||
+                user.Email.Contains(query, StringComparison.CurrentCultureIgnoreCase)
+            ).ToList();
+        }
 
-        // Возвращаем список пользователей для автодополнения
+        // Ограничение количества результатов (например, 10)
+        users = users.Take(10).ToList();
+
         var result = users.Select(user => new
         {
             id = user.Id,
-            fullName = $"{user.FirstName} {user.LastName} {user.Patronymic}",
+            fullName = user.FullName,
             email = user.Email
-        }).ToList();
+        });
 
         return Json(result);
     }
+
 
 }

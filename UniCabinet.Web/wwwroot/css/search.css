@@ -1,6 +1,4 @@
-﻿/* wwwroot/css/search.css */
-
-/* Стили для подсветки предложений */
+﻿/* Стили для подсветки предложений */
 .highlighted {
     background-color: #007bff;
     color: white;
@@ -13,4 +11,51 @@
 
 .list-group-item {
     cursor: pointer;
+}
+
+/* Highlighting suggestions */
+.highlighted {
+    background-color: #007bff;
+    color: white;
+}
+
+.table-info {
+    background-color: #d1ecf1;
+    transition: background-color 0.5s ease-out;
+}
+
+.list-group-item {
+    cursor: pointer;
+}
+
+/* Positioning the suggestions list */
+#searchContainer {
+    position: relative;
+}
+
+#suggestionsList {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: none;
+    margin-top: 0;
+}
+
+.list-group .list-group-item:hover,
+.list-group .list-group-item.highlighted {
+    background-color: #007bff !important; /* Синий фон при наведении */
+    color: white !important; /* Белый текст */
+}
+
+#resetButton {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 38px; /* Высота кнопки должна соответствовать высоте поля ввода */
 }
