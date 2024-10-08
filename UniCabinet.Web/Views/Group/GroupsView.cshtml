@@ -1,0 +1,39 @@
+﻿@model IEnumerable<UniCabinet.Web.ViewModel.GroupViewModel>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Название
+            </th>
+            <th>
+                Тип группы
+            </th>
+            <th>
+                Курс
+            </th>
+            <th>
+                Семестр
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.TypeGroup
+                </td>
+                <td>
+                    @item.CourseNumber
+                </td>
+                <td>
+                    @item.SemesterNumber
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

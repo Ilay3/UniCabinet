@@ -19,9 +19,7 @@ namespace UniCabinet.Domain.DTO
         public string TypeGroup { get; set; }
 
         public int CourseId { get; set; }
-        public Course Course { get; set; }
 
         public int SemesterId { get; set; }
-        public Semester Semester { get; set; }
     }
 }
