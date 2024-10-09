@@ -1,0 +1,20 @@
+﻿
+/* Style for highlighted table rows */
+.table-info {
+    background-color: #d1ecf1;
+}
+
+/* Highlighting suggestions */
+.highlighted {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Styles for modal management */
+.modal-backdrop {
+    z-index: 1040 !important;
+}
+
+.modal-content {
+    z-index: 1050 !important;
+}

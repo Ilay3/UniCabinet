@@ -1,5 +1,4 @@
-﻿// UniCabinet.Application/Services/UserService.cs
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Data;
 using UniCabinet.Application.Interfaces;
@@ -97,6 +96,47 @@ namespace UniCabinet.Application.Services
 
             return users;
         }
+
+        public async Task<UserDetailDTO> GetUserDetailsAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return null;
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var userDetailDTO = new UserDetailDTO
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Patronymic = user.Patronymic,
+                DateBirthday = user.DateBirthday,
+                Roles = roles.ToList(),
+                GroupName = user.Group != null ? user.Group.Name : "Без группы"
+            };
+
+            return userDetailDTO;
+        }
+
+        public async Task UpdateUserDetailsAsync(UserDetailDTO model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user != null)
+            {
+                user.Email = model.Email;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Patronymic = model.Patronymic;
+                user.DateBirthday = model.DateBirthday;
+
+                // Update in the database
+                await _userManager.UpdateAsync(user);
+            }
+        }
+
 
     }
 }

@@ -13,5 +13,7 @@ namespace UniCabinet.Application.Interfaces
         Task<IEnumerable<GroupDTO>> GetAllGroupsAsync();
         Task UpdateUserRoleAsync(string userId, string role);
         Task<IEnumerable<User>> SearchUsersByNameOrEmailAndRoleAsync(string query, string role);
+        Task<UserDetailDTO> GetUserDetailsAsync(string userId);
+        Task UpdateUserDetailsAsync(UserDetailDTO model);
     }
 }

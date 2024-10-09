@@ -12,5 +12,7 @@ namespace UniCabinet.Application.Interfaces
         Task UpdateUserGroupAsync(string userId, int groupId);
         Task<IEnumerable<Group>> GetAllGroupsAsync();
         Task<IEnumerable<User>> SearchUsersAsync(string query);
+        Task<User> GetUserByIdAsync(string userId);
+        Task UpdateUserAsync(User user);
     }
 }

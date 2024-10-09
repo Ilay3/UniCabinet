@@ -1,0 +1,44 @@
+﻿
+@model UniCabinet.Web.ViewModel.UserDetailViewModel
+
+<div class="modal fade" id="userDetailModal" tabindex="-1" role="dialog" aria-labelledby="userDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userDetailModalLabel">Детали пользователя</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="userDetailForm">
+                    <div class="form-group">
+                        <label for="userEmail">Email</label>
+                        <input type="email" class="form-control" id="userEmail" name="Email" value="@Model.Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userFirstName">Имя</label>
+                        <input type="text" class="form-control" id="userFirstName" name="FirstName" value="@Model.FirstName">
+                    </div>
+                    <div class="form-group">
+                        <label for="userLastName">Фамилия</label>
+                        <input type="text" class="form-control" id="userLastName" name="LastName" value="@Model.LastName">
+                    </div>
+                    <div class="form-group">
+                        <label for="userPatronymic">Отчество</label>
+                        <input type="text" class="form-control" id="userPatronymic" name="Patronymic" value="@Model.Patronymic">
+                    </div>
+                    <div class="form-group">
+                        <label for="userDateBirthday">Дата рождения</label>
+                        <input type="date" class="form-control" id="userDateBirthday" name="DateBirthday" value="@Model.DateBirthday?.ToString("yyyy-MM-dd")">
+                    </div>
+                    <input type="hidden" id="userId" name="Id" value="@Model.Id">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary" id="saveUserDetails">Сохранить изменения</button>
+            </div>
+        </div>
+    </div>
+</div>

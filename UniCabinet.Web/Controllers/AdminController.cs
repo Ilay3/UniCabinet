@@ -98,8 +98,6 @@ public class AdminController : Controller
         return View(model);
     }
 
-
-
     [HttpPost]
     public async Task<IActionResult> UpdateUserGroup(string userId, int groupId)
     {
@@ -213,5 +211,50 @@ public class AdminController : Controller
         return Json(result);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetUserDetails(string userId)
+    {
+        var userDetailDTO = await _userService.GetUserDetailsAsync(userId);
+        if (userDetailDTO == null)
+        {
+            return NotFound();
+        }
+
+        var viewModel = new UserDetailViewModel
+        {
+            Id = userDetailDTO.Id,
+            Email = userDetailDTO.Email,
+            FirstName = userDetailDTO.FirstName,
+            LastName = userDetailDTO.LastName,
+            Patronymic = userDetailDTO.Patronymic,
+            DateBirthday = userDetailDTO.DateBirthday,
+            Roles = userDetailDTO.Roles,
+            GroupName = userDetailDTO.GroupName
+        };
+
+        return PartialView("_UserDetailModal", viewModel);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateUserDetails(UserDetailViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest("Некорректные данные.");
+        }
+
+        var userDetailDTO = new UserDetailDTO
+        {
+            Id = model.Id,
+            Email = model.Email,
+            FirstName = model.FirstName,
+            LastName = model.LastName,
+            Patronymic = model.Patronymic,
+            DateBirthday = model.DateBirthday
+        };
+
+        await _userService.UpdateUserDetailsAsync(userDetailDTO);
+        return Ok();
+    }
 
 }

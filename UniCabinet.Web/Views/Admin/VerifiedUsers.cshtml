@@ -37,6 +37,7 @@
                 <th>Текущая Группа</th>
                 <th>Изменить Группу</th>
                 <th>Изменить Роль</th>
+                <th>Информация</th>
             </tr>
         </thead>
         <tbody id="userTableBody">
@@ -65,6 +66,11 @@
                             Изменить роль
                         </button>
                         <partial name="_RoleModal" model="user" />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info open-user-detail" data-user-id="@user.Id">
+                            Подробнее
+                        </button>
                     </td>
                 </tr>
             }

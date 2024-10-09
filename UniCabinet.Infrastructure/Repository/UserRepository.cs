@@ -75,5 +75,19 @@ namespace UniCabinet.Infrastructure.Repositories
                 .Where(u => u.FirstName.Contains(query) || u.LastName.Contains(query) || u.Patronymic.Contains(query) || u.Email.Contains(query))
                 .ToListAsync();
         }
+
+        public async Task<User> GetUserByIdAsync(string userId)
+        {
+            return await _userManager.Users
+                .Include(u => u.Group)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+        }
+
+        public async Task UpdateUserAsync(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }
