@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UniCabinet.Domain.Entities;
-
-namespace UniCabinet.Domain.DTO
+﻿namespace UniCabinet.Web.ViewModel
 {
-    public class GroupDTO
+    public class GroupCreateEditViewModel
     {
         public int Id { get; set; }
 

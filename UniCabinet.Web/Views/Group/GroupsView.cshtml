@@ -1,0 +1,79 @@
+﻿@model IEnumerable<UniCabinet.Web.ViewModel.GroupViewModel>
+
+<button type="button" class="btn btn-primary" onclick="openAddGroupModal()">
+    Добавить группу
+</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Название
+            </th>
+            <th>
+                Тип группы
+            </th>
+            <th>
+                Курс
+            </th>
+            <th>
+                Семестр
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.TypeGroup
+                </td>
+                <td>
+                    @item.CourseNumber
+                </td>
+                <td>
+                    @item.SemesterNumber
+                </td>
+                <td>
+                    <button type="button" class="btn btn-secondary" onclick="openEditGroupModal(@item.Id)">
+                        Редактировать
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Скрипты для открытия модальных окон -->
+@section Scripts {
+    <script>
+        function openAddGroupModal() {
+            fetch('/Group/GroupAddModal')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById("modalContainer").innerHTML = html;
+                    var modal = new bootstrap.Modal(document.getElementById('addGroupModal'));
+                    modal.show();
+                });
+        }
+
+        function openEditGroupModal(groupId) {
+            fetch(`/Group/GroupEditModal?id=${groupId}`)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById("modalContainer").innerHTML = html;
+                    var modal = new bootstrap.Modal(document.getElementById('editGroupModal'));
+                    modal.show();
+                })
+                .catch(error => {
+                    console.error('Ошибка при загрузке модального окна для редактирования:', error);
+                });
+        }
+    </script>
+}
+
+<div id="modalContainer"></div>

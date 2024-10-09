@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UniCabinet.Domain.Entities;
 
-namespace UniCabinet.Domain.Entities
+namespace UniCabinet.Domain.DTO
 {
-    public class Semester
+    public class SemesterDTO
     {
         public int Id { get; set; }
 
@@ -32,9 +35,5 @@ namespace UniCabinet.Domain.Entities
         /// Месяц конца семестра
         /// </summary>
         public int MounthEnd { get; set; }
-
-        // Навигационные свойства
-        public ICollection<DisciplineDetail> DisciplineDetials { get; set; }
-        public ICollection<Group> Groups { get; set; }
     }
 }

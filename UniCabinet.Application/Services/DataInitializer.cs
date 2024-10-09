@@ -30,7 +30,8 @@ public static class DataInitializer
             {
                 UserName = adminEmail,
                 Email = adminEmail,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                Id = Guid.NewGuid().ToString(),
             };
 
             var result = await userManager.CreateAsync(adminUser, adminPassword);

@@ -46,9 +46,9 @@ namespace UniCabinet.Infrastructure.Repository
             var groupEntity = new Group
             {
                 Name = groupDTO.Name,
+                TypeGroup = groupDTO.TypeGroup,
                 SemesterId = groupDTO.SemesterId,
                 CourseId = groupDTO.CourseId,
-                TypeGroup = groupDTO.TypeGroup,
             };
 
             await _context.Groups.AddAsync(groupEntity);
@@ -75,6 +75,7 @@ namespace UniCabinet.Infrastructure.Repository
             groupEntity.CourseId = groupDTO.CourseId;
             groupEntity.SemesterId = groupDTO.SemesterId;
 
+            _context.Groups.Update(groupEntity);
             _context.SaveChanges();
         }
     }

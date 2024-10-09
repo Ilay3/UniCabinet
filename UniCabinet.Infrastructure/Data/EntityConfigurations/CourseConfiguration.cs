@@ -10,11 +10,6 @@ namespace UniCabinet.Infrastructure.Data.EntityConfigurations
         {
             builder.HasKey(c => c.Id);
 
-            builder.HasMany(c => c.Semesters)
-                .WithOne(s => s.Course)
-                .HasForeignKey(s => s.CourseId)
-                .OnDelete(DeleteBehavior.Cascade);
-
             builder.HasMany(c => c.Groups)
                 .WithOne(g => g.Course)
                 .HasForeignKey(g => g.CourseId)
