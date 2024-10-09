@@ -9,11 +9,11 @@ using UniCabinet.Infrastructure.Data;
 
 #nullable disable
 
-namespace UniCabinet.Infrastructure.Migrations
+namespace UniCabinet.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241004101649_Update")]
-    partial class Update
+    [Migration("20241009092837_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -176,6 +176,33 @@ namespace UniCabinet.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Courses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Number = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Number = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Number = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Number = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Number = 5
+                        });
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Discipline", b =>
@@ -187,11 +214,9 @@ namespace UniCabinet.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -241,7 +266,6 @@ namespace UniCabinet.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TeacherId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -290,16 +314,15 @@ namespace UniCabinet.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("FinalPoint")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<bool>("IsAutomatic")
                         .HasColumnType("bit");
 
                     b.Property<decimal>("PointAvarage")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("StudentId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -323,14 +346,12 @@ namespace UniCabinet.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SemesterId")
                         .HasColumnType("int");
 
                     b.Property<string>("TypeGroup")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -357,7 +378,7 @@ namespace UniCabinet.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("LectureNumber")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("Id");
 
@@ -381,10 +402,9 @@ namespace UniCabinet.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("PointsCount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("StudentId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -438,7 +458,6 @@ namespace UniCabinet.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("StudentId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -458,23 +477,44 @@ namespace UniCabinet.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CourseId")
+                    b.Property<int>("DayEnd")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("DayStart")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MounthEnd")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MounthStart")
+                        .HasColumnType("int");
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId");
-
                     b.ToTable("Semesters");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DayEnd = 25,
+                            DayStart = 1,
+                            MounthEnd = 1,
+                            MounthStart = 9,
+                            Number = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DayEnd = 30,
+                            DayStart = 7,
+                            MounthEnd = 6,
+                            MounthStart = 2,
+                            Number = 2
+                        });
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.StudentProgress", b =>
@@ -495,7 +535,6 @@ namespace UniCabinet.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("StudentId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("TotalLecturePoints")
@@ -663,8 +702,7 @@ namespace UniCabinet.Infrastructure.Migrations
                     b.HasOne("UniCabinet.Domain.Entities.User", "Teacher")
                         .WithMany()
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Discipline");
 
@@ -697,8 +735,7 @@ namespace UniCabinet.Infrastructure.Migrations
                     b.HasOne("UniCabinet.Domain.Entities.User", "Student")
                         .WithMany("ExamResults")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Exam");
 
@@ -746,8 +783,7 @@ namespace UniCabinet.Infrastructure.Migrations
                     b.HasOne("UniCabinet.Domain.Entities.User", "Student")
                         .WithMany("LectureVisits")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Lecture");
 
@@ -776,23 +812,11 @@ namespace UniCabinet.Infrastructure.Migrations
                     b.HasOne("UniCabinet.Domain.Entities.User", "Student")
                         .WithMany("PracticalResults")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Practical");
 
                     b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Semester", b =>
-                {
-                    b.HasOne("UniCabinet.Domain.Entities.Course", "Course")
-                        .WithMany("Semesters")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.StudentProgress", b =>
@@ -806,8 +830,7 @@ namespace UniCabinet.Infrastructure.Migrations
                     b.HasOne("UniCabinet.Domain.Entities.User", "Student")
                         .WithMany("StudentProgresses")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("DisciplineDetails");
 
@@ -818,8 +841,7 @@ namespace UniCabinet.Infrastructure.Migrations
                 {
                     b.HasOne("UniCabinet.Domain.Entities.Group", "Group")
                         .WithMany("Users")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("GroupId");
 
                     b.Navigation("Group");
                 });
@@ -827,8 +849,6 @@ namespace UniCabinet.Infrastructure.Migrations
             modelBuilder.Entity("UniCabinet.Domain.Entities.Course", b =>
                 {
                     b.Navigation("Groups");
-
-                    b.Navigation("Semesters");
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Discipline", b =>

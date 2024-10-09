@@ -16,18 +16,24 @@ namespace UniCabinet.Domain.DTO
         /// </summary>
         public int Number { get; set; }
 
-        public int CourseId { get; set; }
-
-        public Course Course { get; set; }
+        /// <summary>
+        /// День начала семестра
+        /// </summary>
+        public int DayStart { get; set; }
 
         /// <summary>
-        /// Начало семестра
+        /// Месяц начала семестра
         /// </summary>
-        public DateTime StartDate { get; set; }
+        public int MounthStart { get; set; }
 
         /// <summary>
-        /// Конец семестра
+        /// День конца семестра
         /// </summary>
-        public DateTime EndDate { get; set; }
+        public int DayEnd { get; set; }
+
+        /// <summary>
+        /// Месяц конца семестра
+        /// </summary>
+        public int MounthEnd { get; set; }
     }
 }

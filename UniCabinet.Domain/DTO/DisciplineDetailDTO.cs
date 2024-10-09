@@ -12,16 +12,12 @@ namespace UniCabinet.Domain.DTO
         public int Id { get; set; }
 
         public int DisciplineId { get; set; }
-        public Discipline Discipline { get; set; }
 
         public int GroupId { get; set; }
-        public Group Group { get; set; }
 
         public int SemesterId { get; set; }
-        public Semester Semester { get; set; }
 
         public string TeacherId { get; set; }
-        public User Teacher { get; set; }
 
         /// <summary>
         /// Количество лекций

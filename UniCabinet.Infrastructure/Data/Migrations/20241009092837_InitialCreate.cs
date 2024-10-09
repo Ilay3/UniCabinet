@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace UniCabinet.Infrastructure.Migrations
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
+namespace UniCabinet.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Update : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,8 +32,8 @@ namespace UniCabinet.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -59,19 +61,14 @@ namespace UniCabinet.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Number = table.Column<int>(type: "int", nullable: false),
-                    CourseId = table.Column<int>(type: "int", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DayStart = table.Column<int>(type: "int", nullable: false),
+                    MounthStart = table.Column<int>(type: "int", nullable: false),
+                    DayEnd = table.Column<int>(type: "int", nullable: false),
+                    MounthEnd = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Semesters", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Semesters_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -101,8 +98,8 @@ namespace UniCabinet.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TypeGroup = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TypeGroup = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CourseId = table.Column<int>(type: "int", nullable: false),
                     SemesterId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -152,8 +149,7 @@ namespace UniCabinet.Infrastructure.Migrations
                         name: "FK_Users_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -165,7 +161,7 @@ namespace UniCabinet.Infrastructure.Migrations
                     DisciplineId = table.Column<int>(type: "int", nullable: false),
                     GroupId = table.Column<int>(type: "int", nullable: false),
                     SemesterId = table.Column<int>(type: "int", nullable: false),
-                    TeacherId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TeacherId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     LectureCount = table.Column<int>(type: "int", nullable: false),
                     PracticalCount = table.Column<int>(type: "int", nullable: false),
                     SubExamCount = table.Column<int>(type: "int", nullable: false),
@@ -357,7 +353,7 @@ namespace UniCabinet.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     DisciplineDetailId = table.Column<int>(type: "int", nullable: false),
                     TotalLecturePoints = table.Column<int>(type: "int", nullable: false),
                     TotalPracticalPoints = table.Column<int>(type: "int", nullable: false),
@@ -388,7 +384,7 @@ namespace UniCabinet.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ExamId = table.Column<int>(type: "int", nullable: false),
                     PointAvarage = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     FinalPoint = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -417,7 +413,7 @@ namespace UniCabinet.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     LectureId = table.Column<int>(type: "int", nullable: false),
                     IsVisit = table.Column<bool>(type: "bit", nullable: false),
                     PointsCount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
@@ -445,7 +441,7 @@ namespace UniCabinet.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     PracticalId = table.Column<int>(type: "int", nullable: false),
                     Grade = table.Column<int>(type: "int", nullable: false),
                     Point = table.Column<int>(type: "int", nullable: false)
@@ -465,6 +461,27 @@ namespace UniCabinet.Infrastructure.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Courses",
+                columns: new[] { "Id", "Number" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 2, 2 },
+                    { 3, 3 },
+                    { 4, 4 },
+                    { 5, 5 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Semesters",
+                columns: new[] { "Id", "DayEnd", "DayStart", "MounthEnd", "MounthStart", "Number" },
+                values: new object[,]
+                {
+                    { 1, 25, 1, 1, 9, 1 },
+                    { 2, 30, 7, 6, 2, 2 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -553,11 +570,6 @@ namespace UniCabinet.Infrastructure.Migrations
                 column: "NormalizedName",
                 unique: true,
                 filter: "[NormalizedName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Semesters_CourseId",
-                table: "Semesters",
-                column: "CourseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudentProgresses_DisciplineDetailId",
@@ -657,10 +669,10 @@ namespace UniCabinet.Infrastructure.Migrations
                 name: "Groups");
 
             migrationBuilder.DropTable(
-                name: "Semesters");
+                name: "Courses");
 
             migrationBuilder.DropTable(
-                name: "Courses");
+                name: "Semesters");
         }
     }
 }

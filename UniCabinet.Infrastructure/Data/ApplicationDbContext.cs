@@ -53,6 +53,17 @@ namespace UniCabinet.Infrastructure.Data
             builder.ApplyConfiguration(new PracticalConfiguration());
             builder.ApplyConfiguration(new ExamConfiguration());
             builder.ApplyConfiguration(new StudentProgressConfiguration());
+
+            builder.Entity<Course>().HasData(
+                new Course {Id = 1, Number = 1 },
+                new Course {Id = 2, Number = 2 },
+                new Course {Id = 3, Number = 3 },
+                new Course {Id = 4, Number = 4 },
+                new Course {Id = 5, Number = 5 });
+            
+            builder.Entity<Semester>().HasData(
+                new Semester { Id = 1, Number = 1, DayStart = 1, MounthStart = 9, DayEnd = 25, MounthEnd = 1 },
+                new Semester { Id = 2, Number = 2, DayStart = 7, MounthStart = 2, DayEnd = 30, MounthEnd = 6 });
         }
     }
 }
