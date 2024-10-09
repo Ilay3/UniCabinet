@@ -46,14 +46,14 @@ function saveUserDetails() {
         body: formData
     })
         .then(response => {
-            if (response.ok) {
-                alert('Данные пользователя успешно обновлены.');
-                location.reload(); // Перезагрузить страницу
+            if (!response.ok) {
+                alert('Произошла ошибка при обновлении данных.'); // Показать сообщение об ошибке
             } else {
-                alert('Произошла ошибка при обновлении данных.');
+                location.reload(); // Перезагрузить страницу после успешного сохранения без вывода уведомления
             }
         })
         .catch(error => {
-            console.error('Error saving user details:', error);
+            console.error('Ошибка при сохранении данных пользователя:', error);
+            alert('Произошла ошибка при обновлении данных.'); // Показать сообщение об ошибке
         });
 }
