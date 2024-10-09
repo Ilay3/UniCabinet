@@ -3,16 +3,16 @@ using UniCabinet.Web.ViewModel;
 
 namespace UniCabinet.Web.Extension
 {
-    public static class GroupsViewModelExtension
+    public static class GroupCreateEditViewModelExtension
     {
-        public static GroupViewModel GetGroupViewModel(this GroupDTO groupsDTO, int courseNumber, int semesterNumber)
+        public static GroupCreateEditViewModel GetGroupCreateEditViewModel(this GroupDTO groupsDTO)
         {
-            var groups = new GroupViewModel
+            var groups = new GroupCreateEditViewModel
             {
                 Id = groupsDTO.Id,
                 Name = groupsDTO.Name,
-                CourseNumber = courseNumber,
-                SemesterNumber = semesterNumber,
+                CourseId = groupsDTO.CourseId,
+                SemesterId = groupsDTO.SemesterId,
                 TypeGroup = groupsDTO.TypeGroup,
             };
 

@@ -24,9 +24,10 @@ namespace UniCabinet.Infrastructure.Repository
             return semesterEntity.Select(d => new SemesterDTO
             {
                 Id = d.Id,
-                StartDate = d.StartDate,
-                EndDate = d.EndDate,
-                CourseId = d.CourseId,
+                DayStart = d.DayStart,
+                DayEnd = d.DayEnd,
+                MounthStart = d.MounthStart,
+                MounthEnd = d.MounthEnd,
                 Number = d.Number,
             }).ToList();
         }
@@ -38,9 +39,10 @@ namespace UniCabinet.Infrastructure.Repository
 
             return new SemesterDTO
             {
-                StartDate = semesterEntity.StartDate,
-                EndDate = semesterEntity.EndDate,
-                CourseId = semesterEntity.CourseId,
+                DayStart = semesterEntity.DayStart,
+                DayEnd = semesterEntity.DayEnd,
+                MounthStart = semesterEntity.MounthStart,
+                MounthEnd = semesterEntity.MounthEnd,
                 Number = semesterEntity.Number,
             };
         }

@@ -1,0 +1,48 @@
+﻿@model UniCabinet.Web.ViewModel.GroupCreateEditViewModel
+
+<div class="modal fade" id="addGroupModal" tabindex="-1" aria-labelledby="addGroupModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addGroupModalLabel">Добавить группу</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-action="AddGroup">
+                    <div class="mb-3">
+                        <label for="groupName" class="form-label">Название группы</label>
+                        <input type="text" class="form-control" id="groupName" name="Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="groupType" class="form-label">Тип группы</label>
+                        <select name="TypeGroup" id="groupType" required>
+                            <option value="1">Очно</option>
+                            <option value="2">Заочно</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="courseNumber" class="form-label" >Курс</label>
+                        <select name="CourseId" required>
+                            <option value="1">1 Курс</option>
+                            <option value="2">2 Курс</option>
+                            <option value="3">3 Курс</option>
+                            <option value="4">4 Курс</option>
+                            <option value="5">5 Курс</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="semesterNumber" class="form-label">Семестр</label>
+                        <select name="SemesterId">
+                            <option value="1">1 Семестр</option>
+                            <option value="2">2 Семестр</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Добавить группу</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

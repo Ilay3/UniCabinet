@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UniCabinet.Application.Interfaces.Repository;
+using UniCabinet.Domain.DTO;
 using UniCabinet.Web.Extension;
+using UniCabinet.Web.Mapping;
+using UniCabinet.Web.ViewModel;
 
 namespace UniCabinet.Web.Controllers
 {
@@ -31,5 +34,74 @@ namespace UniCabinet.Web.Controllers
 
             return View(groupViewModel);
         }
+
+        public IActionResult GroupAddModal()
+        {
+            return PartialView("_GroupAddModal");
+        }
+
+        public IActionResult GroupEditModal(int id)
+        {
+            var groupDTO = _groupRepository.GetGroupById(id);
+            var groupViewModel = groupDTO.GetGroupCreateEditViewModel();
+
+            if (groupViewModel.TypeGroup == "Очно")
+            {
+                groupViewModel.TypeGroup = "1";
+            }
+
+            if (groupViewModel.TypeGroup == "Заочно")
+            {
+                groupViewModel.TypeGroup = "2";
+            }
+
+            return PartialView("_GroupEditModal", groupViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddGroup(GroupCreateEditViewModel viewModel)
+        {
+            if (!ModelState.IsValid) return PartialView("_GroupAddModal", viewModel);
+
+            if (viewModel.TypeGroup == "1")
+            {
+                viewModel.TypeGroup = "Очно";
+            }
+
+            if (viewModel.TypeGroup == "2")
+            {
+                viewModel.TypeGroup = "Заочно";
+            }
+
+            var groupViewModel = viewModel.GetGroupDTO();
+            
+            await _groupRepository.AddGroupAsync(groupViewModel);
+
+            return RedirectToAction("GroupsView");
+        }
+
+        public IActionResult EditGroup(int id, GroupCreateEditViewModel viewModel)
+        {
+            if (id != viewModel.Id) return NotFound();
+            
+            if(!ModelState.IsValid) return PartialView("_GroupEditModal", viewModel);
+
+            if (viewModel.TypeGroup == "1")
+            {
+                viewModel.TypeGroup = "Очно";
+            }
+
+            if (viewModel.TypeGroup == "2")
+            {
+                viewModel.TypeGroup = "Заочно";
+            }
+
+            var groupDTO = viewModel.GetGroupDTO();
+            _groupRepository.UpdateGroup(groupDTO);
+
+            return RedirectToAction("GroupsView");
+            
+        }
+
     }
 }
