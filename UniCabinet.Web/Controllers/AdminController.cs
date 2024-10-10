@@ -30,24 +30,13 @@ public class AdminController : Controller
     {
         if (string.IsNullOrEmpty(role))
         {
-            return RedirectToAction("VerifiedUsers", new { role = "Student" });
+            role = "Student"; // По умолчанию выбираем роль Student
         }
 
         // Получаем всех пользователей, отфильтрованных по роли
-        var users = new List<UserDTO>();
-
-        if (role == "Verified")
-        {
-            users = (await _userService.GetAllUsersAsync())
-                    .Where(user => user.Roles.Count == 1 && user.Roles.Contains("Verified"))
-                    .ToList();
-        }
-        else
-        {
-            users = (await _userService.GetAllUsersAsync())
-                    .Where(user => user.Roles.Contains(role))
-                    .ToList();
-        }
+        var users = (await _userService.GetAllUsersAsync())
+            .Where(user => role == "Verified" ? user.Roles.Count == 1 && user.Roles.Contains("Verified") : user.Roles.Contains(role))
+            .ToList();
 
         // Фильтрация по запросу, если он не пустой
         if (!string.IsNullOrEmpty(query))
@@ -57,7 +46,6 @@ public class AdminController : Controller
                                user.Email.Contains(query, StringComparison.CurrentCultureIgnoreCase))
                 .ToList();
         }
-
 
         // Пагинация
         var totalUsers = users.Count;
@@ -95,8 +83,16 @@ public class AdminController : Controller
             Pagination = paginationModel
         };
 
+        // Если запрос выполнен через AJAX, возвращаем только частичное представление
+        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+        {
+            return PartialView("_UserTablePartial", model);
+        }
+
         return View(model);
     }
+
+
 
     [HttpPost]
     public async Task<IActionResult> UpdateUserGroup(string userId, int groupId)
