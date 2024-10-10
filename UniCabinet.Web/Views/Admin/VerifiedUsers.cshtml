@@ -1,6 +1,8 @@
 ﻿@using UniCabinet.Web.ViewModel
 @model StudentGroupViewModel
 
+<link rel="stylesheet" href="~/css/search.css" />
+
 <h3>Список пользователй</h3>
 
 <form method="get" asp-action="VerifiedUsers" id="roleFilterForm">
@@ -25,9 +27,10 @@
     <ul id="suggestionsList" class="list-group"></ul>
 </div>
 
-
-
 <!-- Контейнер для таблицы пользователей -->
 <div id="userTableContainer">
     @await Html.PartialAsync("_UserTablePartial", Model)
 </div>
+
+<script src="~/js/search.js" defer></script>
+<script src="~/js/roleFilter.js" defer></script>

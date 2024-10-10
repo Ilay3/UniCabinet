@@ -26,7 +26,7 @@ public class AdminController : Controller
         _userManager = userManager;
     }
 
-    public async Task<IActionResult> VerifiedUsers(string role, string query = null, int pageNumber = 1, int pageSize = 2)
+    public async Task<IActionResult> VerifiedUsers(string role, string query = null, int pageNumber = 1, int pageSize = 7)
     {
         if (string.IsNullOrEmpty(role))
         {

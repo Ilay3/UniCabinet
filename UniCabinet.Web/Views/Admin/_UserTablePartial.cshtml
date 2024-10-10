@@ -1,46 +1,54 @@
 ﻿@model UniCabinet.Web.ViewModel.StudentGroupViewModel
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Email</th>
-            <th>Полное Имя</th>
-            <th>Роли</th>
-            <th>Текущая Группа</th>
-            <th>Изменить Группу</th>
-            <th>Изменить Роль</th>
-        </tr>
-    </thead>
-    <tbody id="userTableBody">
-        @foreach (var user in Model.Users)
-        {
-            <tr data-user-id="@user.Id" class="user-row">
-                <td>@user.Email</td>
-                <td>@user.FullName</td>
-                <td>@string.Join(", ", user.Roles)</td>
-                <td>@user.GroupName</td>
-                <td>
-                    @if (user.Roles.Contains("Student") && user.Roles.Contains("Verified"))
-                    {
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#groupModal_@user.Id">
-                            Изменить группу
-                        </button>
-                        <partial name="_GroupModal" model="user" />
-                    }
-                    else
-                    {
-                        <span class="text-muted">Изменение группы недоступно</span>
-                    }
-                </td>
-                <td>
-                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#roleModal_@user.Id">
-                        Изменить роль
-                    </button>
-                    <partial name="_RoleModal" model="user" />
-                </td>
+<div class="table-responsive">
+    <table class="table table-bordered table-hover" >
+        <thead>
+            <tr>
+                <th scope="col">Email</th>
+                <th scope="col">Полное Имя</th>
+                <th scope="col">Роли</th>
+                <th scope="col">Текущая Группа</th>
+                <th scope="col">Изменить Группу</th>
+                <th scope="col">Изменить Роль</th>
+                <th scope="col">Информация</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody id="userTableBody">
+            @foreach (var user in Model.Users)
+            {
+                <tr data-user-id="@user.Id" class="user-row">
+                    <td>@user.Email</td>
+                    <td>@user.FullName</td>
+                    <td>@string.Join(", ", user.Roles)</td>
+                    <td>@user.GroupName</td>
+                    <td>
+                        @if (user.Roles.Contains("Student") && user.Roles.Contains("Verified"))
+                        {
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#groupModal_@user.Id">
+                                Изменить группу
+                            </button>
+                            <partial name="_GroupModal" model="user" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">Изменение группы недоступно</span>
+                        }
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#roleModal_@user.Id">
+                            Изменить роль
+                        </button>
+                        <partial name="_RoleModal" model="user" />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-sm open-user-detail" data-user-id="@user.Id">
+                            Подробнее
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @await Html.PartialAsync("_Pagination", Model.Pagination)

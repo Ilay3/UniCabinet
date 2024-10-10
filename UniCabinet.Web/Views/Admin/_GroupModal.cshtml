@@ -6,10 +6,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="groupModalLabel_@Model.Id">Изменить группу для @Model.FullName</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="post" asp-action="UpdateUserGroup">
+                <form method="post" asp-action="UpdateUserGroup" onsubmit="showLoadingIndicator()">
                     <input type="hidden" name="userId" value="@Model.Id" />
                     <div class="form-group">
                         <label for="groupSelect">Выберите новую группу:</label>

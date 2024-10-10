@@ -9,7 +9,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <form method="post">
+        <form method="post" onsubmit="showLoadingIndicator()">
             <h4>Используйте свою учетную запись</h4>
             <hr />
             @Html.ValidationSummary("", new { @class = "text-danger" })
@@ -53,41 +53,11 @@
 @section Scripts {
     @if (Model.IsLockedOut && Model.RemainingLockoutTime.TotalSeconds > 0)
     {
+        <script src="~/js/lockoutTimer.js"></script>
         <script>
-            // Получение времени блокировки с сервера в миллисекундах
-            var remainingTime = @Model.RemainingLockoutTime.TotalMilliseconds.ToString("F0", CultureInfo.InvariantCulture);
+            var remainingTime = @Model.RemainingLockoutTime.TotalMilliseconds.ToString("F0", System.Globalization.CultureInfo.InvariantCulture);
 
-            function updateTimer() {
-                // Преобразуем время в секунды и минуты
-                var totalSeconds = Math.floor(remainingTime / 1000);
-                var minutes = Math.floor(totalSeconds / 60);
-                var seconds = totalSeconds % 60;
-
-                // Форматируем время для отображения
-                var formattedTime = "";
-                if (minutes > 0) {
-                    formattedTime = minutes + " минут " + seconds + " секунд";
-                } else {
-                    formattedTime = seconds + " секунд";
-                }
-
-                // Отображаем на странице
-                document.getElementById("lockout-timer").textContent = formattedTime;
-
-                // Уменьшаем время на 1 секунду (1000 мс)
-                remainingTime -= 1000;
-
-                // Если время закончилось, перезагружаем страницу
-                if (remainingTime <= 0) {
-                    location.reload();
-                } else {
-                    // Обновляем таймер каждую секунду
-                    setTimeout(updateTimer, 1000);
-                }
-            }
-
-            // Инициализируем таймер при загрузке страницы
-            updateTimer();
+            startLockoutTimer(remainingTime);
         </script>
     }
 }
