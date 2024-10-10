@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/css/search.css" />
     <link rel="stylesheet" href="~/css/modal.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/loading.css" />
 
 </head>
 <body>
@@ -75,6 +76,15 @@
         </div>
     </footer>
 
+    <!-- Индикатор загрузки -->
+    <div id="loadingIndicator" style="display: none;">
+        <p>Загрузка...</p>
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Загрузка...</span>
+        </div>
+    </div>
+
+    <script src="~/js/loadingIndicator.js"></script>
     <script src="~/js/pagination.js" defer></script>
     <script src="~/js/roleFilter.js" defer></script>
     <script src="~/js/search.js" defer></script>

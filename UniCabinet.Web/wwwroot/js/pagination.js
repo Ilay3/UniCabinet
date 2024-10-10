@@ -3,14 +3,22 @@
     var query = $('#searchBox').val();
     var pageSize = $('input[name="pageSize"]').val();
 
+    showLoadingIndicator();
+
     // Выполняем AJAX-запрос для получения данных для указанной страницы
     $.get('/Admin/VerifiedUsers', { pageNumber: pageNumber, role: role, query: query, pageSize: pageSize })
         .done(function (data) {
             // Обновляем содержимое таблицы пользователей
             $('#userTableContainer').html(data);
+
+            hideLoadingIndicator();
         })
+
+
         .fail(function () {
             alert('Ошибка при загрузке пользователей.');
+
+            hideLoadingIndicator();
         });
 }
 

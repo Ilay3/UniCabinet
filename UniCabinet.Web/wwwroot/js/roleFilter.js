@@ -13,14 +13,22 @@
         var pageNumber = 1;
         var pageSize = $('input[name="pageSize"]').val();
 
+        showLoadingIndicator();
+
         // Отправка AJAX-запроса для получения отфильтрованных пользователей
         $.get('/Admin/VerifiedUsers', { role: role, query: query, pageNumber: pageNumber, pageSize: pageSize })
             .done(function (data) {
                 // Обновляем содержимое таблицы
                 $('#userTableContainer').html(data);
+
+                hideLoadingIndicator();
             })
+
+            
             .fail(function () {
                 alert('Ошибка при загрузке списка пользователей.');
+
+                hideLoadingIndicator();
             });
     });
 });
