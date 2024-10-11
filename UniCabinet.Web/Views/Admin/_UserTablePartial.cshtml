@@ -18,7 +18,7 @@
             {
                 <tr data-user-id="@user.Id" class="user-row">
                     <td>@user.Email</td>
-                    <td>@user.FullName</td>
+                    <td>@user.FirstName @user.LastName @user.Patronymic</td>
                     <td>@string.Join(", ", user.Roles)</td>
                     <td>@user.GroupName</td>
                     <td>
@@ -41,9 +41,10 @@
                         <partial name="_RoleModal" model="user" />
                     </td>
                     <td>
-                        <button type="button" class="btn btn-info btn-sm open-user-detail" data-user-id="@user.Id">
+                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#userDetailModal_@user.Id">
                             Подробнее
                         </button>
+                            <partial name="_UserDetailModal" model="user" />
                     </td>
                 </tr>
             }

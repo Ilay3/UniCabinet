@@ -26,7 +26,7 @@ public class AdminController : Controller
         _userManager = userManager;
     }
 
-    public async Task<IActionResult> VerifiedUsers(string role, string query = null, int pageNumber = 1, int pageSize = 7)
+    public async Task<IActionResult> VerifiedUsers(string role, string query = null, int pageNumber = 1, int pageSize = 2)
     {
         if (string.IsNullOrEmpty(role))
         {
@@ -42,9 +42,12 @@ public class AdminController : Controller
         if (!string.IsNullOrEmpty(query))
         {
             users = users
-                .Where(user => user.FullName.Contains(query, StringComparison.CurrentCultureIgnoreCase) ||
+                .Where(user => (user.FirstName != null && user.FirstName.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
+                               (user.LastName != null && user.LastName.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
+                               (user.Patronymic != null && user.Patronymic.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
                                user.Email.Contains(query, StringComparison.CurrentCultureIgnoreCase))
                 .ToList();
+
         }
 
         // Пагинация
@@ -189,50 +192,30 @@ public class AdminController : Controller
         if (!string.IsNullOrEmpty(query))
         {
             users = users.Where(user =>
-                user.FullName.Contains(query, StringComparison.CurrentCultureIgnoreCase) ||
+                (user.FirstName != null && user.FirstName.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
+                (user.LastName != null && user.LastName.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
+                (user.Patronymic != null && user.Patronymic.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
                 user.Email.Contains(query, StringComparison.CurrentCultureIgnoreCase)
             ).ToList();
         }
 
-        // Ограничение количества результатов (например, 10)
+        // Ограничение количества результатов
         users = users.Take(10).ToList();
 
+        // Формирование результата
         var result = users.Select(user => new
         {
             id = user.Id,
-            fullName = user.FullName,
+            fullName = $"{user.FirstName} {user.LastName} {user.Patronymic}".Trim(),
             email = user.Email
         });
 
         return Json(result);
-    }
 
-    [HttpGet]
-    public async Task<IActionResult> GetUserDetails(string userId)
-    {
-        var userDetailDTO = await _userService.GetUserDetailsAsync(userId);
-        if (userDetailDTO == null)
-        {
-            return NotFound();
-        }
-
-        var viewModel = new UserDetailViewModel
-        {
-            Id = userDetailDTO.Id,
-            Email = userDetailDTO.Email,
-            FirstName = userDetailDTO.FirstName,
-            LastName = userDetailDTO.LastName,
-            Patronymic = userDetailDTO.Patronymic,
-            DateBirthday = userDetailDTO.DateBirthday,
-            Roles = userDetailDTO.Roles,
-            GroupName = userDetailDTO.GroupName
-        };
-
-        return PartialView("_UserDetailModal", viewModel);
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateUserDetails(UserDetailViewModel model)
+    public async Task<IActionResult> UpdateUserDetails(UserDTO model)
     {
         if (!ModelState.IsValid)
         {
@@ -250,7 +233,7 @@ public class AdminController : Controller
         };
 
         await _userService.UpdateUserDetailsAsync(userDetailDTO);
-        return Ok();
+        return RedirectToAction("VerifiedUsers");
     }
 
 }

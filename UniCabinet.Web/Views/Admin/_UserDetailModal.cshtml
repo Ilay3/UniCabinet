@@ -1,15 +1,14 @@
-﻿
-@model UniCabinet.Web.ViewModel.UserDetailViewModel
+﻿@model UniCabinet.Domain.DTO.UserDTO
 
-<div class="modal fade" id="userDetailModal" tabindex="-1" role="dialog" aria-labelledby="userDetailModalLabel" aria-hidden="true">
+<div class="modal fade" id="userDetailModal_@Model.Id" tabindex="-1" role="dialog" aria-labelledby="userDetailModalLabel_@Model.Id" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="userDetailModalLabel">Детали пользователя</h5>
+                <h5 class="modal-title" id="userDetailModalLabel_@Model.Id">Детали пользователя</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form id="userDetailForm" onsubmit="showLoadingIndicator()">
+            <form method="post" asp-action="UpdateUserDetails" onsubmit="showLoadingIndicator()">
+                <div class="modal-body">
                     <div class="form-group">
                         <label for="userEmail">Email</label>
                         <input type="email" class="form-control" id="userEmail" name="Email" value="@Model.Email" required>
@@ -30,12 +29,13 @@
                         <label for="userDateBirthday">Дата рождения</label>
                         <input type="date" class="form-control" id="userDateBirthday" name="DateBirthday" value="@Model.DateBirthday?.ToString("yyyy-MM-dd")">
                     </div>
-                    <input type="hidden" id="userId" name="Id" value="@Model.Id">
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="saveUserDetails">Сохранить изменения</button>
-            </div>
+                    <input type="hidden" name="Id" value="@Model.Id">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

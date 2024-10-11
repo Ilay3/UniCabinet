@@ -32,9 +32,12 @@ namespace UniCabinet.Application.Services
                 {
                     Id = user.Id,
                     Email = user.Email,
-                    FullName = $"{user.FirstName} {user.LastName} {user.Patronymic}",
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Patronymic = user.Patronymic,
                     Roles = roles.ToList(),
                     GroupName = user.Group != null ? user.Group.Name : "Без группы"
+
                 });
             }
 
