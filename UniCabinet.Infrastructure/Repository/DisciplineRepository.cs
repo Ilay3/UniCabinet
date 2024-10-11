@@ -67,6 +67,7 @@ namespace UniCabinet.Infrastructure.Data.Repository
             disciplineEntity.Name = disciplineDTO.Name;
             disciplineEntity.Description = disciplineDTO.Description;
 
+            _context.Disciplines.Update(disciplineEntity);
             _context.SaveChanges();
         }
     }

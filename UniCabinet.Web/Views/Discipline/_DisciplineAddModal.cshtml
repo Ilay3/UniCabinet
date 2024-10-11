@@ -1,0 +1,29 @@
+﻿@model UniCabinet.Web.ViewModel.Discipline.DisciplineAddViewModel
+
+<div class="modal fade" id="addDisciplineModal" tabindex="-1" aria-labelledby="addDisciplineModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDisciplineModalLabel">Добавить группу</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-action="AddDiscipline">
+                    <div class="mb-3">
+                        <label for="disciplineName" class="form-label">Название группы</label>
+                        <input type="text" class="form-control" id="disciplineName" name="Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="disciplineDescription" class="form-label">Название группы</label>
+                        <input type="text" class="form-control" id="disciplineDescription" name="Description" required>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Добавить группу</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

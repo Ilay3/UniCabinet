@@ -7,6 +7,7 @@ using UniCabinet.Application.Interfaces.Services;
 using UniCabinet.Application.Services;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
+using UniCabinet.Infrastructure.Data.Repository;
 using UniCabinet.Infrastructure.Repositories;
 using UniCabinet.Infrastructure.Repository;
 using UniCabinet.Infrastructure.Services;
@@ -78,6 +79,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<ISemesterRepository, SemesterRepository>();
+builder.Services.AddScoped<IDisciplineRepository, DisciplineRepository>();
 
 
 builder.Services.AddRazorPages();
@@ -117,6 +119,6 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Admin}/{action=VerifiedUsers}/{id?}");
+    pattern: "{controller=Discipline}/{action=DisciplinesList}/{id?}");
 
 app.Run();
