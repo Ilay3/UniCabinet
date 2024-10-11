@@ -19,7 +19,7 @@ namespace UniCabinet.Web.Controllers
             _semesterRepository = semesterRepository;
         }
 
-        public IActionResult GroupsView()
+        public IActionResult GroupsList()
         {
             var groupDTO = _groupRepository.GetAllGroups();
 
@@ -30,7 +30,8 @@ namespace UniCabinet.Web.Controllers
                     var semesterGroup = _semesterRepository.GetSemesterById(dto.SemesterId);
 
                     return dto.GetGroupViewModel(courseGroup.Number, semesterGroup.Number);
-                }).ToList();
+                })
+                .ToList();
 
             return View(groupViewModel);
         }
@@ -80,7 +81,7 @@ namespace UniCabinet.Web.Controllers
             
             await _groupRepository.AddGroupAsync(groupViewModel);
 
-            return RedirectToAction("GroupsView");
+            return RedirectToAction("GroupsList");
         }
 
         [HttpPost]
@@ -104,7 +105,8 @@ namespace UniCabinet.Web.Controllers
             var groupDTO = viewModel.GetGroupDTO();
             _groupRepository.UpdateGroup(groupDTO);
 
-            return RedirectToAction("GroupsView");
+            return RedirectToAction("GroupsList");
+            
         }
     }
 }
