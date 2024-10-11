@@ -37,7 +37,8 @@ namespace UniCabinet.Web.Controllers
 
         public IActionResult GroupAddModal()
         {
-            return PartialView("_GroupAddModal");
+            var viewModel = new GroupCreateEditViewModel();
+            return PartialView("_GroupAddModal", viewModel);
         }
 
         public IActionResult GroupEditModal(int id)
@@ -55,8 +56,10 @@ namespace UniCabinet.Web.Controllers
                 groupViewModel.TypeGroup = "2";
             }
 
-            return PartialView("_GroupEditModal", groupViewModel);
+            return View("GroupsView", groupViewModel);
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> AddGroup(GroupCreateEditViewModel viewModel)
@@ -80,11 +83,13 @@ namespace UniCabinet.Web.Controllers
             return RedirectToAction("GroupsView");
         }
 
-        public IActionResult EditGroup(int id, GroupCreateEditViewModel viewModel)
+        [HttpPost]
+        public IActionResult EditGroup(GroupCreateEditViewModel viewModel)
         {
-            if (id != viewModel.Id) return NotFound();
-            
-            if(!ModelState.IsValid) return PartialView("_GroupEditModal", viewModel);
+            if (!ModelState.IsValid)
+            {
+                return View("GroupsView", viewModel);
+            }
 
             if (viewModel.TypeGroup == "1")
             {
@@ -100,8 +105,6 @@ namespace UniCabinet.Web.Controllers
             _groupRepository.UpdateGroup(groupDTO);
 
             return RedirectToAction("GroupsView");
-            
         }
-
     }
 }

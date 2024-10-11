@@ -1,24 +1,19 @@
 ﻿@model IEnumerable<UniCabinet.Web.ViewModel.GroupViewModel>
 
-<button type="button" class="btn btn-primary" onclick="openAddGroupModal()" onsubmit="showLoadingIndicator()">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addGroupModal">
     Добавить группу
 </button>
+
+
+<partial name="_GroupAddModal" model="new UniCabinet.Web.ViewModel.GroupCreateEditViewModel()" />
 
 <table class="table">
     <thead>
         <tr>
-            <th>
-                Название
-            </th>
-            <th>
-                Тип группы
-            </th>
-            <th>
-                Курс
-            </th>
-            <th>
-                Семестр
-            </th>
+            <th>Название</th>
+            <th>Тип группы</th>
+            <th>Курс</th>
+            <th>Семестр</th>
             <th></th>
         </tr>
     </thead>
@@ -26,54 +21,20 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>@item.Name</td>
+                <td>@item.TypeGroup</td>
+                <td>@item.CourseNumber</td>
+                <td>@item.SemesterNumber</td>
                 <td>
-                    @item.Name
-                </td>
-                <td>
-                    @item.TypeGroup
-                </td>
-                <td>
-                    @item.CourseNumber
-                </td>
-                <td>
-                    @item.SemesterNumber
-                </td>
-                <td>
-                    <button type="button" class="btn btn-secondary" onclick="openEditGroupModal(@item.Id)">
+                    <a href="@Url.Action("LoadEditGroupModal", "Group", new { id = @item.Id })" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#editGroupModal">
                         Редактировать
-                    </button>
+                    </a>
+
                 </td>
             </tr>
         }
     </tbody>
 </table>
+<div id="modal-container"></div>
 
-<!-- Скрипты для открытия модальных окон -->
-@section Scripts {
-    <script>
-        function openAddGroupModal() {
-            fetch('/Group/GroupAddModal')
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById("modalContainer").innerHTML = html;
-                    var modal = new bootstrap.Modal(document.getElementById('addGroupModal'));
-                    modal.show();
-                });
-        }
-
-        function openEditGroupModal(groupId) {
-            fetch(`/Group/GroupEditModal?id=${groupId}`)
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById("modalContainer").innerHTML = html;
-                    var modal = new bootstrap.Modal(document.getElementById('editGroupModal'));
-                    modal.show();
-                })
-                .catch(error => {
-                    console.error('Ошибка при загрузке модального окна для редактирования:', error);
-                });
-        }
-    </script>
-}
-
-<div id="modalContainer"></div>
+<partial name="_GroupEditModal" model="new UniCabinet.Web.ViewModel.GroupCreateEditViewModel()" />
