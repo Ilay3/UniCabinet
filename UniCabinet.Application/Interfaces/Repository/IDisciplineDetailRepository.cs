@@ -6,8 +6,8 @@ namespace UniCabinet.Application.Interfaces.Repository
     {
         Task AddDisciplineDetailAsync(DisciplineDetailDTO disciplineDetailDTO);
         Task DeleteDisciplineDetail(int id);
-        List<DisciplineDetailDTO> GetAllDisciplineDetails();
-        DisciplineDetailDTO GetDisciplineDetailById(int id);
+        Task<List<DisciplineDetailDTO>> GetAllDisciplineDetails();
+        Task<DisciplineDetailDTO> GetDisciplineDetailById(int id);
         void UpdateDisciplineDetail(DisciplineDetailDTO disciplineDetailDTO);
     }
 }

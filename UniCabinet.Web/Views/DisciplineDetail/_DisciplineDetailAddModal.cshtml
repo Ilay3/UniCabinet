@@ -1,0 +1,98 @@
+﻿@model UniCabinet.Web.ViewModel.DisiciplineDetail.DisciplineDetailAddViewModel
+
+<div class="modal fade" id="addDisciplineDetailModal" tabindex="-1" aria-labelledby="addDisciplineDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDisciplineDetailModalLabel">Добавить группу</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-action="AddDisciplineDetail">
+                    <div class="mb-3">
+                        <label for="disciplineName" class="form-label">Название дисцеплин</label>
+                        <select name="DisciplineId" required>
+                            @foreach (var item in ViewBag.DisciplineList)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="disciplineName" class="form-label">Пользователи</label>
+                        <select name="TeacherId" required>
+                            @foreach (var item in ViewBag.Teacher)
+                            {
+                                <option value="@item.Id">@item.FirstName @item.LastName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="disciplineName" class="form-label">Семестры</label>
+                        <select name="SemesterId" required>
+                            @foreach (var item in ViewBag.SemesterList)
+                            {
+                                <option value="@item.Id">@item.Number</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="disciplineName" class="form-label">Группы</label>
+                        <select name="GroupId" required>
+                            @foreach (var item in ViewBag.Group)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="disciplineName" class="form-label">Курсы</label>
+                        <select name="CourseId" required>
+                            @foreach (var item in ViewBag.Course)
+                            {
+                                <option value="@item.Id">@item.Number</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="disciplineName" class="form-label">Количество лекций</label>
+                        <input type="text" class="form-control" id="disciplineName" name="LectureCount" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="disciplineName" class="form-label">Количество практик</label>
+                        <input type="text" class="form-control" id="disciplineName" name="PracticalCount" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="disciplineName" class="form-label">Количество зачетов</label>
+                        <input type="text" class="form-control" id="disciplineName" name="SubExamCount" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="disciplineName" class="form-label">Количество экзаменов</label>
+                        <input type="text" class="form-control" id="disciplineName" name="ExamCount" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="disciplineName" class="form-label">Минимум посещений лекций</label>
+                        <input type="text" class="form-control" id="disciplineName" name="MinLecturesRequired" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="disciplineName" class="form-label">Минимум посещений практических</label>
+                        <input type="text" class="form-control" id="disciplineName" name="MinPracticalsRequired" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="disciplineName" class="form-label">Минимум для автомата</label>
+                        <input type="text" class="form-control" id="disciplineName" name="AutoExamThreshold" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="disciplineName" class="form-label">Минимум балл для прохождения</label>
+                        <input type="text" class="form-control" id="disciplineName" name="PassCount" required>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Добавить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

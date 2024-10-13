@@ -80,6 +80,9 @@ builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<ISemesterRepository, SemesterRepository>();
 builder.Services.AddScoped<IDisciplineRepository, DisciplineRepository>();
+builder.Services.AddScoped<IDisciplineDetailRepository, DisciplineDetailRepository>();
+builder.Services.AddScoped<ILectureRepository, LectureRepository>();
+builder.Services.AddScoped<ILectureService, LectureService>();
 
 
 builder.Services.AddRazorPages();
@@ -119,6 +122,6 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Discipline}/{action=DisciplinesList}/{id?}");
+    pattern: "{controller=DisciplineDetail}/{action=DisciplineDetailsList}/{id?}");
 
 app.Run();
