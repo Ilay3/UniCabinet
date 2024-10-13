@@ -6,8 +6,8 @@ namespace UniCabinet.Application.Interfaces.Repository
     {
         Task AddGroupAsync(GroupDTO groupDTO);
         Task DeleteGroup(int id);
-        List<GroupDTO> GetAllGroups();
-        GroupDTO GetGroupById(int id);
+        Task<List<GroupDTO>> GetAllGroups();
+        Task<GroupDTO> GetGroupById(int id);
         void UpdateGroup(GroupDTO groupDTO);
     }
 }

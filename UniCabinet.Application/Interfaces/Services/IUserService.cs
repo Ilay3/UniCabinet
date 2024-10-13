@@ -10,7 +10,6 @@ namespace UniCabinet.Application.Interfaces
     {
         Task<IEnumerable<UserDTO>> GetAllUsersAsync();
         Task UpdateStudentGroupAsync(string userId, int groupId);
-        Task<IEnumerable<GroupDTO>> GetAllGroupsAsync();
         Task UpdateUserRoleAsync(string userId, string role);
         Task<IEnumerable<User>> SearchUsersByNameOrEmailAndRoleAsync(string query, string role);
         Task<UserDetailDTO> GetUserDetailsAsync(string userId);

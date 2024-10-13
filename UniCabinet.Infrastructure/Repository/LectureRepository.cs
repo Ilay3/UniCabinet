@@ -1,4 +1,5 @@
-﻿using UniCabinet.Application.Interfaces.Repository;
+﻿using Microsoft.EntityFrameworkCore;
+using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Domain.DTO;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
@@ -12,9 +13,9 @@ namespace UniCabinet.Infrastructure.Repository
         {
             _context = context;
         }
-        public LectureDTO GetLectureById(int id)
+        public async Task<LectureDTO> GetLectureById(int id)
         {
-            var lectureEntity = _context.Lectures.Find(id);
+            var lectureEntity = await _context.Lectures.FindAsync(id);
             if (lectureEntity == null) return null;
 
             return new LectureDTO
@@ -23,6 +24,24 @@ namespace UniCabinet.Infrastructure.Repository
                 DisciplineDetailId = lectureEntity.DisciplineDetailId,
                 LectureNumber = lectureEntity.LectureNumber,
             };
+        }
+
+        public async Task<IEnumerable<LectureDTO>> GetLectureListByDisciplineDetailId(int id)
+        {
+            var lectureListEntity = await _context.Lectures
+                .Where(l => l.DisciplineDetailId == id)
+                .ToListAsync();
+
+            var disciplineDetailEntity = await _context.DisciplineDetails.FindAsync(id);
+            var disciplineEntity = await _context.Disciplines.FindAsync(disciplineDetailEntity.DisciplineId);
+
+            return lectureListEntity
+                .Select(l => new LectureDTO
+                {
+                    Date = l.Date,
+                    DisciplineDetailId = l.DisciplineDetailId,
+                    LectureNumber= l.LectureNumber,
+                }).ToList();
         }
 
         public List<LectureDTO> GetAllLectures()

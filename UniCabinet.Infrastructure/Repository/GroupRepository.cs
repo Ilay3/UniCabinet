@@ -1,4 +1,5 @@
-﻿using UniCabinet.Application.Interfaces.Repository;
+﻿using Microsoft.EntityFrameworkCore;
+using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Domain.DTO;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
@@ -13,9 +14,9 @@ namespace UniCabinet.Infrastructure.Repository
             _context = context;
         }
 
-        public GroupDTO GetGroupById(int id)
+        public async Task<GroupDTO> GetGroupById(int id)
         {
-            var groupEntity = _context.Groups.Find(id);
+            var groupEntity = await _context.Groups.FindAsync(id);
             if (groupEntity == null) return null;
 
             return new GroupDTO
@@ -27,9 +28,9 @@ namespace UniCabinet.Infrastructure.Repository
             };
         }
 
-        public List<GroupDTO> GetAllGroups()
+        public async Task<List<GroupDTO>> GetAllGroups()
         {
-            var groupEntity = _context.Groups.ToList();
+            var groupEntity = await _context.Groups.ToListAsync();
 
             return groupEntity.Select(d => new GroupDTO
             {

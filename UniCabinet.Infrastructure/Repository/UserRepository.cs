@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UniCabinet.Application.Interfaces;
+using UniCabinet.Domain.DTO;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
 
@@ -82,7 +83,24 @@ namespace UniCabinet.Infrastructure.Repositories
                 .Include(u => u.Group)
                 .FirstOrDefaultAsync(u => u.Id == userId);
         }
+        
+        public async Task<UserDTO> GetUserById(string id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            var group = await _context.Groups.FindAsync(user.GroupId);
 
+            if(user == null) return null;
+
+            return new UserDTO
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                DateBirthday = user.DateBirthday,
+                GroupName = group.Name,
+                Patronymic = user.Patronymic,
+            };
+        }
         public async Task UpdateUserAsync(User user)
         {
             _context.Users.Update(user);

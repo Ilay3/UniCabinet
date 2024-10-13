@@ -1,4 +1,5 @@
-﻿using UniCabinet.Application.Interfaces.Repository;
+﻿using Microsoft.EntityFrameworkCore;
+using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Domain.DTO;
 using UniCabinet.Domain.Entities;
 
@@ -13,9 +14,9 @@ namespace UniCabinet.Infrastructure.Data.Repository
             _context = context;
         }
 
-        public DisciplineDTO GetDisciplineById(int id)
+        public async Task<DisciplineDTO> GetDisciplineById(int id)
         {
-            var disciplineEntity = _context.Disciplines.Find(id);
+            var disciplineEntity = await _context.Disciplines.FindAsync(id);
             if (disciplineEntity == null) return null;
 
             return new DisciplineDTO
@@ -25,9 +26,9 @@ namespace UniCabinet.Infrastructure.Data.Repository
             };
         }
 
-        public List<DisciplineDTO> GetAllDisciplines()
+        public async Task<List<DisciplineDTO>> GetAllDisciplines()
         {
-            var disciplineEntity = _context.Disciplines.ToList();
+            var disciplineEntity = await _context.Disciplines.ToListAsync();
 
             return disciplineEntity.Select(d => new DisciplineDTO
             {
