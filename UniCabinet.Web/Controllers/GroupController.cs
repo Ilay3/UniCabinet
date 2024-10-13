@@ -21,19 +21,20 @@ namespace UniCabinet.Web.Controllers
 
         public async Task<IActionResult> GroupsList()
         {
-            var groupDTO = await _groupRepository.GetAllGroups();
+            var groupListDTO = await _groupRepository.GetAllGroups();
 
-            var groupViewModel = groupDTO
-                .Select(async dto =>
-                {
-                    var courseGroup = await _courseRepository.GetCourseById(dto.CourseId);
-                    var semesterGroup = await _semesterRepository.GetSemesterById(dto.SemesterId);
+            var groupViewModelList = new List<GroupViewModel>();
 
-                    return dto.GetGroupViewModel(courseGroup.Number, semesterGroup.Number);
-                })
-                .ToList();
+            foreach (var dto in groupListDTO)
+            {
+                var courseGroup = await _courseRepository.GetCourseById(dto.CourseId);
+                var semesterGroup = await _semesterRepository.GetSemesterById(dto.SemesterId);
 
-            return View(groupViewModel);
+                var groupViewModel = await dto.GetGroupViewModelAsync(courseGroup.Number, semesterGroup.Number);
+                groupViewModelList.Add(groupViewModel);
+            }
+
+            return View(groupViewModelList);
         }
 
         public IActionResult GroupAddModal()

@@ -5,18 +5,19 @@ namespace UniCabinet.Web.Extension
 {
     public static class GroupsViewModelExtension
     {
-        public static GroupViewModel GetGroupViewModel(this GroupDTO groupsDTO, int courseNumber, int semesterNumber)
+        public static async Task<GroupViewModel> GetGroupViewModelAsync(this GroupDTO dto, int courseNumber, int semesterNumber)
         {
-            var groups = new GroupViewModel
+            return await Task.Run(() =>
             {
-                Id = groupsDTO.Id,
-                Name = groupsDTO.Name,
-                CourseNumber = courseNumber,
-                SemesterNumber = semesterNumber,
-                TypeGroup = groupsDTO.TypeGroup,
-            };
-
-            return groups;
+                return new GroupViewModel
+                {
+                    CourseNumber = courseNumber,
+                    SemesterNumber = semesterNumber,
+                    Id = dto.Id,
+                    Name = dto.Name,
+                    TypeGroup = dto.TypeGroup,
+                };
+            });
         }
     }
 }
