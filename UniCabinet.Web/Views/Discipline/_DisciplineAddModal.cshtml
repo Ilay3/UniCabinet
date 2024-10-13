@@ -4,17 +4,17 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addDisciplineModalLabel">Добавить группу</h5>
+                <h5 class="modal-title" id="addDisciplineModalLabel">Добавить дисциплину</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form method="post" asp-action="AddDiscipline">
                     <div class="mb-3">
-                        <label for="disciplineName" class="form-label">Название группы</label>
+                        <label for="disciplineName" class="form-label">Название</label>
                         <input type="text" class="form-control" id="disciplineName" name="Name" required>
                     </div>
                     <div class="mb-3">
-                        <label for="disciplineDescription" class="form-label">Название группы</label>
+                        <label for="disciplineDescription" class="form-label">Описание</label>
                         <input type="text" class="form-control" id="disciplineDescription" name="Description" required>
                     </div>
                     
