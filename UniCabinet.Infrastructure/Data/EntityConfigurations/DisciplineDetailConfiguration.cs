@@ -29,6 +29,11 @@ namespace UniCabinet.Infrastructure.Data.EntityConfigurations
                 .WithMany(s => s.DisciplineDetials)
                 .HasForeignKey(dd => dd.SemesterId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(dd => dd.Course)
+                .WithMany(s => s.DisciplineDetails)
+                .HasForeignKey(dd => dd.CourseId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -26,6 +26,7 @@ namespace UniCabinet.Infrastructure.Repository
 
             return new DisciplineDetailDTO
             {
+                CourseId = disciplineDetailEntity.CourseId,
                 SemesterId = disciplineDetailEntity.SemesterId,
                 GroupId = disciplineDetailEntity.GroupId,
                 TeacherId = disciplineDetailEntity.TeacherId,
@@ -50,6 +51,7 @@ namespace UniCabinet.Infrastructure.Repository
                 Id = d.Id,
                 GroupId = d.GroupId,
                 SemesterId = d.SemesterId,
+                CourseId = d.CourseId,
                 DisciplineId = d.DisciplineId,
                 TeacherId = d.TeacherId,
                 SubExamCount = d.SubExamCount,
@@ -69,6 +71,7 @@ namespace UniCabinet.Infrastructure.Repository
             {
                 TeacherId = disciplineDetailDTO.TeacherId,
                 SemesterId = disciplineDetailDTO.SemesterId,
+                CourseId = disciplineDetailDTO.CourseId,
                 DisciplineId = disciplineDetailDTO.DisciplineId,
                 GroupId = disciplineDetailDTO.GroupId,
                 SubExamCount = disciplineDetailDTO.SubExamCount,
@@ -103,6 +106,7 @@ namespace UniCabinet.Infrastructure.Repository
             disciplineDetailEntity.DisciplineId = disciplineDetailDTO.DisciplineId;
             disciplineDetailEntity.GroupId = disciplineDetailDTO.GroupId;
             disciplineDetailEntity.SemesterId = disciplineDetailDTO.SemesterId;
+            disciplineDetailEntity.CourseId = disciplineDetailDTO.CourseId;
             disciplineDetailEntity.TeacherId = disciplineDetailDTO.TeacherId;
             disciplineDetailEntity.AutoExamThreshold = disciplineDetailDTO.AutoExamThreshold;
             disciplineDetailEntity.MinLecturesRequired = disciplineDetailDTO.MinLecturesRequired;

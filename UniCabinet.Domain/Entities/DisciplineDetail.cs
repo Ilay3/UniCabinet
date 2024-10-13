@@ -18,6 +18,9 @@ namespace UniCabinet.Domain.Entities
         public int SemesterId { get; set; }
         public Semester Semester { get; set; }
 
+        public int CourseId { get; set; }
+        public Course Course { get; set; }
+
         public string TeacherId { get; set; }
         public User Teacher { get; set; }
 
@@ -62,12 +65,10 @@ namespace UniCabinet.Domain.Entities
         public int PassCount { get; set; }
 
         // Навигационные свойства
+        
         public ICollection<Lecture> Lectures { get; set; }
-
         public ICollection<Practical> Practicals { get; set; }
-
         public ICollection<Exam> Exams { get; set; }
-
         public ICollection<StudentProgress> StudentProgresses { get; set; }
     }
 }

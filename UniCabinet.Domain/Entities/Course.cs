@@ -14,5 +14,6 @@ namespace UniCabinet.Domain.Entities
 
         // Навигационные свойства
         public ICollection<Group> Groups { get; set; }
+        public ICollection<DisciplineDetail> DisciplineDetails { get; set; }
     }
 }

@@ -17,6 +17,8 @@ namespace UniCabinet.Domain.DTO
 
         public int SemesterId { get; set; }
 
+        public int CourseId { get; set; }
+
         public string TeacherId { get; set; }
 
         /// <summary>
@@ -58,5 +60,7 @@ namespace UniCabinet.Domain.DTO
         /// Минимальный балл для прохождения
         /// </summary>
         public int PassCount { get; set; }
+
+        
     }
 }
