@@ -36,6 +36,9 @@ namespace UniCabinet.Domain.Entities
 
         public Group Group { get; set; }
 
+        public int? SpecialtyId { get; set; }
+        public Specialty Specialty { get; set; }
+
         // Навигационные свойства
         public ICollection<LectureVisit> LectureVisits { get; set; }
         public ICollection<PracticalResult> PracticalResults { get; set; }

@@ -26,6 +26,7 @@ namespace UniCabinet.Infrastructure.Data
         public DbSet<PracticalResult> PracticalResults { get; set; }
         public DbSet<ExamResult> ExamResults { get; set; }
         public DbSet<StudentProgress> StudentProgresses { get; set; }
+        public DbSet<Specialty> Specialties { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

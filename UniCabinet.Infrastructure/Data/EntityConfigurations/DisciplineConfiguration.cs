@@ -14,6 +14,12 @@ namespace UniCabinet.Infrastructure.Data.EntityConfigurations
                 .WithOne(dd => dd.Discipline)
                 .HasForeignKey(dd => dd.DisciplineId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(d => d.Specialty)
+                   .WithMany()
+                   .HasForeignKey(d => d.SpecialtyId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

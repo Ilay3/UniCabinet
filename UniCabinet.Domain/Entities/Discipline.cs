@@ -10,6 +10,9 @@ namespace UniCabinet.Domain.Entities
 
         public string Description { get; set; }
 
+        public int? SpecialtyId { get; set; }
+        public Specialty Specialty { get; set; }
+
         // Навигационные свойства
         public ICollection<DisciplineDetail> DisciplineDetails { get; set; }
     }

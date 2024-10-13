@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniCabinet.Infrastructure.Data;
 
 #nullable disable
 
-namespace UniCabinet.Infrastructure.Data.Migrations
+namespace UniCabinet.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241009092837_InitialCreate")]
-    partial class InitialCreate
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,7 +216,12 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SpecialtyId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SpecialtyId");
 
                     b.ToTable("Disciplines");
                 });
@@ -517,6 +519,22 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("UniCabinet.Domain.Entities.Specialty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Specialties");
+                });
+
             modelBuilder.Entity("UniCabinet.Domain.Entities.StudentProgress", b =>
                 {
                     b.Property<int>("Id")
@@ -609,6 +627,9 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SpecialtyId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -624,6 +645,8 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("SpecialtyId");
 
                     b.ToTable("Users", (string)null);
                 });
@@ -677,6 +700,16 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("UniCabinet.Domain.Entities.Discipline", b =>
+                {
+                    b.HasOne("UniCabinet.Domain.Entities.Specialty", "Specialty")
+                        .WithMany()
+                        .HasForeignKey("SpecialtyId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Specialty");
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.DisciplineDetail", b =>
@@ -843,7 +876,13 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                         .WithMany("Users")
                         .HasForeignKey("GroupId");
 
+                    b.HasOne("UniCabinet.Domain.Entities.Specialty", "Specialty")
+                        .WithMany("Teachers")
+                        .HasForeignKey("SpecialtyId");
+
                     b.Navigation("Group");
+
+                    b.Navigation("Specialty");
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.Course", b =>
@@ -894,6 +933,11 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Navigation("DisciplineDetials");
 
                     b.Navigation("Groups");
+                });
+
+            modelBuilder.Entity("UniCabinet.Domain.Entities.Specialty", b =>
+                {
+                    b.Navigation("Teachers");
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.User", b =>
