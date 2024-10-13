@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,9 +18,9 @@ namespace UniCabinet.Infrastructure.Repository
             _context = context;
         }
 
-        public List<SemesterDTO> GetAllSemesters()
+        public async Task<List<SemesterDTO>> GetAllSemesters()
         {
-            var semesterEntity = _context.Semesters.ToList();
+            var semesterEntity = await _context.Semesters.ToListAsync();
 
             return semesterEntity.Select(d => new SemesterDTO
             {
@@ -32,9 +33,9 @@ namespace UniCabinet.Infrastructure.Repository
             }).ToList();
         }
 
-        public SemesterDTO GetSemesterById(int id)
+        public async Task<SemesterDTO> GetSemesterById(int id)
         {
-            var semesterEntity = _context.Semesters.Find(id);
+            var semesterEntity = await _context.Semesters.FindAsync(id);
             if (semesterEntity == null) return null;
 
             return new SemesterDTO

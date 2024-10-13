@@ -19,15 +19,15 @@ namespace UniCabinet.Web.Controllers
             _semesterRepository = semesterRepository;
         }
 
-        public IActionResult GroupsList()
+        public async Task<IActionResult> GroupsList()
         {
-            var groupDTO = _groupRepository.GetAllGroups();
+            var groupDTO = await _groupRepository.GetAllGroups();
 
             var groupViewModel = groupDTO
-                .Select(dto =>
+                .Select(async dto =>
                 {
-                    var courseGroup = _courseRepository.GetCourseById(dto.CourseId);
-                    var semesterGroup = _semesterRepository.GetSemesterById(dto.SemesterId);
+                    var courseGroup = await _courseRepository.GetCourseById(dto.CourseId);
+                    var semesterGroup = await _semesterRepository.GetSemesterById(dto.SemesterId);
 
                     return dto.GetGroupViewModel(courseGroup.Number, semesterGroup.Number);
                 })
@@ -42,9 +42,9 @@ namespace UniCabinet.Web.Controllers
             return PartialView("_GroupAddModal", viewModel);
         }
 
-        public IActionResult GroupEditModal(int id)
+        public async Task<IActionResult> GroupEditModal(int id)
         {
-            var groupDTO = _groupRepository.GetGroupById(id);
+            var groupDTO = await _groupRepository.GetGroupById(id);
             var groupViewModel = groupDTO.GetGroupCreateEditViewModel();
 
             if (groupViewModel.TypeGroup == "Очно")
@@ -57,10 +57,8 @@ namespace UniCabinet.Web.Controllers
                 groupViewModel.TypeGroup = "2";
             }
 
-            return View("GroupsView", groupViewModel);
+            return View("_GroupEditModal", groupViewModel);
         }
-
-
 
         [HttpPost]
         public async Task<IActionResult> AddGroup(GroupCreateEditViewModel viewModel)
@@ -77,9 +75,9 @@ namespace UniCabinet.Web.Controllers
                 viewModel.TypeGroup = "Заочно";
             }
 
-            var groupViewModel = viewModel.GetGroupDTO();
+            var groupDTO = viewModel.GetGroupDTO();
             
-            await _groupRepository.AddGroupAsync(groupViewModel);
+            await _groupRepository.AddGroupAsync(groupDTO);
 
             return RedirectToAction("GroupsList");
         }

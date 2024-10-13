@@ -19,6 +19,7 @@ public class AdminController : Controller
     private readonly IGroupRepository _groupRepository;
     private readonly UserManager<User> _userManager;
 
+
     public AdminController(IUserService userService, IGroupRepository groupRepository, UserManager<User> userManager)
     {
         _userService = userService;
@@ -62,7 +63,7 @@ public class AdminController : Controller
             .Select(r => new SelectListItem { Value = r, Text = r, Selected = r == role })
             .ToList();
 
-        var groups = await _userService.GetAllGroupsAsync();
+        var groups = await _groupRepository.GetAllGroups();
         ViewBag.Groups = new SelectList(groups, "Id", "Name");
 
         var paginationModel = new PaginationModel

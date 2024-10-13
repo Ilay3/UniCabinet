@@ -4,7 +4,6 @@
     Добавить группу
 </button>
 
-
 <partial name="_GroupAddModal" model="new UniCabinet.Web.ViewModel.GroupCreateEditViewModel()" />
 
 <table class="table">
@@ -22,19 +21,24 @@
         {
             <tr>
                 <td>@item.Name</td>
+
                 <td>@item.TypeGroup</td>
+
                 <td>@item.CourseNumber</td>
+
                 <td>@item.SemesterNumber</td>
+
                 <td>
-                    <a href="@Url.Action("LoadEditGroupModal", "Group", new { id = @item.Id })" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#editGroupModal">
+                    <a href="@Url.Action("GroupEditModal", "Group", new { id = @item.Id })" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#editGroupModal">
                         Редактировать
                     </a>
-
                 </td>
             </tr>
+            <partial name="_GroupEditModal" model="item" />
         }
     </tbody>
 </table>
+
 <div id="modal-container"></div>
 
-<partial name="_GroupEditModal" model="new UniCabinet.Web.ViewModel.GroupCreateEditViewModel()" />
+

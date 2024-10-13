@@ -1,0 +1,33 @@
+﻿@model IEnumerable<UniCabinet.Web.ViewModel.Lecture.LectureViewModel>
+
+<h2>Дисциплина @ViewBag.Discipline</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Номер лекции
+            </th>
+            <th>
+                Дата проведения
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.LectureNumber
+                </td>
+                <td>
+                    @item.Date
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

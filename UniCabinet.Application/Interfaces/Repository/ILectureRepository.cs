@@ -5,9 +5,10 @@ namespace UniCabinet.Application.Interfaces.Repository
     public interface ILectureRepository
     {
         Task AddLectureAsync(LectureDTO lectureDTO);
+        Task<IEnumerable<LectureDTO>> GetLectureListByDisciplineDetailId(int id);
         Task DeleteLecture(int id);
         List<LectureDTO> GetAllLectures();
-        LectureDTO GetLectureById(int id);
+        Task<LectureDTO> GetLectureById(int id);
         void UpdateLecture(LectureDTO lectureDTO);
     }
 }

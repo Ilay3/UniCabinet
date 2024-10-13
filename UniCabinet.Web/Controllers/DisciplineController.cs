@@ -16,9 +16,9 @@ namespace UniCabinet.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult DisciplinesList()
+        public async Task<IActionResult> DisciplinesList()
         {
-            var disciplineDTO = _disciplineRepository.GetAllDisciplines();
+            var disciplineDTO = await _disciplineRepository.GetAllDisciplines();
             var disciplineViewModel = disciplineDTO
                 .Select(dto => dto.GetDisciplineViewModel())
                 .ToList();
@@ -55,9 +55,9 @@ namespace UniCabinet.Web.Controllers
             return PartialView("_DisciplineAddModal");
         }
         
-        public IActionResult DisciplineEditModal(int id)
+        public async Task<IActionResult> DisciplineEditModal(int id)
         {
-            var disciplineDTO = _disciplineRepository.GetDisciplineById(id);
+            var disciplineDTO = await _disciplineRepository.GetDisciplineById(id);
 
             var disciplineViewModel = disciplineDTO.GetDisciplineEditViewModel();
 

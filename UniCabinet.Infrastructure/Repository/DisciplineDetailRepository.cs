@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,9 +19,9 @@ namespace UniCabinet.Infrastructure.Repository
             _context = context;
         }
 
-        public DisciplineDetailDTO GetDisciplineDetailById(int id)
+        public async Task<DisciplineDetailDTO> GetDisciplineDetailById(int id)
         {
-            var disciplineDetailEntity = _context.DisciplineDetails.Find(id);
+            var disciplineDetailEntity = await _context.DisciplineDetails.FindAsync(id);
             if (disciplineDetailEntity == null) return null;
 
             return new DisciplineDetailDTO
@@ -40,9 +41,9 @@ namespace UniCabinet.Infrastructure.Repository
             };
         }
 
-        public List<DisciplineDetailDTO> GetAllDisciplineDetails()
+        public async Task<List<DisciplineDetailDTO>> GetAllDisciplineDetails()
         {
-            var disciplineDetailEntity = _context.DisciplineDetails.ToList();
+            var disciplineDetailEntity = await _context.DisciplineDetails.ToListAsync();
 
             return disciplineDetailEntity.Select(d => new DisciplineDetailDTO
             {

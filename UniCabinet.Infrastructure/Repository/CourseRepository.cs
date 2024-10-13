@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,9 +18,9 @@ namespace UniCabinet.Infrastructure.Repository
             _context = context;
         }
 
-        public List<CourseDTO> GetAllCourse()
+        public async Task<List<CourseDTO>> GetAllCourse()
         {
-            var courseEntity = _context.Courses.ToList();
+            var courseEntity = await _context.Courses.ToListAsync();
 
             return courseEntity.Select(d => new CourseDTO
             {
@@ -28,9 +29,9 @@ namespace UniCabinet.Infrastructure.Repository
             }).ToList();
         }
 
-        public CourseDTO GetCourseById(int id)
+        public async Task<CourseDTO> GetCourseById(int id)
         {
-            var courseEntity = _context.Courses.Find(id);
+            var courseEntity = await _context.Courses.FindAsync(id);
             if (courseEntity == null) return null;
 
             return new CourseDTO

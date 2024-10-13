@@ -1,6 +1,7 @@
 ﻿// UniCabinet.Application/Interfaces/IUserRepository.cs
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UniCabinet.Domain.DTO;
 using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Application.Interfaces
@@ -14,5 +15,6 @@ namespace UniCabinet.Application.Interfaces
         Task<IEnumerable<User>> SearchUsersAsync(string query);
         Task<User> GetUserByIdAsync(string userId);
         Task UpdateUserAsync(User user);
+        Task<UserDTO> GetUserById(string id);
     }
 }
