@@ -1,45 +1,35 @@
 ﻿@model IEnumerable<UniCabinet.Web.ViewModel.GroupViewModel>
 
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addGroupModal">
-    Добавить группу
-</button>
+<h2>Список групп</h2>
 
-<partial name="_GroupAddModal" model="new UniCabinet.Web.ViewModel.GroupCreateEditViewModel()" />
+<button class="btn btn-primary" data-url="@Url.Action("GroupAddModal", "Group")">Добавить группу</button>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Название</th>
+            <th>Название группы</th>
             <th>Тип группы</th>
             <th>Курс</th>
             <th>Семестр</th>
-            <th></th>
+            <th>Действия</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var group in Model)
         {
             <tr>
-                <td>@item.Name</td>
-
-                <td>@item.TypeGroup</td>
-
-                <td>@item.CourseNumber</td>
-
-                <td>@item.SemesterNumber</td>
-
+                <td>@group.Name</td>
+                <td>@group.TypeGroup</td>
+                <td>@group.CourseNumber</td>
+                <td>@group.SemesterNumber</td>
                 <td>
-                    <a href="@Url.Action("GroupEditModal", "Group", new { id = @item.Id })" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#editGroupModal">
-                        Редактировать
-                    </a>
+                    <button class="btn btn-info" data-url="@Url.Action("GroupEditModal", "Group", new { id = group.Id })">Редактировать</button>
                 </td>
             </tr>
-            
         }
     </tbody>
 </table>
 
-<div id="modal-container"></div>
-
-<partial name="_GroupEditModal" model="new UniCabinet.Web.ViewModel.GroupCreateEditViewModel()" />
-
+@section Scripts {
+    <script src="~/js/ajax-modal.js"></script>
+}

@@ -1,18 +1,14 @@
 ﻿@model IEnumerable<UniCabinet.Web.ViewModel.Discipline.DisciplineViewModel>
 
-<button type="button" class="btn btn-primary" onclick="openAddDisciplineModal()">
+<button type="button" class="btn btn-primary" data-url="@Url.Action("DisciplineAddModal", "Discipline")">
     Добавить дисциплину
 </button>
 
 <table class="table">
     <thead>
         <tr>
-            <th>
-                Название
-            </th>
-            <th>
-                Описание
-            </th>
+            <th>Название</th>
+            <th>Описание</th>
             <th></th>
         </tr>
     </thead>
@@ -20,14 +16,10 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
                 <td>
-                    @item.Name
-                </td>
-                <td>
-                    @item.Description
-                </td>
-                <td>
-                    <button type="button" class="btn btn-secondary" onclick="openEditDisciplineModal(@item.Id)">
+                    <button type="button" class="btn btn-secondary" data-url="@Url.Action("DisciplineEditModal", "Discipline", new { id = item.Id })">
                         Редактировать
                     </button>
                 </td>
@@ -36,29 +28,9 @@
     </tbody>
 </table>
 
-<!-- Скрипты для открытия модальных окон -->
 @section Scripts {
-    <script>
-        function openAddDisciplineModal() {
-            fetch('/Discipline/DisciplineAddModal')
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById("modalContainer").innerHTML = html;
-                    var modal = new bootstrap.Modal(document.getElementById('addDisciplineModal'));
-                    modal.show();
-                });
-        }
-
-        function openEditDisciplineModal(disciplineId) {
-            fetch(`/Discipline/DisciplineEditModal?id=${disciplineId}`)
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById("modalContainer").innerHTML = html;
-                    var modal = new bootstrap.Modal(document.getElementById('editDisciplineModal'));
-                    modal.show();
-                });
-        }
-    </script>
+    <script src="~/js/ajax-modal.js"></script>
 }
+
 
 <div id="modalContainer"></div>

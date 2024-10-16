@@ -1,26 +1,30 @@
 ﻿@model UniCabinet.Web.ViewModel.Discipline.DisciplineEditViewModel
 
-<div class="modal fade" id="editDisciplineModal" tabindex="-1" aria-labelledby="editDisciplineModalLabel" aria-hidden="true">
+<div class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
+            <!-- Заголовок модального окна -->
             <div class="modal-header">
-                <h5 class="modal-title" id="editDisciplineModalLabel">Редактировать группу</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Редактировать дисциплину</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
             </div>
+            <!-- Тело модального окна -->
             <div class="modal-body">
-                <form method="post" asp-action="EditDiscipline">
+                <form id="editDisciplineForm" asp-action="EditDiscipline">
+                    <!-- Скрытое поле для ID дисциплины -->
                     <input type="hidden" asp-for="Id" />
 
                     <div class="mb-3">
-                        <label for="disciplineName" class="form-label">Название группы</label>
-                        <input type="text" class="form-control" id="disciplineName" asp-for="Name" required>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="disciplineDescription" class="form-label">Название группы</label>
-                        <input type="text" class="form-control" id="disciplineDescription" asp-for="Description" required>
+                        <label for="disciplineName" class="form-label">Название дисциплины</label>
+                        <input type="text" class="form-control" id="disciplineName" asp-for="Name" required />
                     </div>
 
+                    <div class="mb-3">
+                        <label for="disciplineDescription" class="form-label">Описание дисциплины</label>
+                        <textarea class="form-control" id="disciplineDescription" asp-for="Description" required></textarea>
+                    </div>
+
+                    <!-- Подвал модального окна -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                         <button type="submit" class="btn btn-primary">Сохранить</button>

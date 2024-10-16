@@ -52,14 +52,14 @@ namespace UniCabinet.Web.Controllers
             {
                 groupViewModel.TypeGroup = "1";
             }
-
-            if (groupViewModel.TypeGroup == "Заочно")
+            else if (groupViewModel.TypeGroup == "Заочно")
             {
                 groupViewModel.TypeGroup = "2";
             }
 
-            return View("_GroupEditModal", groupViewModel);
+            return PartialView("_GroupEditModal", groupViewModel);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> AddGroup(GroupCreateEditViewModel viewModel)
@@ -88,15 +88,14 @@ namespace UniCabinet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("GroupsView", viewModel);
+                return PartialView("_GroupEditModal", viewModel);
             }
 
             if (viewModel.TypeGroup == "1")
             {
                 viewModel.TypeGroup = "Очно";
             }
-
-            if (viewModel.TypeGroup == "2")
+            else if (viewModel.TypeGroup == "2")
             {
                 viewModel.TypeGroup = "Заочно";
             }
@@ -104,8 +103,8 @@ namespace UniCabinet.Web.Controllers
             var groupDTO = viewModel.GetGroupDTO();
             _groupRepository.UpdateGroup(groupDTO);
 
-            return RedirectToAction("GroupsList");
-            
+            return Json(new { success = true });
         }
+
     }
 }

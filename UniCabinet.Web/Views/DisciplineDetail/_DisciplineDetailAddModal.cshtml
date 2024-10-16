@@ -1,94 +1,116 @@
-﻿@model UniCabinet.Web.ViewModel.DisiciplineDetail.DisciplineDetailAddViewModel
+﻿@using UniCabinet.Web.ViewModel.DisiciplineDetail
+@model DisciplineDetailAddViewModel
 
-<div class="modal fade" id="addDisciplineDetailModal" tabindex="-1" aria-labelledby="addDisciplineDetailModalLabel" aria-hidden="true">
+
+<div class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
+            <!-- Заголовок модального окна -->
             <div class="modal-header">
-                <h5 class="modal-title" id="addDisciplineDetailModalLabel">Добавить группу</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Добавить деталь дисциплины</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
             </div>
+            <!-- Тело модального окна -->
             <div class="modal-body">
-                <form method="post" asp-action="AddDisciplineDetail">
+                <form id="addDisciplineDetailForm" asp-action="AddDisciplineDetail">
                     <div class="mb-3">
-                        <label for="disciplineName" class="form-label">Название дисцеплин</label>
-                        <select name="DisciplineId" required>
+                        <label for="disciplineId" class="form-label">Дисциплина</label>
+                        <select class="form-select" asp-for="DisciplineId" required>
+                            <option value="">Выберите дисциплину</option>
                             @foreach (var item in ViewBag.DisciplineList)
                             {
                                 <option value="@item.Id">@item.Name</option>
                             }
                         </select>
                     </div>
+
                     <div class="mb-3">
-                        <label for="disciplineName" class="form-label">Пользователи</label>
-                        <select name="TeacherId" required>
+                        <label for="teacherId" class="form-label">Преподаватель</label>
+                        <select class="form-select" asp-for="TeacherId" required>
+                            <option value="">Выберите преподавателя</option>
                             @foreach (var item in ViewBag.Teacher)
                             {
                                 <option value="@item.Id">@item.FirstName @item.LastName</option>
                             }
                         </select>
                     </div>
+
                     <div class="mb-3">
-                        <label for="disciplineName" class="form-label">Семестры</label>
-                        <select name="SemesterId" required>
+                        <label for="semesterId" class="form-label">Семестр</label>
+                        <select class="form-select" asp-for="SemesterId" required>
+                            <option value="">Выберите семестр</option>
                             @foreach (var item in ViewBag.SemesterList)
                             {
                                 <option value="@item.Id">@item.Number</option>
                             }
                         </select>
                     </div>
+
                     <div class="mb-3">
-                        <label for="disciplineName" class="form-label">Группы</label>
-                        <select name="GroupId" required>
+                        <label for="groupId" class="form-label">Группа</label>
+                        <select class="form-select" asp-for="GroupId" required>
+                            <option value="">Выберите группу</option>
                             @foreach (var item in ViewBag.Group)
                             {
                                 <option value="@item.Id">@item.Name</option>
                             }
                         </select>
                     </div>
+
                     <div class="mb-3">
-                        <label for="disciplineName" class="form-label">Курсы</label>
-                        <select name="CourseId" required>
+                        <label for="courseId" class="form-label">Курс</label>
+                        <select class="form-select" asp-for="CourseId" required>
+                            <option value="">Выберите курс</option>
                             @foreach (var item in ViewBag.Course)
                             {
                                 <option value="@item.Id">@item.Number</option>
                             }
                         </select>
                     </div>
+
                     <div class="mb-3">
-                        <label for="disciplineName" class="form-label">Количество лекций</label>
-                        <input type="text" class="form-control" id="disciplineName" name="LectureCount" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="disciplineName" class="form-label">Количество практик</label>
-                        <input type="text" class="form-control" id="disciplineName" name="PracticalCount" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="disciplineName" class="form-label">Количество зачетов</label>
-                        <input type="text" class="form-control" id="disciplineName" name="SubExamCount" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="disciplineName" class="form-label">Количество экзаменов</label>
-                        <input type="text" class="form-control" id="disciplineName" name="ExamCount" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="disciplineName" class="form-label">Минимум посещений лекций</label>
-                        <input type="text" class="form-control" id="disciplineName" name="MinLecturesRequired" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="disciplineName" class="form-label">Минимум посещений практических</label>
-                        <input type="text" class="form-control" id="disciplineName" name="MinPracticalsRequired" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="disciplineName" class="form-label">Минимум для автомата</label>
-                        <input type="text" class="form-control" id="disciplineName" name="AutoExamThreshold" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="disciplineName" class="form-label">Минимум балл для прохождения</label>
-                        <input type="text" class="form-control" id="disciplineName" name="PassCount" required>
+                        <label for="lectureCount" class="form-label">Количество лекций</label>
+                        <input type="number" class="form-control" asp-for="LectureCount" required />
                     </div>
 
+                    <div class="mb-3">
+                        <label for="practicalCount" class="form-label">Количество практических занятий</label>
+                        <input type="number" class="form-control" asp-for="PracticalCount" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="subExamCount" class="form-label">Количество зачетов</label>
+                        <input type="number" class="form-control" asp-for="SubExamCount" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="examCount" class="form-label">Количество экзаменов</label>
+                        <input type="number" class="form-control" asp-for="ExamCount" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="minLecturesRequired" class="form-label">Минимум посещений лекций</label>
+                        <input type="number" class="form-control" asp-for="MinLecturesRequired" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="minPracticalsRequired" class="form-label">Минимум посещений практических занятий</label>
+                        <input type="number" class="form-control" asp-for="MinPracticalsRequired" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="autoExamThreshold" class="form-label">Минимум для автомата</label>
+                        <input type="number" class="form-control" asp-for="AutoExamThreshold" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="passCount" class="form-label">Минимальный балл для прохождения</label>
+                        <input type="number" class="form-control" asp-for="PassCount" required />
+                    </div>
+
+                    <!-- Подвал модального окна -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
                         <button type="submit" class="btn btn-primary">Добавить</button>
                     </div>
                 </form>

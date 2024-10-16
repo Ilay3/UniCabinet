@@ -1,28 +1,36 @@
 ﻿@model UniCabinet.Web.ViewModel.GroupCreateEditViewModel
 
-<div class="modal fade" id="addGroupModal" tabindex="-1" aria-labelledby="addGroupModalLabel" aria-hidden="true">
+<div class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
+            <!-- Заголовок модального окна -->
             <div class="modal-header">
-                <h5 class="modal-title" id="addGroupModalLabel">Добавить группу</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Добавить группу</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <!-- Тело модального окна -->
             <div class="modal-body">
-                <form method="post" asp-action="AddGroup">
-                    <div class="mb-3">
-                        <label for="groupName" class="form-label">Название группы</label>
-                        <input type="text" class="form-control" id="groupName" name="Name" required>
+                <form id="addGroupForm" asp-action="AddGroup">
+                    <div class="form-group">
+                        <label for="groupName">Название группы</label>
+                        <input type="text" class="form-control" id="groupName" asp-for="Name" required />
                     </div>
-                    <div class="mb-3">
-                        <label for="groupType" class="form-label">Тип группы</label>
-                        <select name="TypeGroup" id="groupType" required>
+
+                    <div class="form-group">
+                        <label for="groupType">Тип группы</label>
+                        <select asp-for="TypeGroup" class="form-control" required>
+                            <option value="">Выберите тип</option>
                             <option value="1">Очно</option>
                             <option value="2">Заочно</option>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label for="courseNumber" class="form-label" >Курс</label>
-                        <select name="CourseId" required>
+
+                    <div class="form-group">
+                        <label for="courseNumber">Курс</label>
+                        <select asp-for="CourseId" class="form-control" required>
+                            <option value="">Выберите курс</option>
                             <option value="1">1 Курс</option>
                             <option value="2">2 Курс</option>
                             <option value="3">3 Курс</option>
@@ -30,16 +38,20 @@
                             <option value="5">5 Курс</option>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label for="semesterNumber" class="form-label">Семестр</label>
-                        <select name="SemesterId">
+
+                    <div class="form-group">
+                        <label for="semesterNumber">Семестр</label>
+                        <select asp-for="SemesterId" class="form-control" required>
+                            <option value="">Выберите семестр</option>
                             <option value="1">1 Семестр</option>
                             <option value="2">2 Семестр</option>
                         </select>
                     </div>
+
+                    <!-- Подвал модального окна -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                        <button type="submit" class="btn btn-primary">Добавить группу</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
                     </div>
                 </form>
             </div>
