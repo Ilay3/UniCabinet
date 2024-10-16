@@ -19,7 +19,7 @@ namespace UniCabinet.Web.Extension.DisciplineDetail
                 PassCount = modelDTO.PassCount,
                 PracticalCount = modelDTO.PracticalCount,
                 SemesterNumber = modelDTO.SemesterNumber,
-                
+                CourseNumber = modelDTO.CourseNumber,
                 GroupName = modelDTO.GroupName,
                 DisciplineName = modelDTO.DisciplineName,
                 TeacherFirstName = modelDTO.TeacherFirstName,

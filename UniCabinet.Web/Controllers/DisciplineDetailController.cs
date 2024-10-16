@@ -33,29 +33,13 @@ namespace UniCabinet.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> DisciplineDetailsList()
+        public IActionResult DisciplineDetailsList()
         {
-            var disciplineDListDTO = await _disciplineDetailRepository.GetAllDisciplineDetails();
+            var disciplineDListDTO =  _disciplineDetailRepository.GetAllDisciplineDetails();
 
-            var tasks = disciplineDListDTO.Select(async dto =>
-            {
-                var discipline = await _disciplineRepository.GetDisciplineById(dto.DisciplineId);
-                var semester = await _semesterRepository.GetSemesterById(dto.SemesterId);
-                var group = await _groupRepository.GetGroupById(dto.GroupId);
-                var teacher = await _userRepository.GetUserById(dto.TeacherId);
-                var course = await _courseRepository.GetCourseById(group.CourseId);
-
-                return dto.GetDisciplineDetailViewModel(
-                    semester.Number,
-                    course.Number,
-                    group.Name,
-                    discipline.Name,
-                    teacher.FirstName,
-                    teacher.LastName,
-                    teacher.Patronymic);
-            });
-
-            var disciplineDListViewModel = await Task.WhenAll(tasks);
+            var disciplineDListViewModel = disciplineDListDTO
+                .Select(dd => dd.GetDisciplineDetailViewModel())
+                .ToList();
 
             return View(disciplineDListViewModel);
         }

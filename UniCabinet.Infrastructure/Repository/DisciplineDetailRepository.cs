@@ -42,9 +42,9 @@ namespace UniCabinet.Infrastructure.Repository
             };
         }
 
-        public async Task<List<DisciplineDetailDTO>> GetAllDisciplineDetails()
+        public List<DisciplineDetailDTO> GetAllDisciplineDetails()
         {
-            var disciplineDetailEntity = await _context.DisciplineDetails.ToListAsync();
+            var disciplineDetailEntity = _context.DisciplineDetails;
 
             return disciplineDetailEntity.Select(d => new DisciplineDetailDTO
             {
