@@ -44,16 +44,28 @@ namespace UniCabinet.Infrastructure.Repository
 
         public List<DisciplineDetailDTO> GetAllDisciplineDetails()
         {
-            var disciplineDetailEntity = _context.DisciplineDetails;
+            var disciplineDetailEntity = _context.DisciplineDetails
+                .Include(dd => dd.Group)
+                .Include(dd => dd.Course)
+                .Include(dd => dd.Semester)
+                .Include(dd => dd.Discipline)
+                .Include(dd => dd.Teacher);
 
             return disciplineDetailEntity.Select(d => new DisciplineDetailDTO
             {
                 Id = d.Id,
                 GroupId = d.GroupId,
+                GroupName = d.Group.Name,
                 SemesterId = d.SemesterId,
+                SemesterNumber = d.Semester.Number,
                 CourseId = d.CourseId,
+                CourseNumber = d.Course.Number,
                 DisciplineId = d.DisciplineId,
+                DisciplineName = d.Discipline.Name,
                 TeacherId = d.TeacherId,
+                TeacherFirstName = d.Teacher.FirstName,
+                TeacherLastName = d.Teacher.LastName,
+                TeacherPatronymic = d.Teacher.Patronymic,
                 SubExamCount = d.SubExamCount,
                 PracticalCount = d.PracticalCount,
                 PassCount = d.PassCount,

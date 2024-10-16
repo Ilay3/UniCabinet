@@ -22,6 +22,7 @@ namespace UniCabinet.Web.Mapping.DisciplineDetail
                 SemesterId = viewModel.SemesterId,
                 GroupId = viewModel.GroupId,
                 TeacherId = viewModel.TeacherId,
+                CourseId = viewModel.CourseId,
             };
 
             return disciplineD;

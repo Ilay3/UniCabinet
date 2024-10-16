@@ -11,6 +11,10 @@ namespace UniCabinet.Domain.DTO
     {
         public int Id { get; set; }
 
+        public int CourseId { get; set; }
+
+        public int CourseNumber { get; set; }
+
         public int DisciplineId { get; set; }
 
         public string DisciplineName { get; set; }
@@ -23,17 +27,13 @@ namespace UniCabinet.Domain.DTO
 
         public int SemesterNumber { get; set; }
 
-        public int CourseId { get; set; }
-
-        public int CourseNumber { get; set; }
-
         public string TeacherId { get; set; }
 
         public string TeacherFirstName { get; set; }
 
-        public string TeacherLastName { get; set; }
+        public string TeacherLastName {  get; set; }
 
-        public string TeacherPatronymic {  get; set; }
+        public string TeacherPatronymic { get; set; }
 
         /// <summary>
         /// Количество лекций
