@@ -16,7 +16,7 @@ namespace UniCabinet.Domain.DTO
         /// <summary>
         /// Номер лекции
         /// </summary>
-        public decimal LectureNumber { get; set; }
+        public int LectureNumber { get; set; }
 
         public DateTime Date { get; set; }
     }

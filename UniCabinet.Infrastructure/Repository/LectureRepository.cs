@@ -40,7 +40,7 @@ namespace UniCabinet.Infrastructure.Repository
                 {
                     Date = l.Date,
                     DisciplineDetailId = l.DisciplineDetailId,
-                    LectureNumber= l.LectureNumber,
+                    LectureNumber = l.LectureNumber,
                 }).ToList();
         }
 
