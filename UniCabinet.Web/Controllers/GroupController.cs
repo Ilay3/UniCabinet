@@ -45,7 +45,7 @@ namespace UniCabinet.Web.Controllers
 
         public async Task<IActionResult> GroupEditModal(int id)
         {
-            var groupDTO = await _groupRepository.GetGroupById(id);
+            var groupDTO = await _groupRepository.GetGroupById(id); 
             var groupViewModel = groupDTO.GetGroupCreateEditViewModel();
 
             if (groupViewModel.TypeGroup == "Очно")
@@ -58,7 +58,7 @@ namespace UniCabinet.Web.Controllers
                 groupViewModel.TypeGroup = "2";
             }
 
-            return View("_GroupEditModal", groupViewModel);
+            return PartialView("_GroupEditModal", groupViewModel);
         }
 
         [HttpPost]

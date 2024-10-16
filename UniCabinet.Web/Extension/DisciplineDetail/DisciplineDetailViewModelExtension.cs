@@ -5,9 +5,7 @@ namespace UniCabinet.Web.Extension.DisciplineDetail
 {
     public static class DisciplineDetailViewModelExtension
     {
-        public static DisciplineDetailViewModel GetDisciplineDetailViewModel(this DisciplineDetailDTO modelDTO,
-            int semesterNumber, int courseNumber, string groupName, string disciplineName,
-            string teacherFirstName, string teacherLastName, string teacherPatronymic)
+        public static DisciplineDetailViewModel GetDisciplineDetailViewModel(this DisciplineDetailDTO modelDTO)
         {
             var disciplineD = new DisciplineDetailViewModel
             {
@@ -20,13 +18,13 @@ namespace UniCabinet.Web.Extension.DisciplineDetail
                 MinPracticalsRequired = modelDTO.MinPracticalsRequired,
                 PassCount = modelDTO.PassCount,
                 PracticalCount = modelDTO.PracticalCount,
-                SemesterNumber = semesterNumber,
-                CourseNumber = courseNumber,
-                GroupName = groupName,
-                DisciplineName = disciplineName,
-                TeacherFirstName = teacherFirstName,
-                TeacherLastName = teacherLastName,
-                TeacherPatronymic = teacherPatronymic
+                SemesterNumber = modelDTO.SemesterNumber,
+                
+                GroupName = modelDTO.GroupName,
+                DisciplineName = modelDTO.DisciplineName,
+                TeacherFirstName = modelDTO.TeacherFirstName,
+                TeacherLastName = modelDTO.TeacherLastName,
+                TeacherPatronymic = modelDTO.TeacherPatronymic,
             };
 
             return disciplineD;
