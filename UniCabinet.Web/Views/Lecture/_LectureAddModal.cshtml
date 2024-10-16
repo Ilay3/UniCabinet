@@ -1,0 +1,29 @@
+﻿@model UniCabinet.Web.ViewModel.Lecture.LectureAddViewModel
+
+<div class="modal fade" id="addLectureModal" tabindex="-1" aria-labelledby="addLectureModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addLectureModalLabel">Добавить лекцию</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-action="AddLecture">
+                    <div class="mb-3">
+                        <label for="lectureNumber" class="form-label">Номер лекции</label>
+                        <input type="text" class="form-control" id="lectureNumber" name="LectureNumber" required>
+                        <input type="hidden" value="@ViewBag.DisciplineDetaildId" name="DisciplineDetailId" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lectureDate" class="form-label">Дата</label>
+                        <input type="datetime-local" class="form-control" id="lectureDate" name="Date" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Добавить группу</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
