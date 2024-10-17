@@ -47,8 +47,6 @@ function searchUsers() {
     }
 }
 
-
-
 // Function to clear previous highlights
 function clearSuggestionsHighlight() {
     var suggestions = document.querySelectorAll('#suggestionsList .list-group-item');

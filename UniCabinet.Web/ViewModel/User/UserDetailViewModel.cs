@@ -1,4 +1,4 @@
-﻿namespace UniCabinet.Web.ViewModel
+﻿namespace UniCabinet.Web.ViewModel.User
 {
     public class UserDetailViewModel
     {

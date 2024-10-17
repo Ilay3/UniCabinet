@@ -1,16 +1,16 @@
-﻿@model UniCabinet.Web.ViewModel.StudentGroupViewModel
+﻿@model UniCabinet.Web.ViewModel.User.StudentGroupViewModel
 
 <div class="table-responsive">
-    <table class="table table-bordered table-hover" >
+    <table class="table table-bordered table-hover">
         <thead>
             <tr>
-                <th scope="col">Email</th>
-                <th scope="col">Полное Имя</th>
-                <th scope="col">Роли</th>
-                <th scope="col">Текущая Группа</th>
-                <th scope="col">Изменить Группу</th>
-                <th scope="col">Изменить Роль</th>
-                <th scope="col">Информация</th>
+                <th>Email</th>
+                <th>Полное Имя</th>
+                <th>Роли</th>
+                <th>Текущая Группа</th>
+                <th>Изменить Группу</th>
+                <th>Изменить Роль</th>
+                <th>Информация</th>
             </tr>
         </thead>
         <tbody id="userTableBody">
@@ -24,10 +24,9 @@
                     <td>
                         @if (user.Roles.Contains("Student") && user.Roles.Contains("Verified"))
                         {
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#groupModal_@user.Id">
+                            <button type="button" class="btn btn-primary btn-sm" data-url="@Url.Action("GroupEditModal", "Admin", new { userId = user.Id })">
                                 Изменить группу
                             </button>
-                            <partial name="_GroupModal" model="user" />
                         }
                         else
                         {
@@ -35,16 +34,14 @@
                         }
                     </td>
                     <td>
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#roleModal_@user.Id">
+                        <button type="button" class="btn btn-secondary btn-sm" data-url="@Url.Action("RoleEditModal", "Admin", new { userId = user.Id })">
                             Изменить роль
                         </button>
-                        <partial name="_RoleModal" model="user" />
                     </td>
                     <td>
-                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#userDetailModal_@user.Id">
+                        <button type="button" class="btn btn-info btn-sm" data-url="@Url.Action("UserDetailModal", "Admin", new { userId = user.Id })">
                             Подробнее
                         </button>
-                            <partial name="_UserDetailModal" model="user" />
                     </td>
                 </tr>
             }

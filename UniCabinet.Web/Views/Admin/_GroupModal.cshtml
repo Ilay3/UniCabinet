@@ -1,26 +1,31 @@
-﻿@using UniCabinet.Domain.DTO
-@model UserDTO
+﻿@model UniCabinet.Web.ViewModel.User.UserGroupViewModel
 
-<div class="modal fade" id="groupModal_@Model.Id" tabindex="-1" aria-labelledby="groupModalLabel_@Model.Id" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
         <div class="modal-content">
+            <!-- Заголовок модального окна -->
             <div class="modal-header">
-                <h5 class="modal-title" id="groupModalLabel_@Model.Id">Изменить группу для @Model.FirstName @Model.LastName @Model.Patronymic</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Изменить группу для @Model.FullName</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
             </div>
+            <!-- Тело модального окна -->
             <div class="modal-body">
-                <form method="post" asp-action="UpdateUserGroup" onsubmit="showLoadingIndicator()">
-                    <input type="hidden" name="userId" value="@Model.Id" />
-                    <div class="form-group">
+                <form asp-action="UpdateUserGroup">
+                    <input type="hidden" name="UserId" value="@Model.UserId" />
+                    <div class="mb-3">
                         <label for="groupSelect">Выберите новую группу:</label>
-                        <select name="groupId" class="form-control">
-                            @foreach (var group in (IEnumerable<SelectListItem>)ViewBag.Groups)
+                        <select name="GroupId" class="form-select">
+                            @foreach (var group in Model.AvailableGroups)
                             {
                                 <option value="@group.Value">@group.Text</option>
                             }
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <!-- Подвал модального окна -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
                 </form>
             </div>
         </div>

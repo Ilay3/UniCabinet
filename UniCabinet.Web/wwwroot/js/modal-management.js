@@ -10,7 +10,13 @@
         // Удаляем ненужные данные из dataToSend
         delete dataToSend.url;
 
+        // Показываем индикатор загрузки перед началом AJAX-запроса
+        showLoadingIndicator();
+
         $.get(url, dataToSend, function (data) {
+            // Скрываем индикатор загрузки после завершения AJAX-запроса
+            hideLoadingIndicator();
+
             // Добавляем полученное модальное окно в конец body
             var $modal = $(data);
 
@@ -24,6 +30,10 @@
             $modal.on('hidden.bs.modal', function () {
                 $modal.remove();
             });
+        }).fail(function () {
+            // Скрываем индикатор загрузки в случае ошибки
+            hideLoadingIndicator();
+            alert('Произошла ошибка при загрузке данных.');
         });
     });
 
@@ -34,7 +44,13 @@
         var $form = $(this);
         var url = $form.attr('action');
 
+        // Показываем индикатор загрузки перед началом AJAX-запроса
+        showLoadingIndicator();
+
         $.post(url, $form.serialize(), function (data) {
+            // Скрываем индикатор загрузки после завершения AJAX-запроса
+            hideLoadingIndicator();
+
             if (data.success) {
                 // Закрываем модальное окно
                 $form.closest('.modal').modal('hide');
@@ -45,6 +61,8 @@
                 $form.closest('.modal-content').html(data);
             }
         }).fail(function (xhr) {
+            // Скрываем индикатор загрузки в случае ошибки
+            hideLoadingIndicator();
             // Обработка ошибок сервера
             $form.closest('.modal-content').html(xhr.responseText);
         });

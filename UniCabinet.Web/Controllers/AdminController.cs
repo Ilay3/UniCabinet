@@ -11,6 +11,7 @@ using UniCabinet.Domain.DTO;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Web.Models;
 using UniCabinet.Web.ViewModel;
+using UniCabinet.Web.ViewModel.User;
 
 [Authorize(Roles = "Administrator")]
 public class AdminController : Controller
@@ -27,45 +28,71 @@ public class AdminController : Controller
         _userManager = userManager;
     }
 
-    public async Task<IActionResult> VerifiedUsers(string role, string query = null, int pageNumber = 1, int pageSize = 2)
+    public async Task<IActionResult> VerifiedUsers(string role, string query = null, int pageNumber = 1, int pageSize = 1)
     {
         if (string.IsNullOrEmpty(role))
         {
             role = "Student"; // По умолчанию выбираем роль Student
         }
 
-        // Получаем всех пользователей, отфильтрованных по роли
-        var users = (await _userService.GetAllUsersAsync())
-            .Where(user => role == "Verified" ? user.Roles.Count == 1 && user.Roles.Contains("Verified") : user.Roles.Contains(role))
-            .ToList();
+        // Получаем всех пользователей (DTO)
+        var userDTOs = await _userService.GetAllUsersAsync();
 
-        // Фильтрация по запросу, если он не пустой
-        if (!string.IsNullOrEmpty(query))
+        // Фильтрация по роли
+        if (role == "Verified")
         {
-            users = users
-                .Where(user => (user.FirstName != null && user.FirstName.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
-                               (user.LastName != null && user.LastName.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
-                               (user.Patronymic != null && user.Patronymic.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
-                               user.Email.Contains(query, StringComparison.CurrentCultureIgnoreCase))
-                .ToList();
-
+            userDTOs = userDTOs.Where(user => user.Roles.Count == 1 && user.Roles.Contains("Verified")).ToList();
+        }
+        else
+        {
+            userDTOs = userDTOs.Where(user => user.Roles.Contains(role)).ToList();
         }
 
+        // Фильтрация по запросу
+        if (!string.IsNullOrEmpty(query))
+        {
+            userDTOs = userDTOs
+                .Where(user =>
+                    (user.FirstName != null && user.FirstName.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
+                    (user.LastName != null && user.LastName.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
+                    (user.Patronymic != null && user.Patronymic.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
+                    user.Email.Contains(query, StringComparison.CurrentCultureIgnoreCase))
+                .ToList();
+        }
+
+        // Преобразуем DTO в ViewModel
+        var userViewModels = userDTOs.Select(user => new UserViewModel
+        {
+            Id = user.Id,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Patronymic = user.Patronymic,
+            DateBirthday = user.DateBirthday,
+            Roles = user.Roles,
+            GroupName = user.GroupName,
+            GroupId = user.GroupId,
+            // FullName будет автоматически заполнено благодаря свойству с getter
+        }).ToList();
+
         // Пагинация
-        var totalUsers = users.Count;
-        var paginatedUsers = users
+        var totalUsers = userViewModels.Count;
+        var paginatedUsers = userViewModels
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToList();
 
+        // Подготовка ViewBag для фильтрации
         ViewBag.SelectedRole = role;
         ViewBag.Roles = new List<string> { "Student", "Teacher", "Administrator", "Verified" }
             .Select(r => new SelectListItem { Value = r, Text = r, Selected = r == role })
             .ToList();
 
+        // Получение всех групп
         var groups = await _groupRepository.GetAllGroups();
         ViewBag.Groups = new SelectList(groups, "Id", "Name");
 
+        // Подготовка модели пагинации
         var paginationModel = new PaginationModel
         {
             CurrentPage = pageNumber,
@@ -80,6 +107,7 @@ public class AdminController : Controller
             }
         };
 
+        // Создание модели представления
         var model = new StudentGroupViewModel
         {
             Users = paginatedUsers,
@@ -96,44 +124,82 @@ public class AdminController : Controller
         return View(model);
     }
 
-
-
-    [HttpPost]
-    public async Task<IActionResult> UpdateUserGroup(string userId, int groupId)
+    // Метод для AJAX поиска
+    [HttpGet]
+    public async Task<IActionResult> SearchUsers(string query, string role)
     {
-        if (!string.IsNullOrEmpty(userId) && groupId > 0)
+        if (string.IsNullOrEmpty(query))
         {
-            // Получаем пользователя
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return RedirectToAction("VerifiedUsers");
-            }
+            return Json(new List<UserViewModel>());
+        }
 
-            // Проверяем, что пользователь имеет роли "Student" и "Verified"
-            var roles = await _userManager.GetRolesAsync(user);
-            if (roles.Contains("Student") && roles.Contains("Verified"))
+        var userDTOs = await _userService.GetAllUsersAsync();
+
+        // Фильтрация по роли, если необходимо
+        if (!string.IsNullOrEmpty(role))
+        {
+            if (role == "Verified")
             {
-                await _userService.UpdateStudentGroupAsync(userId, groupId);
+                userDTOs = userDTOs.Where(user => user.Roles.Count == 1 && user.Roles.Contains("Verified")).ToList();
             }
             else
             {
-                // Если нет необходимых ролей, перенаправляем с сообщением об ошибке
-                TempData["GroupMessage"] = "Изменение группы доступно только для пользователей с ролями Student и Verified.";
-                return RedirectToAction("VerifiedUsers");
+                userDTOs = userDTOs.Where(user => user.Roles.Contains(role)).ToList();
             }
-
-            return RedirectToAction("VerifiedUsers");
         }
 
-        // Если данные неверные, возвращаемся к списку
-        return RedirectToAction("VerifiedUsers");
+        // Фильтрация по запросу
+        var filteredUsers = userDTOs
+            .Where(user =>
+                (user.FirstName != null && user.FirstName.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
+                (user.LastName != null && user.LastName.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
+                (user.Patronymic != null && user.Patronymic.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
+                user.Email.Contains(query, StringComparison.CurrentCultureIgnoreCase))
+            .Select(user => new UserViewModel
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Patronymic = user.Patronymic,
+                DateBirthday = user.DateBirthday,
+                Roles = user.Roles,
+                GroupName = user.GroupName,
+                GroupId = user.GroupId,
+                // FullName будет автоматически заполнено
+            })
+            .ToList();
+
+        return Json(filteredUsers);
+    }
+
+
+    [HttpGet]
+    public async Task<IActionResult> RoleEditModal(string userId)
+    {
+        var userDTO = await _userService.GetUserByIdAsync(userId);
+        if (userDTO == null)
+        {
+            return NotFound();
+        }
+
+        var roles = new List<string> { "Student", "Teacher", "Administrator", "Verified" };
+
+        var model = new UserRolesViewModel
+        {
+            UserId = userDTO.Id,
+            FullName = $"{userDTO.FirstName} {userDTO.LastName} {userDTO.Patronymic}".Trim(),
+            SelectedRoles = userDTO.Roles,
+            AvailableRoles = roles.Select(r => new SelectListItem { Value = r, Text = r }).ToList()
+        };
+
+        return PartialView("_RoleModal", model);
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateUserRoles(string userId, string[] selectedRoles)
+    public async Task<IActionResult> UpdateUserRoles(UserRolesViewModel model)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(model.UserId);
         if (user == null)
         {
             return NotFound();
@@ -143,86 +209,120 @@ public class AdminController : Controller
         var currentRoles = await _userManager.GetRolesAsync(user);
 
         // Роли, которые нужно добавить
-        var rolesToAdd = selectedRoles.Except(currentRoles);
+        var rolesToAdd = model.SelectedRoles.Except(currentRoles);
 
         // Роли, которые нужно удалить
-        var rolesToRemove = currentRoles.Except(selectedRoles);
+        var rolesToRemove = currentRoles.Except(model.SelectedRoles);
 
-        // Удаление ролей, включая роль "Verified", если это необходимо
+        // Удаление ролей
         if (rolesToRemove.Any())
         {
             var removeResult = await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
             if (!removeResult.Succeeded)
             {
                 ModelState.AddModelError("", "Ошибка при удалении ролей.");
-                return RedirectToAction("VerifiedUsers", new { role = "Student" });
+                return PartialView("_RoleModal", model);
             }
         }
 
-        // Добавление новых ролей, включая роль "Verified"
+        // Добавление новых ролей
         if (rolesToAdd.Any())
         {
             var addResult = await _userManager.AddToRolesAsync(user, rolesToAdd);
             if (!addResult.Succeeded)
             {
                 ModelState.AddModelError("", "Ошибка при добавлении ролей.");
-                return RedirectToAction("VerifiedUsers", new { role = "Student" });
+                return PartialView("_RoleModal", model);
             }
         }
 
-        // Перенаправляем после успешного обновления
-        return RedirectToAction("VerifiedUsers", new { role = ViewBag.SelectedRole });
+        // Возвращаем успех
+        return Json(new { success = true });
     }
 
     [HttpGet]
-    public async Task<IActionResult> SearchUsers(string query, string role)
+    public async Task<IActionResult> GroupEditModal(string userId)
     {
-        var users = await _userService.GetAllUsersAsync();
-
-        // Фильтрация по роли
-        if (role == "Verified")
+        var userDTO = await _userService.GetUserByIdAsync(userId);
+        if (userDTO == null)
         {
-            users = users.Where(user => user.Roles.Count == 1 && user.Roles.Contains("Verified")).ToList();
-        }
-        else
-        {
-            users = users.Where(user => user.Roles.Contains(role)).ToList();
+            return NotFound();
         }
 
-        // Фильтрация по запросу
-        if (!string.IsNullOrEmpty(query))
+        var groups = await _groupRepository.GetAllGroups();
+
+        var model = new UserGroupViewModel
         {
-            users = users.Where(user =>
-                (user.FirstName != null && user.FirstName.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
-                (user.LastName != null && user.LastName.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
-                (user.Patronymic != null && user.Patronymic.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
-                user.Email.Contains(query, StringComparison.CurrentCultureIgnoreCase)
-            ).ToList();
-        }
+            UserId = userDTO.Id,
+            FullName = $"{userDTO.FirstName} {userDTO.LastName} {userDTO.Patronymic}".Trim(),
+            GroupId = userDTO.GroupId,
+            AvailableGroups = groups.Select(g => new SelectListItem { Value = g.Id.ToString(), Text = g.Name }).ToList()
+        };
 
-        // Ограничение количества результатов
-        users = users.Take(10).ToList();
-
-        // Формирование результата
-        var result = users.Select(user => new
-        {
-            id = user.Id,
-            fullName = $"{user.FirstName} {user.LastName} {user.Patronymic}".Trim(),
-            email = user.Email
-        });
-
-        return Json(result);
-
+        return PartialView("_GroupModal", model);
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateUserDetails(UserDTO model)
+    public async Task<IActionResult> UpdateUserGroup(UserGroupViewModel model)
     {
-        if (!ModelState.IsValid)
+        if (string.IsNullOrEmpty(model.UserId) || model.GroupId == null)
         {
             return BadRequest("Некорректные данные.");
         }
 
+        var user = await _userManager.FindByIdAsync(model.UserId);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        // Проверяем, что пользователь имеет роли "Student" и "Verified"
+        var roles = await _userManager.GetRolesAsync(user);
+        if (roles.Contains("Student") && roles.Contains("Verified"))
+        {
+            await _userService.UpdateStudentGroupAsync(model.UserId, model.GroupId.Value);
+        }
+        else
+        {
+            ModelState.AddModelError("", "Изменение группы доступно только для пользователей с ролями Student и Verified.");
+            return PartialView("_GroupModal", model);
+        }
+
+        // Возвращаем успех
+        return Json(new { success = true });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> UserDetailModal(string userId)
+    {
+        var userDTO = await _userService.GetUserByIdAsync(userId);
+        if (userDTO == null)
+        {
+            return NotFound();
+        }
+
+        var model = new UserDetailViewModel
+        {
+            Id = userDTO.Id,
+            Email = userDTO.Email,
+            FirstName = userDTO.FirstName,
+            LastName = userDTO.LastName,
+            Patronymic = userDTO.Patronymic,
+            DateBirthday = userDTO.DateBirthday
+        };
+
+        return PartialView("_UserDetailModal", model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateUserDetails(UserDetailViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return PartialView("_UserDetailModal", model);
+        }
+
+        // Создаём DTO из ViewModel
         var userDetailDTO = new UserDetailDTO
         {
             Id = model.Id,
@@ -234,7 +334,10 @@ public class AdminController : Controller
         };
 
         await _userService.UpdateUserDetailsAsync(userDetailDTO);
-        return RedirectToAction("VerifiedUsers");
+
+        // Возвращаем успех
+        return Json(new { success = true });
     }
+
 
 }

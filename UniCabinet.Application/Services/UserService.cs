@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Data;
 using UniCabinet.Application.Interfaces;
@@ -37,7 +38,6 @@ namespace UniCabinet.Application.Services
                     Patronymic = user.Patronymic,
                     Roles = roles.ToList(),
                     GroupName = user.Group != null ? user.Group.Name : "Без группы"
-
                 });
             }
 
@@ -125,6 +125,32 @@ namespace UniCabinet.Application.Services
                 await _userManager.UpdateAsync(user);
             }
         }
+
+        public async Task<UserDTO> GetUserByIdAsync(string userId)
+        {
+            var user = await _userRepository.GetUserByIdAsync(userId);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return new UserDTO
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Patronymic = user.Patronymic,
+                DateBirthday = user.DateBirthday,
+                Roles = roles.ToList(),
+                GroupName = user.Group != null ? user.Group.Name : "Без группы",
+                GroupId = user.GroupId
+            };
+        }
+
 
 
     }
