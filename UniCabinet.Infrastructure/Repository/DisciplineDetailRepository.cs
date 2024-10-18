@@ -77,7 +77,7 @@ namespace UniCabinet.Infrastructure.Repository
             }).ToList();
         }
 
-        public async Task AddDisciplineDetailAsync(DisciplineDetailDTO disciplineDetailDTO)
+        public void AddDisciplineDetail(DisciplineDetailDTO disciplineDetailDTO)
         {
             var disciplineDetailEntity = new DisciplineDetail
             {
@@ -96,17 +96,17 @@ namespace UniCabinet.Infrastructure.Repository
                 AutoExamThreshold = disciplineDetailDTO.AutoExamThreshold,
             };
 
-            await _context.DisciplineDetails.AddAsync(disciplineDetailEntity);
-            await _context.SaveChangesAsync();
+             _context.DisciplineDetails.Add(disciplineDetailEntity);
+             _context.SaveChanges();
         }
 
-        public async Task DeleteDisciplineDetail(int id)
+        public void DeleteDisciplineDetail(int id)
         {
-            var disciplineDetailEntity = await _context.DisciplineDetails.FindAsync(id);
+            var disciplineDetailEntity =  _context.DisciplineDetails.Find(id);
             if (disciplineDetailEntity != null)
             {
                 _context.DisciplineDetails.Remove(disciplineDetailEntity);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
 

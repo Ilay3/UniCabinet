@@ -45,13 +45,13 @@ namespace UniCabinet.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> DisciplineDetailAddModal()
+        public IActionResult DisciplineDetailAddModal()
         {
-            var disciplineList = await _disciplineRepository.GetAllDisciplines();
-            var semesterList = await _semesterRepository.GetAllSemesters();
-            var groupList = await _groupRepository.GetAllGroups();
-            var teacherList = await _userRepository.GetAllUsersWithRolesAsync();
-            var courseList = await _courseRepository.GetAllCourse();
+            var disciplineList = _disciplineRepository.GetAllDisciplines();
+            var semesterList = _semesterRepository.GetAllSemesters();
+            var groupList = _groupRepository.GetAllGroups();
+            var teacherList = _userRepository.GetAllUsersWithRolesAsync();
+            var courseList = _courseRepository.GetAllCourse();
 
             ViewBag.DisciplineList = disciplineList;
             ViewBag.SemesterList = semesterList;
@@ -65,30 +65,29 @@ namespace UniCabinet.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddDisciplineDetail(DisciplineDetailAddViewModel viewModel)
+        public IActionResult AddDisciplineDetail(DisciplineDetailAddViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 // Перезагрузим списки в ViewBag для повторного отображения формы
-                await LoadSelectListsAsync();
+                LoadSelectLists();
                 return PartialView("_DisciplineDetailAddModal", viewModel);
             }
 
             var disciplineDetailDTO = viewModel.GetDisciplineDetailDTO();
 
-            await _disciplineDetailRepository.AddDisciplineDetailAsync(disciplineDetailDTO);
+            _disciplineDetailRepository.AddDisciplineDetail(disciplineDetailDTO);
 
             return Json(new { success = true });
         }
 
-        // Метод для загрузки списков в ViewBag
-        private async Task LoadSelectListsAsync()
+        private void LoadSelectLists()
         {
-            ViewBag.DisciplineList = await _disciplineRepository.GetAllDisciplines();
-            ViewBag.SemesterList = await _semesterRepository.GetAllSemesters();
-            ViewBag.Group = await _groupRepository.GetAllGroups();
-            ViewBag.Teacher = await _userRepository.GetAllUsersWithRolesAsync();
-            ViewBag.Course = await _courseRepository.GetAllCourse();
+            ViewBag.DisciplineList = _disciplineRepository.GetAllDisciplines();
+            ViewBag.SemesterList = _semesterRepository.GetAllSemesters();
+            ViewBag.Group = _groupRepository.GetAllGroups();
+            ViewBag.Teacher = _userRepository.GetAllUsersWithRolesAsync();
+            ViewBag.Course = _courseRepository.GetAllCourse();
         }
     }
 }

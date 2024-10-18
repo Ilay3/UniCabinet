@@ -47,7 +47,7 @@ namespace UniCabinet.Infrastructure.Repository
             }).ToList();
         }
 
-        public async Task AddStudentProgressAsync(StudentProgressDTO studentProgressDTO)
+        public void AddStudentProgress(StudentProgressDTO studentProgressDTO)
         {
             var studentProgressEntity = new StudentProgress
             {
@@ -60,17 +60,17 @@ namespace UniCabinet.Infrastructure.Repository
                 TotalPoints = studentProgressDTO.TotalPoints,
             };
 
-            await _context.StudentProgresses.AddAsync(studentProgressEntity);
-            await _context.SaveChangesAsync();
+            _context.StudentProgresses.Add(studentProgressEntity);
+            _context.SaveChanges();
         }
 
-        public async Task DeleteStudentProgress(int id)
+        public void DeleteStudentProgress(int id)
         {
-            var studentProgressEntity = await _context.StudentProgresses.FindAsync(id);
+            var studentProgressEntity = _context.StudentProgresses.Find(id);
             if (studentProgressEntity != null)
             {
                 _context.StudentProgresses.Remove(studentProgressEntity);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
 

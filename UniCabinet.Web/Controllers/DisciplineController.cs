@@ -17,9 +17,9 @@ namespace UniCabinet.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> DisciplinesList()
+        public IActionResult DisciplinesList()
         {
-            var disciplineDTOs = await _disciplineRepository.GetAllDisciplines();
+            var disciplineDTOs = _disciplineRepository.GetAllDisciplines();
             var disciplineViewModels = disciplineDTOs
                 .Select(dto => dto.GetDisciplineViewModel())
                 .ToList();
@@ -35,7 +35,7 @@ namespace UniCabinet.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddDiscipline(DisciplineAddViewModel viewModel)
+        public IActionResult AddDiscipline(DisciplineAddViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -43,15 +43,15 @@ namespace UniCabinet.Web.Controllers
             }
 
             var disciplineDTO = viewModel.GetDisciplineDTO();
-            await _disciplineRepository.AddDisciplineAsync(disciplineDTO);
+            _disciplineRepository.AddDiscipline(disciplineDTO);
 
             return Json(new { success = true });
         }
 
         [HttpGet]
-        public async Task<IActionResult> DisciplineEditModal(int id)
+        public IActionResult DisciplineEditModal(int id)
         {
-            var disciplineDTO = await _disciplineRepository.GetDisciplineById(id);
+            var disciplineDTO = _disciplineRepository.GetDisciplineById(id);
             if (disciplineDTO == null)
             {
                 return NotFound();
@@ -62,7 +62,7 @@ namespace UniCabinet.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditDiscipline(DisciplineEditViewModel viewModel)
+        public IActionResult EditDiscipline(DisciplineEditViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {

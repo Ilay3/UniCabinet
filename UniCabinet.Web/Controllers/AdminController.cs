@@ -89,7 +89,7 @@ public class AdminController : Controller
             .ToList();
 
         // Получение всех групп
-        var groups = await _groupRepository.GetAllGroups();
+        var groups = _groupRepository.GetAllGroups();
         ViewBag.Groups = new SelectList(groups, "Id", "Name");
 
         // Подготовка модели пагинации
@@ -166,7 +166,6 @@ public class AdminController : Controller
                 Roles = user.Roles,
                 GroupName = user.GroupName,
                 GroupId = user.GroupId,
-                // FullName будет автоматически заполнено
             })
             .ToList();
 
@@ -249,7 +248,7 @@ public class AdminController : Controller
             return NotFound();
         }
 
-        var groups = await _groupRepository.GetAllGroups();
+        var groups = _groupRepository.GetAllGroups();
 
         var model = new UserGroupViewModel
         {

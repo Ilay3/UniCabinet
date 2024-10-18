@@ -23,10 +23,10 @@ namespace UniCabinet.Application.Services
             _disciplineRepository = disciplineRepository;
         }
 
-        public async Task<string> GetDisciplineById(int id)
+        public string GetDisciplineById(int id)
         {
             var disciplineDetailDTO = _disciplineDetailRepository.GetDisciplineDetailById(id);
-            var disciplineDTO = await _disciplineRepository.GetDisciplineById(disciplineDetailDTO.DisciplineId);
+            var disciplineDTO = _disciplineRepository.GetDisciplineById(disciplineDetailDTO.DisciplineId);
 
             return disciplineDTO.Name;
         }

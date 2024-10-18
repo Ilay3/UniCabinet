@@ -18,9 +18,9 @@ namespace UniCabinet.Infrastructure.Repository
             _context = context;
         }
 
-        public async Task<List<SemesterDTO>> GetAllSemesters()
+        public List<SemesterDTO> GetAllSemesters()
         {
-            var semesterEntity = await _context.Semesters.ToListAsync();
+            var semesterEntity = _context.Semesters.ToList();
 
             return semesterEntity.Select(d => new SemesterDTO
             {
@@ -33,9 +33,9 @@ namespace UniCabinet.Infrastructure.Repository
             }).ToList();
         }
 
-        public async Task<SemesterDTO> GetSemesterById(int id)
+        public SemesterDTO GetSemesterById(int id)
         {
-            var semesterEntity = await _context.Semesters.FindAsync(id);
+            var semesterEntity = _context.Semesters.Find(id);
             if (semesterEntity == null) return null;
 
             return new SemesterDTO

@@ -39,7 +39,7 @@ namespace UniCabinet.Infrastructure.Repository
             }).ToList();
         }
 
-        public async Task AddPracticalAsync(PracticalDTO practicalDTO)
+        public void AddPractical(PracticalDTO practicalDTO)
         {
             var practicalEntity = new Practical
             {
@@ -48,17 +48,17 @@ namespace UniCabinet.Infrastructure.Repository
                 PracticalNumber = practicalDTO.PracticalNumber,
             };
 
-            await _context.Practicals.AddAsync(practicalEntity);
-            await _context.SaveChangesAsync();
+            _context.Practicals.Find(practicalEntity);
+            _context.SaveChanges();
         }
 
-        public async Task DeletePractical(int id)
+        public void DeletePractical(int id)
         {
-            var practicalEntity = await _context.Practicals.FindAsync(id);
+            var practicalEntity = _context.Practicals.Find(id);
             if (practicalEntity != null)
             {
                 _context.Practicals.Remove(practicalEntity);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
 

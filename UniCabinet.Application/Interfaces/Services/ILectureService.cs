@@ -2,6 +2,6 @@
 {
     public interface ILectureService
     {
-        Task<string> GetDisciplineById(int id);
+        string GetDisciplineById(int id);
     }
 }

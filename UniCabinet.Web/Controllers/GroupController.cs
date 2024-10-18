@@ -21,14 +21,14 @@ namespace UniCabinet.Web.Controllers
 
         public async Task<IActionResult> GroupsList()
         {
-            var groupListDTO = await _groupRepository.GetAllGroups();
+            var groupListDTO = _groupRepository.GetAllGroups();
 
             var groupViewModelList = new List<GroupViewModel>();
 
             foreach (var dto in groupListDTO)
             {
-                var courseGroup = await _courseRepository.GetCourseById(dto.CourseId);
-                var semesterGroup = await _semesterRepository.GetSemesterById(dto.SemesterId);
+                var courseGroup = _courseRepository.GetCourseById(dto.CourseId);
+                var semesterGroup = _semesterRepository.GetSemesterById(dto.SemesterId);
 
                 var groupViewModel = await dto.GetGroupViewModelAsync(courseGroup.Number, semesterGroup.Number);
                 groupViewModelList.Add(groupViewModel);
@@ -43,9 +43,9 @@ namespace UniCabinet.Web.Controllers
             return PartialView("_GroupAddModal", viewModel);
         }
 
-        public async Task<IActionResult> GroupEditModal(int id)
+        public IActionResult GroupEditModal(int id)
         {
-            var groupDTO = await _groupRepository.GetGroupById(id); 
+            var groupDTO = _groupRepository.GetGroupById(id); 
             var groupViewModel = groupDTO.GetGroupCreateEditViewModel();
 
             if (groupViewModel.TypeGroup == "Очно")
@@ -62,7 +62,7 @@ namespace UniCabinet.Web.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddGroup(GroupCreateEditViewModel viewModel)
+        public IActionResult AddGroup(GroupCreateEditViewModel viewModel)
         {
             if (!ModelState.IsValid) return PartialView("_GroupAddModal", viewModel);
 
@@ -78,9 +78,9 @@ namespace UniCabinet.Web.Controllers
 
             var groupDTO = viewModel.GetGroupDTO();
             
-            await _groupRepository.AddGroupAsync(groupDTO);
+            _groupRepository.AddGroup(groupDTO);
 
-            return RedirectToAction("GroupsList");
+            return Json(new { success = true, redirectUrl = Url.Action("LecturesList") });
         }
 
         [HttpPost]

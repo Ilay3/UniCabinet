@@ -4,7 +4,7 @@ namespace UniCabinet.Application.Interfaces.Repository
 {
     public interface ISemesterRepository
     {
-        Task<List<SemesterDTO>> GetAllSemesters();
-        Task<SemesterDTO> GetSemesterById(int id);
+        List<SemesterDTO> GetAllSemesters();
+        SemesterDTO GetSemesterById(int id);
     }
 }

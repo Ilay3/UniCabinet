@@ -18,9 +18,9 @@ namespace UniCabinet.Infrastructure.Repository
             _context = context;
         }
 
-        public async Task<List<CourseDTO>> GetAllCourse()
+        public List<CourseDTO> GetAllCourse()
         {
-            var courseEntity = await _context.Courses.ToListAsync();
+            var courseEntity = _context.Courses.ToList();
 
             return courseEntity.Select(d => new CourseDTO
             {
@@ -29,9 +29,9 @@ namespace UniCabinet.Infrastructure.Repository
             }).ToList();
         }
 
-        public async Task<CourseDTO> GetCourseById(int id)
+        public CourseDTO GetCourseById(int id)
         {
-            var courseEntity = await _context.Courses.FindAsync(id);
+            var courseEntity = _context.Courses.Find(id);
             if (courseEntity == null) return null;
 
             return new CourseDTO

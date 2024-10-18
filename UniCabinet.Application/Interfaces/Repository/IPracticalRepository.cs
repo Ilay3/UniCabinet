@@ -4,8 +4,8 @@ namespace UniCabinet.Application.Interfaces.Repository
 {
     public interface IPracticalRepository
     {
-        Task AddPracticalAsync(PracticalDTO practicalDTO);
-        Task DeletePractical(int id);
+        void AddPractical(PracticalDTO practicalDTO);
+        void DeletePractical(int id);
         List<PracticalDTO> GetAllPracticals();
         PracticalDTO GetPracticalById(int id);
         void UpdatePractical(PracticalDTO practicalDTO);

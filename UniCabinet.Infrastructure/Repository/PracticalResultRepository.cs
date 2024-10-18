@@ -40,7 +40,7 @@ namespace UniCabinet.Infrastructure.Repository
             }).ToList();
         }
 
-        public async Task AddPracticalResultAsync(PracticalResultDTO practicalResultDTO)
+        public void AddPracticalResult(PracticalResultDTO practicalResultDTO)
         {
             var practicalResultEntity = new PracticalResult
             {
@@ -50,17 +50,17 @@ namespace UniCabinet.Infrastructure.Repository
                 StudentId = practicalResultDTO.StudentId,
             };
 
-            await _context.PracticalResults.AddAsync(practicalResultEntity);
-            await _context.SaveChangesAsync();
+            _context.PracticalResults.Find(practicalResultEntity);
+            _context.SaveChanges();
         }
 
-        public async Task DeletePracticalResult(int id)
+        public void DeletePracticalResult(int id)
         {
-            var practicalResultEntity = await _context.PracticalResults.FindAsync(id);
+            var practicalResultEntity = _context.PracticalResults.Find(id);
             if (practicalResultEntity != null)
             {
                 _context.PracticalResults.Remove(practicalResultEntity);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
 

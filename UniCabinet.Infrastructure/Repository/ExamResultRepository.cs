@@ -43,7 +43,7 @@ namespace UniCabinet.Infrastructure.Repository
             }).ToList();
         }
 
-        public async Task AddExamResultAsync(ExamResultDTO examResultDTO)
+        public void AddExamResult(ExamResultDTO examResultDTO)
         {
             var examResultEntity = new ExamResult
             {
@@ -54,17 +54,17 @@ namespace UniCabinet.Infrastructure.Repository
                 IsAutomatic = examResultDTO.IsAutomatic,
             };
 
-            await _context.ExamResults.AddAsync(examResultEntity);
-            await _context.SaveChangesAsync();
+            _context.ExamResults.Add(examResultEntity);
+            _context.SaveChanges();
         }
 
-        public async Task DeleteExamResult(int id)
+        public void DeleteExamResult(int id)
         {
-            var examResultEntity = await _context.ExamResults.FindAsync(id);
+            var examResultEntity = _context.ExamResults.Find(id);
             if (examResultEntity != null)
             {
                 _context.ExamResults.Remove(examResultEntity);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
 

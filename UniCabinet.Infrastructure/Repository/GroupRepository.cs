@@ -14,9 +14,9 @@ namespace UniCabinet.Infrastructure.Repository
             _context = context;
         }
 
-        public async Task<GroupDTO> GetGroupById(int id)
+        public GroupDTO GetGroupById(int id)
         {
-            var groupEntity = await _context.Groups.FindAsync(id);
+            var groupEntity = _context.Groups.Find(id);
             if (groupEntity == null) return null;
 
             return new GroupDTO
@@ -28,9 +28,9 @@ namespace UniCabinet.Infrastructure.Repository
             };
         }
 
-        public async Task<List<GroupDTO>> GetAllGroups()
+        public List<GroupDTO> GetAllGroups()
         {
-            var groupEntity = await _context.Groups.ToListAsync();
+            var groupEntity = _context.Groups.ToList();
 
             return groupEntity.Select(d => new GroupDTO
             {
@@ -42,7 +42,7 @@ namespace UniCabinet.Infrastructure.Repository
             }).ToList();
         }
 
-        public async Task AddGroupAsync(GroupDTO groupDTO)
+        public void AddGroup(GroupDTO groupDTO)
         {
             var groupEntity = new Group
             {
@@ -52,17 +52,17 @@ namespace UniCabinet.Infrastructure.Repository
                 CourseId = groupDTO.CourseId,
             };
 
-            await _context.Groups.AddAsync(groupEntity);
-            await _context.SaveChangesAsync();
+            _context.Groups.Find(groupEntity);
+            _context.SaveChanges();
         }
 
-        public async Task DeleteGroup(int id)
+        public void DeleteGroup(int id)
         {
-            var groupEntity = await _context.Groups.FindAsync(id);
+            var groupEntity = _context.Groups.Find(id);
             if (groupEntity != null)
             {
                 _context.Groups.Remove(groupEntity);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
 
