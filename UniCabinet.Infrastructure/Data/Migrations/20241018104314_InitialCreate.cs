@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace UniCabinet.Infrastructure.Migrations
+namespace UniCabinet.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Create : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -187,6 +187,7 @@ namespace UniCabinet.Infrastructure.Migrations
                     DisciplineId = table.Column<int>(type: "int", nullable: false),
                     GroupId = table.Column<int>(type: "int", nullable: false),
                     SemesterId = table.Column<int>(type: "int", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
                     TeacherId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     LectureCount = table.Column<int>(type: "int", nullable: false),
                     PracticalCount = table.Column<int>(type: "int", nullable: false),
@@ -200,6 +201,12 @@ namespace UniCabinet.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DisciplineDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DisciplineDetails_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_DisciplineDetails_Disciplines_DisciplineId",
                         column: x => x.DisciplineId,
@@ -338,7 +345,7 @@ namespace UniCabinet.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DisciplineDetailId = table.Column<int>(type: "int", nullable: false),
-                    LectureNumber = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Number = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -509,6 +516,11 @@ namespace UniCabinet.Infrastructure.Migrations
                     { 1, 25, 1, 1, 9, 1 },
                     { 2, 30, 7, 6, 2, 2 }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DisciplineDetails_CourseId",
+                table: "DisciplineDetails",
+                column: "CourseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DisciplineDetails_DisciplineId",

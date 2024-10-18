@@ -12,7 +12,7 @@ namespace UniCabinet.Web.Mapping.Lecture
                 Id = viewModel.Id,
                 Date = viewModel.Date,
                 DisciplineDetailId = viewModel.DisciplineDetailId,
-                LectureNumber = viewModel.LectureNumber,
+                Number = viewModel.Number,
             };
 
             return lecture;

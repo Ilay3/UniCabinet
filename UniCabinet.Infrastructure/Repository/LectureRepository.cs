@@ -22,18 +22,17 @@ namespace UniCabinet.Infrastructure.Repository
             {
                 Date = lectureEntity.Date,
                 DisciplineDetailId = lectureEntity.DisciplineDetailId,
-                LectureNumber = lectureEntity.LectureNumber,
+                Number = lectureEntity.Number,
             };
         }
 
-        public async Task<IEnumerable<LectureDTO>> GetLectureListByDisciplineDetailId(int id)
+        public IEnumerable<LectureDTO> GetLectureListByDisciplineDetailId(int id)
         {
-            var lectureListEntity = await _context.Lectures
-                .Where(l => l.DisciplineDetailId == id)
-                .ToListAsync();
+            var lectureListEntity = _context.Lectures
+                .Where(l => l.DisciplineDetailId == id);
 
-            var disciplineDetailEntity = await _context.DisciplineDetails.FindAsync(id);
-            var disciplineEntity = await _context.Disciplines.FindAsync(disciplineDetailEntity.DisciplineId);
+            var disciplineDetailEntity = _context.DisciplineDetails.Find(id);
+            var disciplineEntity = _context.Disciplines.Find(disciplineDetailEntity.DisciplineId);
 
             return lectureListEntity
                 .Select(l => new LectureDTO
@@ -41,7 +40,7 @@ namespace UniCabinet.Infrastructure.Repository
                     Id = l.Id,
                     Date = l.Date,
                     DisciplineDetailId = l.DisciplineDetailId,
-                    LectureNumber = l.LectureNumber,
+                    Number = l.Number,
                 }).ToList();
         }
 
@@ -54,7 +53,7 @@ namespace UniCabinet.Infrastructure.Repository
                 Id = d.Id,
                 Date = d.Date,
                 DisciplineDetailId = d.DisciplineDetailId,
-                LectureNumber = d.LectureNumber,
+                Number = d.Number,
             }).ToList();
         }
 
@@ -64,11 +63,11 @@ namespace UniCabinet.Infrastructure.Repository
             {
                 Date = lectureDTO.Date,
                 DisciplineDetailId = lectureDTO.DisciplineDetailId,
-                LectureNumber = lectureDTO.LectureNumber,
+                Number = lectureDTO.Number,
             };
 
-            _context.Lectures.AddAsync(lectureEntity);
-            _context.SaveChangesAsync();
+            _context.Lectures.Add(lectureEntity);
+            _context.SaveChanges();
         }
 
         public async Task DeleteLecture(int id)
@@ -86,7 +85,7 @@ namespace UniCabinet.Infrastructure.Repository
             var lectureEntity = _context.Lectures.FirstOrDefault(d => d.Id == lectureDTO.Id);
             if (lectureEntity == null) return;
 
-            lectureEntity.LectureNumber = lectureDTO.LectureNumber;
+            lectureEntity.Number = lectureDTO.Number;
             lectureEntity.DisciplineDetailId = lectureDTO.DisciplineDetailId;
             lectureEntity.Date = lectureDTO.Date;
 

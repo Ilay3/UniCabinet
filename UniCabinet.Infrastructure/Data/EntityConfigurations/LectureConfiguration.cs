@@ -10,7 +10,7 @@ namespace UniCabinet.Infrastructure.Data.EntityConfigurations
         {
             builder.HasKey(l => l.Id);
 
-            builder.Property(l => l.LectureNumber)
+            builder.Property(l => l.Number)
                 .HasColumnType("decimal(18, 2)");
 
             builder.HasOne(l => l.DisciplineDetails)

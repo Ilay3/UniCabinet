@@ -18,13 +18,15 @@ namespace UniCabinet.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> LecturesList(int id)
+        public IActionResult LecturesList(int id)
         {
-            var lectureListDTO = await _lectureRepository.GetLectureListByDisciplineDetailId(id);
+            var lectureListDTO = _lectureRepository.GetLectureListByDisciplineDetailId(id);
 
-            var lectureListViewModel = await lectureListDTO.GetLectureViewModelAsync();
+            var lectureListViewModel = lectureListDTO
+                .Select(l => l.GetLectureViewModel())
+                .ToList();
             
-            ViewBag.Discipline = await _lectureService.GetDisciplineById(id);
+            ViewBag.Discipline = _lectureService.GetDisciplineById(id);
             ViewBag.DisciplineDetaildId = id;
 
             return View(lectureListViewModel);
