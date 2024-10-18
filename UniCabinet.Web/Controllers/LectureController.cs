@@ -36,17 +36,36 @@ namespace UniCabinet.Web.Controllers
             ViewBag.DisciplineDetaildId = id;
             return PartialView("_LectureAddModal");
         }
-
+        
         [HttpPost]
-        public async Task<IActionResult> AddLecture(LectureAddViewModel viewModel)
+        public IActionResult AddLecture(LectureAddViewModel viewModel)
         {
             var lectureDTO = viewModel.GetLectureDTO();
-            await _lectureRepository.AddLectureAsync(lectureDTO);
+            _lectureRepository.AddLecture(lectureDTO);
 
             var disciplineDId = viewModel.DisciplineDetailId;
 
-            return RedirectToAction("LecturesList", new {id = disciplineDId});
+            return Json(new { success = true, redirectUrl = Url.Action("LecturesList", new { id = disciplineDId }) });
+        }
 
+        [HttpGet]
+        public IActionResult LectureEditModal(int id)
+        {
+            var lectureDTO = _lectureRepository.GetLectureById(id);
+            var lectureViewModel = lectureDTO.GetLectureEditViewModel();
+
+            return PartialView("_LectureEditModal", lectureViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult EditLecture(LectureEditViewModel viewModel)
+        {
+            var lectureDTO = viewModel.GetLectureDTO();
+            _lectureRepository.UpdateLecture(lectureDTO);
+
+            var disciplineDId = viewModel.DisciplineDetailId;
+
+            return Json(new { success = true, redirectUrl = Url.Action("LecturesList", new { id = disciplineDId }) });
         }
     }
 }

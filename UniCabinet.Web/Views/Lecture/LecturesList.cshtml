@@ -1,13 +1,10 @@
-﻿@using UniCabinet.Web.Controllers
-@model IEnumerable<UniCabinet.Web.ViewModel.Lecture.LectureViewModel>
+﻿@model IEnumerable<UniCabinet.Web.ViewModel.Lecture.LectureViewModel>
 
 <h2>Лекции по "@ViewBag.Discipline"</h2>
 
-<button type="button" class="btn btn-primary" onclick="openAddLectureModal()">
+<button type="button" class="btn btn-primary" onclick="openModal('/Lecture/LectureAddModal', 'addLectureModal', @ViewBag.DisciplineDetaildId)">
     Добавить лекцию
 </button>
-
-<input type="hidden" id="disciplineDId" value="@ViewBag.DisciplineDetaildId" />
 
 <table class="table">
     <thead>
@@ -32,38 +29,14 @@
                     @item.Date.ToString("yyyy-MM-dd HH:mm")
                 </td>
                 <td>
-                    
+                    <button type="button" class="btn btn-primary" onclick="openModal('/Lecture/LectureEditModal', 'editLectureModal', @item.Id)">
+                        Редактировать
+                    </button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<!-- Скрипты для открытия модальных окон -->
-@section Scripts {
-    <script>
-        function openAddLectureModal() {
-            var disciplineDetaildId = document.getElementById("disciplineDId").value;
-            const addModalUrl = '@Url.ActionLink(nameof(LectureController.LectureAddModal), "Lecture", new { id = ViewBag.DisciplineDetaildId })';
-            fetch(addModalUrl)
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById("modalContainer").innerHTML = html;
-                    var modal = new bootstrap.Modal(document.getElementById('addLectureModal'));
-                    modal.show();
-                });
-        }
-
-        function openEditDisciplineModal(disciplineId) {
-            fetch(`/Discipline/DisciplineEditModal?id=${disciplineId}`)
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById("modalContainer").innerHTML = html;
-                    var modal = new bootstrap.Modal(document.getElementById('editDisciplineModal'));
-                    modal.show();
-                });
-        }
-    </script>
-}
-
 <div id="modalContainer"></div>
+

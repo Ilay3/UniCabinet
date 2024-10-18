@@ -13,9 +13,9 @@ namespace UniCabinet.Infrastructure.Repository
         {
             _context = context;
         }
-        public async Task<LectureDTO> GetLectureById(int id)
+        public LectureDTO GetLectureById(int id)
         {
-            var lectureEntity = await _context.Lectures.FindAsync(id);
+            var lectureEntity = _context.Lectures.Find(id);
             if (lectureEntity == null) return null;
 
             return new LectureDTO
@@ -38,6 +38,7 @@ namespace UniCabinet.Infrastructure.Repository
             return lectureListEntity
                 .Select(l => new LectureDTO
                 {
+                    Id = l.Id,
                     Date = l.Date,
                     DisciplineDetailId = l.DisciplineDetailId,
                     LectureNumber = l.LectureNumber,
@@ -57,7 +58,7 @@ namespace UniCabinet.Infrastructure.Repository
             }).ToList();
         }
 
-        public async Task AddLectureAsync(LectureDTO lectureDTO)
+        public void AddLecture(LectureDTO lectureDTO)
         {
             var lectureEntity = new Lecture
             {
@@ -66,8 +67,8 @@ namespace UniCabinet.Infrastructure.Repository
                 LectureNumber = lectureDTO.LectureNumber,
             };
 
-            await _context.Lectures.AddAsync(lectureEntity);
-            await _context.SaveChangesAsync();
+            _context.Lectures.AddAsync(lectureEntity);
+            _context.SaveChangesAsync();
         }
 
         public async Task DeleteLecture(int id)

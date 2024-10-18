@@ -1,0 +1,33 @@
+﻿@model UniCabinet.Web.ViewModel.Lecture.LectureEditViewModel
+
+<div class="modal fade" id="editLectureModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Редактировать группу</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-action="EditLecture">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="DisciplineDetailId" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Номер лекции</label>
+                        <input type="text" class="form-control" asp-for="LectureNumber" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Дата проведения</label>
+                        <input type="date" class="form-control" asp-for="Date" required />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

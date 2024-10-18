@@ -25,7 +25,7 @@ namespace UniCabinet.Application.Services
 
         public async Task<string> GetDisciplineById(int id)
         {
-            var disciplineDetailDTO = await _disciplineDetailRepository.GetDisciplineDetailById(id);
+            var disciplineDetailDTO = _disciplineDetailRepository.GetDisciplineDetailById(id);
             var disciplineDTO = await _disciplineRepository.GetDisciplineById(disciplineDetailDTO.DisciplineId);
 
             return disciplineDTO.Name;
