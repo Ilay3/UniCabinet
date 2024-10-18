@@ -14,9 +14,9 @@ namespace UniCabinet.Infrastructure.Data.Repository
             _context = context;
         }
 
-        public async Task<DisciplineDTO> GetDisciplineById(int id)
+        public DisciplineDTO GetDisciplineById(int id)
         {
-            var disciplineEntity = await _context.Disciplines.FindAsync(id);
+            var disciplineEntity = _context.Disciplines.Find(id);
             if (disciplineEntity == null) return null;
 
             return new DisciplineDTO
@@ -26,9 +26,9 @@ namespace UniCabinet.Infrastructure.Data.Repository
             };
         }
 
-        public async Task<List<DisciplineDTO>> GetAllDisciplines()
+        public List<DisciplineDTO> GetAllDisciplines()
         {
-            var disciplineEntity = await _context.Disciplines.ToListAsync();
+            var disciplineEntity = _context.Disciplines.ToList();
 
             return disciplineEntity.Select(d => new DisciplineDTO
             {
@@ -38,7 +38,7 @@ namespace UniCabinet.Infrastructure.Data.Repository
             }).ToList();
         }
 
-        public async Task AddDisciplineAsync(DisciplineDTO disciplineDTO)
+        public void AddDiscipline(DisciplineDTO disciplineDTO)
         {
             var disciplineEntity = new Discipline
             {
@@ -46,17 +46,17 @@ namespace UniCabinet.Infrastructure.Data.Repository
                 Description = disciplineDTO.Description,
             };
 
-            await _context.Disciplines.AddAsync(disciplineEntity);
-            await _context.SaveChangesAsync();
+            _context.Disciplines.Add(disciplineEntity);
+            _context.SaveChanges();
         }
 
-        public async Task DeleteDiscipline(int id)
+        public void DeleteDiscipline(int id)
         {
-            var disciplineEntity = await _context.Disciplines.FindAsync(id);
+            var disciplineEntity = _context.Disciplines.Find(id);
             if (disciplineEntity != null)
             {
                 _context.Disciplines.Remove(disciplineEntity);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
 

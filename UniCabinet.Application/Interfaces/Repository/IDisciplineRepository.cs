@@ -4,10 +4,10 @@ namespace UniCabinet.Application.Interfaces.Repository
 {
     public interface IDisciplineRepository
     {
-        Task AddDisciplineAsync(DisciplineDTO disciplineDTO);
-        Task DeleteDiscipline(int id);
-        Task<List<DisciplineDTO>> GetAllDisciplines();
-        Task<DisciplineDTO> GetDisciplineById(int id);
+        void AddDiscipline(DisciplineDTO disciplineDTO);
+        void DeleteDiscipline(int id);
+        List<DisciplineDTO> GetAllDisciplines();
+        DisciplineDTO GetDisciplineById(int id);
         void UpdateDiscipline(DisciplineDTO disciplineDTO);
     }
 }
