@@ -19,9 +19,9 @@ namespace UniCabinet.Infrastructure.Repository
             _context = context;
         }
 
-        public async Task<DisciplineDetailDTO> GetDisciplineDetailById(int id)
+        public DisciplineDetailDTO GetDisciplineDetailById(int id)
         {
-            var disciplineDetailEntity = await _context.DisciplineDetails.FindAsync(id);
+            var disciplineDetailEntity = _context.DisciplineDetails.Find(id);
             if (disciplineDetailEntity == null) return null;
 
             return new DisciplineDetailDTO
