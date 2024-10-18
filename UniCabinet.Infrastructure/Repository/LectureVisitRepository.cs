@@ -1,4 +1,5 @@
-﻿using UniCabinet.Application.Interfaces.Repository;
+﻿using Microsoft.EntityFrameworkCore;
+using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Domain.DTO;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
@@ -29,19 +30,26 @@ namespace UniCabinet.Infrastructure.Repository
 
         public List<LectureVisitDTO> GetAllLectureVisits()
         {
-            var lectureVisitEntity = _context.LectureVisits.ToList();
+            var lectureVisitEntity = _context.LectureVisits
+                .Include(lv => lv.Lecture)
+                .Include(lv => lv.Student)
+                .AsNoTracking();
 
             return lectureVisitEntity.Select(d => new LectureVisitDTO
             {
                 Id = d.Id,
                 isVisit = d.IsVisit,
                 LectureId = d.LectureId,
+                LectureNumber = d.Lecture.Number,
                 StudentId = d.StudentId,
+                SudentFirstName = d.Student.FirstName,
+                StudentLastName = d.Student.LastName,
+                StudentPatronymic = d.Student.Patronymic,
                 PointsCount = d.PointsCount,
             }).ToList();
         }
 
-        public async Task AddLectureVisitAsync(LectureVisitDTO lectureVisitDTO)
+        public void AddLectureVisit(LectureVisitDTO lectureVisitDTO)
         {
             var lectureVisitEntity = new LectureVisit
             {
@@ -51,17 +59,17 @@ namespace UniCabinet.Infrastructure.Repository
                 StudentId = lectureVisitDTO.StudentId,
             };
 
-            await _context.LectureVisits.AddAsync(lectureVisitEntity);
-            await _context.SaveChangesAsync();
+            _context.LectureVisits.Add(lectureVisitEntity);
+            _context.SaveChanges();
         }
 
-        public async Task DeleteLectureVisit(int id)
+        public void DeleteLectureVisit(int id)
         {
-            var lectureVisitEntity = await _context.LectureVisits.FindAsync(id);
+            var lectureVisitEntity = _context.LectureVisits.Find(id);
             if (lectureVisitEntity != null)
             {
                 _context.LectureVisits.Remove(lectureVisitEntity);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
 

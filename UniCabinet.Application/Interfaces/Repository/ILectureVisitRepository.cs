@@ -4,8 +4,8 @@ namespace UniCabinet.Application.Interfaces.Repository
 {
     public interface ILectureVisitRepository
     {
-        Task AddLectureVisitAsync(LectureVisitDTO lectureVisitDTO);
-        Task DeleteLectureVisit(int id);
+        void AddLectureVisit(LectureVisitDTO lectureVisitDTO);
+        void DeleteLectureVisit(int id);
         List<LectureVisitDTO> GetAllLectureVisits();
         LectureVisitDTO GetLectureVisitById(int id);
         void UpdateLectureVisit(LectureVisitDTO lectureVisitDTO);

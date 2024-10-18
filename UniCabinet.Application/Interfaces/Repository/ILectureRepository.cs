@@ -5,7 +5,7 @@ namespace UniCabinet.Application.Interfaces.Repository
     public interface ILectureRepository
     {
         void AddLecture(LectureDTO lectureDTO);
-        Task<IEnumerable<LectureDTO>> GetLectureListByDisciplineDetailId(int id);
+        IEnumerable<LectureDTO> GetLectureListByDisciplineDetailId(int id);
         Task DeleteLecture(int id);
         List<LectureDTO> GetAllLectures();
         LectureDTO GetLectureById(int id);

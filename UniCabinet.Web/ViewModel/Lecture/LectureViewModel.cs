@@ -7,7 +7,7 @@
         /// <summary>
         /// Номер лекции
         /// </summary>
-        public int LectureNumber { get; set; }
+        public int Number { get; set; }
 
         public DateTime Date { get; set; }
     }

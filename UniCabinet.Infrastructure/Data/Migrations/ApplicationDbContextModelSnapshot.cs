@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniCabinet.Infrastructure.Data;
 
 #nullable disable
 
-namespace UniCabinet.Infrastructure.Migrations
+namespace UniCabinet.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241013150107_Add_CourseId")]
-    partial class Add_CourseId
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -387,7 +384,7 @@ namespace UniCabinet.Infrastructure.Migrations
                     b.Property<int>("DisciplineDetailId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("LectureNumber")
+                    b.Property<decimal>("Number")
                         .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("Id");
