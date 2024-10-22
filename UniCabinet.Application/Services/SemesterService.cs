@@ -88,7 +88,7 @@ namespace UniCabinet.Application.Services
 
             try
             {
-                currentSemester = await _semesterRepository.GetCurrentSemesterAsync(currentDate);
+                currentSemester = _semesterRepository.GetCurrentSemester(currentDate);
                 _logger.LogInformation($"Текущий семестр: №{currentSemester.Number}, период: {currentSemester.DayStart}.{currentSemester.MounthStart} - {currentSemester.DayEnd}.{currentSemester.MounthEnd}");
             }
             catch (InvalidOperationException ex)
