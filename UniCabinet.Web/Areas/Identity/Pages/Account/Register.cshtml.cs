@@ -48,9 +48,8 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account
         {
             if (ModelState.IsValid)
             {
-                var user = new User
-                {
-                    UserName = Input.Email,
+                var user = new User { 
+                    UserName = Input.Email, 
                     Email = Input.Email,
                     Id = Guid.NewGuid().ToString(),
                     LockoutEnabled = true
@@ -60,23 +59,14 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    // Присвоение роли "Not Verified"
+                    // Присвоение роли "Не идентифицирован"
                     await _verificationService.AssignRoleAsync(user.Id, "Not Verified");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(Url.Content("~/"));
                 }
-                else
-                {
-                    // Добавляем ошибки в ModelState
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
             }
 
-            // Если мы дошли до этого места, значит произошла ошибка
             return Page();
         }
     }
