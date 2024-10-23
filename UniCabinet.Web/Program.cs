@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using UniCabinet.Application.Interfaces;
 using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Application.Interfaces.Services;
@@ -50,7 +47,16 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.ExpireTimeSpan = TimeSpan.FromDays(10); // Время жизни куки
     options.SlidingExpiration = true; // Обновлять время действия при каждом запросе
     options.Cookie.HttpOnly = true; // Куки доступны только через HTTP
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Использовать куки только по HTTPS
+
+    // Настройка SecurePolicy в зависимости от среды
+    if (builder.Environment.IsDevelopment())
+    {
+        options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+    }
+    else
+    {
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    }
 });
 
 // Настройка сессий
@@ -69,6 +75,14 @@ builder.Services.AddDefaultIdentity<User>(options =>
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15); // Время блокировки
     options.Lockout.MaxFailedAccessAttempts = 5; // Максимальное количество попыток
     options.Lockout.AllowedForNewUsers = true; // Разрешить блокировку для новых пользователей
+
+    // Настройки пароля
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+
     options.SignIn.RequireConfirmedAccount = false;
 })
     .AddRoles<IdentityRole>()
@@ -130,11 +144,9 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Маршрутизация контроллеров API
-app.MapControllers();
-
 // Маршрутизация Razor Pages и MVC контроллеров
 app.MapRazorPages();
+app.MapControllers(); // Размещено после MapRazorPages
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=DisciplineDetail}/{action=DisciplineDetailsList}/{id?}");
