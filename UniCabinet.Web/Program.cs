@@ -1,11 +1,15 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using UniCabinet.Application.Interfaces;
 using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Application.Interfaces.Services;
 using UniCabinet.Application.Services;
 using UniCabinet.Domain.Entities;
+using UniCabinet.Infrastructure.BackgroundServices;
 using UniCabinet.Infrastructure.Data;
 using UniCabinet.Infrastructure.Data.Repository;
 using UniCabinet.Infrastructure.Repositories;
@@ -17,7 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Настройка минимального уровня логирования для Entity Framework Core
-builder.Logging.ClearProviders(); // очищает все провайдеры логов
+builder.Logging.ClearProviders(); // Очищает все провайдеры логов
 builder.Logging.AddConsole();
 builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
 
@@ -27,7 +31,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     var environment = builder.Environment;
 
     // Подключение к базе данных
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(connectionString);
 
     // Включить логирование чувствительных данных только в dev-среде
     if (environment.IsDevelopment())
@@ -35,7 +39,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.EnableSensitiveDataLogging();
     }
 });
-
 
 // Настройка куки аутентификации
 builder.Services.ConfigureApplicationCookie(options =>
@@ -71,27 +74,37 @@ builder.Services.AddDefaultIdentity<User>(options =>
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// Другие сервисы
-builder.Services.AddScoped<IUserVerificationService, UserVerificationService>();
-builder.Services.AddSingleton<IEmailSender, EmailSender>();
+// Регистрация репозиториев
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<ISemesterRepository, SemesterRepository>();
 builder.Services.AddScoped<IDisciplineRepository, DisciplineRepository>();
 builder.Services.AddScoped<IDisciplineDetailRepository, DisciplineDetailRepository>();
 builder.Services.AddScoped<ILectureRepository, LectureRepository>();
+
+// Регистрация сервисов
+builder.Services.AddScoped<IUserVerificationService, UserVerificationService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IGroupService, GroupService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<ISemesterService, SemesterService>();
 builder.Services.AddScoped<ILectureService, LectureService>();
 
+// Регистрация сервиса отправки электронной почты
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
+// Регистрация фонового сервиса обновления семестров
+builder.Services.AddHostedService<SemesterBackgroundService>();
+
+// Регистрация контроллеров API
+builder.Services.AddControllers();
+
+// Добавление контроллеров с представлениями и Razor Pages
+builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-// MVC
-builder.Services.AddControllersWithViews();
-
 var app = builder.Build();
-
 
 // Инициализация ролей и администратора при запуске приложения
 using (var scope = app.Services.CreateScope())
@@ -99,8 +112,6 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     await DataInitializer.SeedRolesAndAdmin(services);
 }
-
-
 
 // Middleware конфигурация
 if (!app.Environment.IsDevelopment())
@@ -119,6 +130,10 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Маршрутизация контроллеров API
+app.MapControllers();
+
+// Маршрутизация Razor Pages и MVC контроллеров
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",

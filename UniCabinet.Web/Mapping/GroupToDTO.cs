@@ -12,7 +12,6 @@ namespace UniCabinet.Web.Mapping
                 Id = viewModel.Id,
                 Name = viewModel.Name,
                 CourseId = viewModel.CourseId,
-                SemesterId = viewModel.SemesterId,
                 TypeGroup = viewModel.TypeGroup,
             };
 

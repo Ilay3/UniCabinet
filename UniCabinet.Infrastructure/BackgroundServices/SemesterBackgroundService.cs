@@ -1,10 +1,10 @@
 ﻿// Файл: UniCabinet.Infrastructure/BackgroundServices/SemesterBackgroundService.cs
 
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using UniCabinet.Application.Interfaces.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,13 +12,13 @@ namespace UniCabinet.Infrastructure.BackgroundServices
 {
     public class SemesterBackgroundService : BackgroundService
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<SemesterBackgroundService> _logger;
-        private readonly TimeSpan _checkInterval = TimeSpan.FromHours(1); // Интервал проверки
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly TimeSpan _checkInterval = TimeSpan.FromDays(1);
 
-        public SemesterBackgroundService(IServiceProvider serviceProvider, ILogger<SemesterBackgroundService> logger)
+        public SemesterBackgroundService(IServiceScopeFactory serviceScopeFactory, ILogger<SemesterBackgroundService> logger)
         {
-            _serviceProvider = serviceProvider;
+            _serviceScopeFactory = serviceScopeFactory;
             _logger = logger;
         }
 
@@ -30,13 +30,13 @@ namespace UniCabinet.Infrastructure.BackgroundServices
             {
                 try
                 {
-                    using (var scope = _serviceProvider.CreateScope())
+                    using (var scope = _serviceScopeFactory.CreateScope())
                     {
                         var semesterService = scope.ServiceProvider.GetRequiredService<ISemesterService>();
                         await semesterService.UpdateCurrentSemesterAsync();
-                    }
 
-                    _logger.LogInformation("Проверка и обновление семестров выполнены успешно.");
+                        _logger.LogInformation("Проверка и обновление семестров выполнены успешно.");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -45,8 +45,6 @@ namespace UniCabinet.Infrastructure.BackgroundServices
 
                 await Task.Delay(_checkInterval, stoppingToken);
             }
-
-            _logger.LogInformation("Фоновый сервис обновления семестров остановлен.");
         }
     }
 }

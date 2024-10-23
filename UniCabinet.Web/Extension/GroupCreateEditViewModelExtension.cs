@@ -12,7 +12,6 @@ namespace UniCabinet.Web.Extension
                 Id = groupsDTO.Id,
                 Name = groupsDTO.Name,
                 CourseId = groupsDTO.CourseId,
-                SemesterId = groupsDTO.SemesterId,
                 TypeGroup = groupsDTO.TypeGroup,
             };
 

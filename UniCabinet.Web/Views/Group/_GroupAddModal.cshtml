@@ -10,6 +10,7 @@
             </div>
             <!-- Тело модального окна -->
             <div class="modal-body">
+
                 <form id="addGroupForm" asp-action="AddGroup">
                     <div class="form-group">
                         <label for="groupName">Название группы</label>
@@ -37,14 +38,7 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="semesterNumber">Семестр</label>
-                        <select asp-for="SemesterId" class="form-control" required>
-                            <option value="">Выберите семестр</option>
-                            <option value="1">1 Семестр</option>
-                            <option value="2">2 Семестр</option>
-                        </select>
-                    </div>
+                    <p>Текущий семестр: @Model.CurrentSemester</p>
 
                     <!-- Подвал модального окна -->
                     <div class="modal-footer">

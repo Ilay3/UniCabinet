@@ -25,17 +25,17 @@ namespace UniCabinet.Application.Services
             _logger = logger;
         }
 
-        public async Task<List<SemesterDTO>> GetAllSemestersAsync()
+        public List<SemesterDTO> GetAllSemesters()
         {
-            return await _semesterRepository.GetAllSemestersAsync();
+            return _semesterRepository.GetAllSemesters();
         }
 
-        public async Task<SemesterDTO> GetSemesterByIdAsync(int id)
+        public SemesterDTO GetSemesterById(int id)
         {
-            return await _semesterRepository.GetSemesterByIdAsync(id);
+            return _semesterRepository.GetSemesterById(id);
         }
 
-        public async Task CreateSemesterAsync(SemesterDTO semesterDto)
+        public void CreateSemester(SemesterDTO semesterDto)
         {
             var semester = new Semester
             {
@@ -47,12 +47,12 @@ namespace UniCabinet.Application.Services
             };
 
             _semesterRepository.Add(semester);
-            await _semesterRepository.SaveChangesAsync();
+            _semesterRepository.SaveChanges();
         }
 
-        public async Task UpdateSemesterAsync(SemesterDTO semesterDto)
+        public void UpdateSemester(SemesterDTO semesterDto)
         {
-            var semesterEntity = await _semesterRepository.GetSemesterEntityByIdAsync(semesterDto.Id);
+            var semesterEntity = _semesterRepository.GetSemesterEntityById(semesterDto.Id);
             if (semesterEntity != null)
             {
                 semesterEntity.Number = semesterDto.Number;
@@ -62,17 +62,17 @@ namespace UniCabinet.Application.Services
                 semesterEntity.MounthEnd = semesterDto.MounthEnd;
 
                 _semesterRepository.Update(semesterEntity);
-                await _semesterRepository.SaveChangesAsync();
+                _semesterRepository.SaveChanges();
             }
         }
 
-        public async Task DeleteSemesterAsync(int id)
+        public void DeleteSemester(int id)
         {
-            var semester = await _semesterRepository.GetSemesterByIdAsync(id);
+            var semester = _semesterRepository.GetSemesterById(id);
             if (semester != null)
             {
                 _semesterRepository.Remove(new Semester { Id = id });
-                await _semesterRepository.SaveChangesAsync();
+                _semesterRepository.SaveChanges();
             }
         }
 
@@ -80,54 +80,39 @@ namespace UniCabinet.Application.Services
         /// Обновление текущего семестра на основе текущей или тестовой даты
         /// </summary>
         /// <param name="testDate">Тестовая дата для обновления семестра (опционально)</param>
-        /// <returns></returns>
         public async Task UpdateCurrentSemesterAsync(DateTime? testDate = null)
         {
             var currentDate = testDate ?? DateTime.Now;
-            SemesterDTO currentSemester;
 
-            try
+            // Получаем текущий семестр
+            var currentSemester = _semesterRepository.GetCurrentSemester(currentDate);
+            _logger.LogInformation($"Текущий семестр: №{currentSemester.Number}, период: {currentSemester.DayStart}.{currentSemester.MounthStart} - {currentSemester.DayEnd}.{currentSemester.MounthEnd}");
+
+            // Получаем все группы
+            var groups = _groupRepository.GetAllGroups();
+            var groupsToUpdate = groups.Where(g => g.SemesterId != currentSemester.Id).ToList();
+
+            if (groupsToUpdate.Any())
             {
-                currentSemester = _semesterRepository.GetCurrentSemester(currentDate);
-                _logger.LogInformation($"Текущий семестр: №{currentSemester.Number}, период: {currentSemester.DayStart}.{currentSemester.MounthStart} - {currentSemester.DayEnd}.{currentSemester.MounthEnd}");
-            }
-            catch (InvalidOperationException ex)
-            {
-                // Логирование ошибки
-                _logger.LogError(ex, "Текущий семестр не найден.");
-                return;
-            }
+                _logger.LogInformation($"Начинаем обновление {groupsToUpdate.Count} групп до семестра №{currentSemester.Number}");
 
-            // Получаем все семестры
-            var semesters = await _semesterRepository.GetAllSemestersAsync();
-            var previousSemester = semesters.OrderByDescending(s => s.Number).FirstOrDefault();
-
-            if (previousSemester == null || previousSemester.Number != currentSemester.Number)
-            {
-                // Семестр сменился, обновляем связанные группы
-                _logger.LogInformation($"Смена семестра: предыдущий семестр №{previousSemester?.Number}, новый семестр №{currentSemester.Number}");
-
-                var groups = await _groupRepository.GetAllGroupsAsync();
-                var groupsToUpdate = groups.Where(g => g.SemesterId != currentSemester.Id).ToList();
-
-                if (groupsToUpdate.Any())
+                // Обновляем SemesterId у групп
+                foreach (var group in groupsToUpdate)
                 {
-                    _logger.LogInformation($"Начинаем обновление {groupsToUpdate.Count} групп до семестра №{currentSemester.Number}");
-
-                    await _groupRepository.UpdateGroupsSemesterAsync(groupsToUpdate);
-                    await _groupRepository.SaveChangesAsync();
-
-                    _logger.LogInformation($"Обновление групп завершено: {groupsToUpdate.Count} групп обновлено до семестра №{currentSemester.Number}");
+                    group.SemesterId = currentSemester.Id;
                 }
-                else
-                {
-                    _logger.LogInformation("Нет групп для обновления.");
-                }
+
+                await _groupRepository.UpdateGroupsSemesterAsync(groupsToUpdate);
+                await _groupRepository.SaveChangesAsync();
+
+                _logger.LogInformation($"Обновление групп завершено: {groupsToUpdate.Count} групп обновлено до семестра №{currentSemester.Number}");
             }
             else
             {
-                _logger.LogInformation("Смена семестра не требуется.");
+                _logger.LogInformation("Нет групп для обновления.");
             }
         }
+
+
     }
 }

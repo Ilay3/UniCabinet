@@ -13,6 +13,7 @@
 
         public int CourseId { get; set; }
 
-        public int SemesterId { get; set; }
+        public string CurrentSemester { get; set; }
+
     }
 }

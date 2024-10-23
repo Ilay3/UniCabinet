@@ -1,13 +1,9 @@
-﻿// Файл: UniCabinet.Infrastructure/Repository/SemesterRepository.cs
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Extensions.Logging;
 using UniCabinet.Application.Interfaces.Repository;
+using UniCabinet.Application.Services;
 using UniCabinet.Domain.DTO;
 using UniCabinet.Domain.Entities;
+using UniCabinet.Infrastructure.BackgroundServices;
 using UniCabinet.Infrastructure.Data;
 
 namespace UniCabinet.Infrastructure.Repository
@@ -15,13 +11,14 @@ namespace UniCabinet.Infrastructure.Repository
     public class SemesterRepository : ISemesterRepository
     {
         private readonly ApplicationDbContext _context;
-
-        public SemesterRepository(ApplicationDbContext context)
+        private readonly ILogger<SemesterRepository> _logger;
+        public SemesterRepository(ApplicationDbContext context, ILogger<SemesterRepository> logger)
         {
             _context = context;
-        }
+            _logger = logger;
+            
+    }
 
-        // Существующие синхронные методы
         public List<SemesterDTO> GetAllSemesters()
         {
             var semesterEntities = _context.Semesters.ToList();
@@ -55,16 +52,37 @@ namespace UniCabinet.Infrastructure.Repository
 
         public SemesterDTO GetCurrentSemester(DateTime currentDate)
         {
-            var semesterEntity = _context.Semesters
-                .FirstOrDefault(s =>
-                    (currentDate.Month > s.MounthStart || (currentDate.Month == s.MounthStart && currentDate.Day >= s.DayStart)) &&
-                    (currentDate.Month < s.MounthEnd || (currentDate.Month == s.MounthEnd && currentDate.Day <= s.DayEnd))
-                );
+            var semesters = _context.Semesters.ToList();
+            Semester semesterEntity = null;
+
+            foreach (var s in semesters)
+            {
+                var startDate = new DateTime(currentDate.Year, s.MounthStart, s.DayStart);
+                var endDate = new DateTime(currentDate.Year, s.MounthEnd, s.DayEnd);
+
+                // Если период семестра пересекает новый год
+                if (endDate < startDate)
+                {
+                    endDate = endDate.AddYears(1);
+                }
+
+                _logger.LogInformation($"Проверяем семестр №{s.Number}: {startDate.ToShortDateString()} - {endDate.ToShortDateString()}");
+
+                if (currentDate >= startDate && currentDate <= endDate)
+                {
+                    _logger.LogInformation($"Текущая дата {currentDate.ToShortDateString()} попадает в семестр №{s.Number}");
+                    semesterEntity = s;
+                    break;
+                }
+
+            }
 
             if (semesterEntity == null)
             {
                 throw new InvalidOperationException("Текущий семестр не найден.");
             }
+
+            _logger.LogInformation($"Определён текущий семестр: №{semesterEntity.Number}, период: {semesterEntity.DayStart}.{semesterEntity.MounthStart} - {semesterEntity.DayEnd}.{semesterEntity.MounthEnd}");
 
             return new SemesterDTO
             {
@@ -75,6 +93,11 @@ namespace UniCabinet.Infrastructure.Repository
                 DayEnd = semesterEntity.DayEnd,
                 MounthEnd = semesterEntity.MounthEnd,
             };
+        }
+
+        public Semester GetSemesterEntityById(int id)
+        {
+            return _context.Semesters.Find(id);
         }
 
         public void Add(Semester semester)
@@ -92,70 +115,9 @@ namespace UniCabinet.Infrastructure.Repository
             _context.Semesters.Remove(semester);
         }
 
-        // Добавленные асинхронные методы
-        public async Task<List<SemesterDTO>> GetAllSemestersAsync()
+        public void SaveChanges()
         {
-            var semesterEntities = await _context.Semesters.ToListAsync();
-
-            return semesterEntities.Select(d => new SemesterDTO
-            {
-                Id = d.Id,
-                DayStart = d.DayStart,
-                DayEnd = d.DayEnd,
-                MounthStart = d.MounthStart,
-                MounthEnd = d.MounthEnd,
-                Number = d.Number,
-            }).ToList();
-        }
-
-        public async Task<SemesterDTO> GetSemesterByIdAsync(int id)
-        {
-            var semesterEntity = await _context.Semesters.FindAsync(id);
-            if (semesterEntity == null) return null;
-
-            return new SemesterDTO
-            {
-                Id = semesterEntity.Id,
-                DayStart = semesterEntity.DayStart,
-                DayEnd = semesterEntity.DayEnd,
-                MounthStart = semesterEntity.MounthStart,
-                MounthEnd = semesterEntity.MounthEnd,
-                Number = semesterEntity.Number,
-            };
-        }
-
-        public async Task<Semester> GetSemesterEntityByIdAsync(int id)
-        {
-            return await _context.Semesters.FindAsync(id);
-        }
-
-        public async Task SaveChangesAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<SemesterDTO> GetCurrentSemesterAsync(DateTime currentDate)
-        {
-            var semesterEntity = await _context.Semesters
-                .FirstOrDefaultAsync(s =>
-                    (currentDate.Month > s.MounthStart || (currentDate.Month == s.MounthStart && currentDate.Day >= s.DayStart)) &&
-                    (currentDate.Month < s.MounthEnd || (currentDate.Month == s.MounthEnd && currentDate.Day <= s.DayEnd))
-                );
-
-            if (semesterEntity == null)
-            {
-                throw new InvalidOperationException("Текущий семестр не найден.");
-            }
-
-            return new SemesterDTO
-            {
-                Id = semesterEntity.Id,
-                Number = semesterEntity.Number,
-                DayStart = semesterEntity.DayStart,
-                MounthStart = semesterEntity.MounthStart,
-                DayEnd = semesterEntity.DayEnd,
-                MounthEnd = semesterEntity.MounthEnd,
-            };
+            _context.SaveChanges();
         }
     }
 }

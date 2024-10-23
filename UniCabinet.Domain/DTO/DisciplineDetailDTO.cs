@@ -74,7 +74,5 @@ namespace UniCabinet.Domain.DTO
         /// Минимальный балл для прохождения
         /// </summary>
         public int PassCount { get; set; }
-
-        
     }
 }

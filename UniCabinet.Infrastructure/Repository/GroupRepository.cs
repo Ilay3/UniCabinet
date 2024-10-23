@@ -1,10 +1,4 @@
-﻿// Файл: UniCabinet.Infrastructure/Repository/GroupRepository.cs
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using UniCabinet.Application.Interfaces.Repository;
+﻿using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Domain.DTO;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
@@ -113,11 +107,14 @@ namespace UniCabinet.Infrastructure.Repository
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Пакетное обновление SemesterId для списка групп.
+        /// </summary>
+        /// <param name="groupsToUpdate">Список групп для обновления.</param>
         public async Task UpdateGroupsSemesterAsync(List<GroupDTO> groupsToUpdate)
         {
             if (groupsToUpdate == null || !groupsToUpdate.Any()) return;
 
-            // Преобразуем DTO в сущности с только необходимыми свойствами
             var groupEntities = groupsToUpdate.Select(dto => new Group
             {
                 Id = dto.Id,
@@ -126,21 +123,20 @@ namespace UniCabinet.Infrastructure.Repository
 
             try
             {
-                // Используем BulkUpdate для пакетного обновления только SemesterId
                 await _context.BulkUpdateAsync(groupEntities, new BulkConfig
                 {
-                    PreserveInsertOrder = true,
-                    SetOutputIdentity = true,
-                    BatchSize = 1000,
                     PropertiesToInclude = new List<string> { "SemesterId" },
-                    UpdateByProperties = new List<string> { "Id" }
+                    UpdateByProperties = new List<string> { "Id" },
+                    BatchSize = 1000 // Настройте размер партии при необходимости
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка при пакетном обновлении SemesterId групп.");
+                _logger.LogError(ex, "Ошибка при пакетном обновлении групп.");
                 throw;
             }
         }
+
+
     }
 }

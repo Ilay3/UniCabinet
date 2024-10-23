@@ -6,31 +6,30 @@
             <!-- Заголовок модального окна -->
             <div class="modal-header">
                 <h5 class="modal-title">Редактировать группу</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <!-- Тело модального окна -->
             <div class="modal-body">
                 <form id="editGroupForm" asp-action="EditGroup">
-                    <!-- Скрытое поле для ID группы -->
                     <input type="hidden" asp-for="Id" />
 
-                    <div class="mb-3">
-                        <label for="groupName" class="form-label">Название группы</label>
+                    <div class="form-group">
+                        <label for="groupName">Название группы</label>
                         <input type="text" class="form-control" id="groupName" asp-for="Name" required />
                     </div>
 
-                    <div class="mb-3">
-                        <label for="groupType" class="form-label">Тип группы</label>
-                        <select asp-for="TypeGroup" class="form-select" required>
+                    <div class="form-group">
+                        <label for="groupType">Тип группы</label>
+                        <select asp-for="TypeGroup" class="form-control" required>
                             <option value="">Выберите тип</option>
                             <option value="1">Очно</option>
                             <option value="2">Заочно</option>
                         </select>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="courseNumber" class="form-label">Курс</label>
-                        <select asp-for="CourseId" class="form-select" required>
+                    <div class="form-group">
+                        <label for="courseNumber">Курс</label>
+                        <select asp-for="CourseId" class="form-control" required>
                             <option value="">Выберите курс</option>
                             <option value="1">1 Курс</option>
                             <option value="2">2 Курс</option>
@@ -40,14 +39,7 @@
                         </select>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="semesterNumber" class="form-label">Семестр</label>
-                        <select asp-for="SemesterId" class="form-select" required>
-                            <option value="">Выберите семестр</option>
-                            <option value="1">1 Семестр</option>
-                            <option value="2">2 Семестр</option>
-                        </select>
-                    </div>
+                    <p>Текущий семестр: @Model.CurrentSemester</p>
 
                     <!-- Подвал модального окна -->
                     <div class="modal-footer">

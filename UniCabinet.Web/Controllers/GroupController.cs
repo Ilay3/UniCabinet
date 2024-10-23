@@ -12,6 +12,7 @@ namespace UniCabinet.Web.Controllers
         private readonly IGroupRepository _groupRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly ISemesterRepository _semesterRepository;
+
         public GroupController(IGroupRepository groupRepository, ICourseRepository courseRepository, ISemesterRepository semesterRepository)
         {
             _groupRepository = groupRepository;
@@ -19,7 +20,7 @@ namespace UniCabinet.Web.Controllers
             _semesterRepository = semesterRepository;
         }
 
-        public async Task<IActionResult> GroupsList()
+        public IActionResult GroupsList()
         {
             var groupListDTO = _groupRepository.GetAllGroups();
 
@@ -30,23 +31,31 @@ namespace UniCabinet.Web.Controllers
                 var courseGroup = _courseRepository.GetCourseById(dto.CourseId);
                 var semesterGroup = _semesterRepository.GetSemesterById(dto.SemesterId);
 
-                var groupViewModel = await dto.GetGroupViewModelAsync(courseGroup.Number, semesterGroup.Number);
+                var groupViewModel = dto.GetGroupViewModel(courseGroup.Number, semesterGroup.Number);
                 groupViewModelList.Add(groupViewModel);
             }
 
             return View(groupViewModelList);
         }
 
+
         public IActionResult GroupAddModal()
         {
-            var viewModel = new GroupCreateEditViewModel();
+            var currentSemester = _semesterRepository.GetCurrentSemester(DateTime.Now);
+            var viewModel = new GroupCreateEditViewModel
+            {
+                CurrentSemester = currentSemester != null ? $"Семестр №{currentSemester.Number}" : "Не определён"
+            };
             return PartialView("_GroupAddModal", viewModel);
         }
 
         public IActionResult GroupEditModal(int id)
         {
-            var groupDTO = _groupRepository.GetGroupById(id); 
+            var groupDTO = _groupRepository.GetGroupById(id);
             var groupViewModel = groupDTO.GetGroupCreateEditViewModel();
+
+            var currentSemester = _semesterRepository.GetCurrentSemester(DateTime.Now);
+            groupViewModel.CurrentSemester = currentSemester != null ? $"Семестр №{currentSemester.Number}" : "Не определён";
 
             if (groupViewModel.TypeGroup == "Очно")
             {
@@ -76,12 +85,27 @@ namespace UniCabinet.Web.Controllers
                 viewModel.TypeGroup = "Заочно";
             }
 
+            // Определение текущего семестра
+            SemesterDTO currentSemester;
+            try
+            {
+                currentSemester = _semesterRepository.GetCurrentSemester(DateTime.Now);
+            }
+            catch (InvalidOperationException)
+            {
+                ModelState.AddModelError("", "Текущий семестр не определён.");
+                return PartialView("_GroupAddModal", viewModel);
+            }
+
             var groupDTO = viewModel.GetGroupDTO();
-            
+            groupDTO.SemesterId = currentSemester.Id; // Автоматическое присваивание SemesterId
+
             _groupRepository.AddGroup(groupDTO);
 
-            return Json(new { success = true, redirectUrl = Url.Action("LecturesList") });
+            return Json(new { success = true, redirectUrl = Url.Action("GroupsList") });
         }
+
+
 
         [HttpPost]
         public IActionResult EditGroup(GroupCreateEditViewModel viewModel)
@@ -100,11 +124,20 @@ namespace UniCabinet.Web.Controllers
                 viewModel.TypeGroup = "Заочно";
             }
 
+            // Определение текущего семестра
+            var currentSemester = _semesterRepository.GetCurrentSemester(DateTime.Now);
+            if (currentSemester == null)
+            {
+                ModelState.AddModelError("", "Текущий семестр не определён.");
+                return PartialView("_GroupEditModal", viewModel);
+            }
+
             var groupDTO = viewModel.GetGroupDTO();
+            groupDTO.SemesterId = currentSemester.Id; // Автоматическое присваивание SemesterId
+
             _groupRepository.UpdateGroup(groupDTO);
 
             return Json(new { success = true });
         }
-
     }
 }
