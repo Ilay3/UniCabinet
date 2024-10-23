@@ -151,7 +151,5 @@ namespace UniCabinet.Application.Services
             };
         }
 
-
-
     }
 }

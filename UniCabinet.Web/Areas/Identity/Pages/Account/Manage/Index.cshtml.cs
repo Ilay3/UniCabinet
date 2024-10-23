@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using UniCabinet.Application.Interfaces.Services;
 using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Web.Areas.Identity.Pages.Account.Manage
@@ -10,13 +11,20 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account.Manage
     public class IndexModel : PageModel
     {
         private readonly UserManager<User> _userManager;
+        private readonly IUserVerificationService _verificationService;
         private readonly SignInManager<User> _signInManager;
+        private readonly ILogger<IndexModel> _logger;
 
-
-        public IndexModel(UserManager<User> userManager, SignInManager<User> signInManager)
+        public IndexModel(
+            UserManager<User> userManager,
+            IUserVerificationService verificationService,
+            SignInManager<User> signInManager,
+            ILogger<IndexModel> logger)
         {
             _userManager = userManager;
+            _verificationService = verificationService;
             _signInManager = signInManager;
+            _logger = logger;
         }
 
         public bool IsProfileComplete { get; set; }
@@ -102,12 +110,27 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account.Manage
 
             var updateResult = await _userManager.UpdateAsync(user);
 
-            if (updateResult.Succeeded)
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
             {
-                StatusMessage = "Your profile has been updated";
+                _logger.LogInformation("Профиль пользователя обновлен.");
+
+                // Вызываем VerifyUserAsync после обновления профиля
+                await _verificationService.VerifyUserAsync(user.Id);
+
                 await _signInManager.RefreshSignInAsync(user);
+                TempData["StatusMessage"] = "Ваш профиль обновлен";
                 return RedirectToPage();
             }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
 
             foreach (var error in updateResult.Errors)
             {
