@@ -12,5 +12,11 @@ namespace UniCabinet.Application.Interfaces.Repository
         void UpdateGroup(GroupDTO groupDTO);
         Task UpdateGroupsSemesterAsync(List<GroupDTO> groupsToUpdate);
         Task SaveChangesAsync();
+
+        List<UserDTO> GetUsersByGroupId(int groupId);
+        void UpdateGroupsCourse(List<GroupDTO> groupsToUpdate);
+        void UpdateUsersGroup(List<UserDTO> usersToUpdate);
+
+
     }
 }

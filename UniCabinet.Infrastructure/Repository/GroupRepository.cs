@@ -137,6 +137,84 @@ namespace UniCabinet.Infrastructure.Repository
             }
         }
 
+        /// <summary>
+        /// Получает список пользователей по идентификатору группы.
+        /// </summary>
+        /// <param name="groupId">Идентификатор группы.</param>
+        /// <returns>Список пользователей.</returns>
+        public List<UserDTO> GetUsersByGroupId(int groupId)
+        {
+            var users = _context.Users.Where(u => u.GroupId == groupId).ToList();
+
+            return users.Select(u => new UserDTO
+            {
+                Id = u.Id,
+                GroupId = u.GroupId,
+                // Другие свойства, если необходимо
+            }).ToList();
+        }
+
+        /// <summary>
+        /// Обновляет курсы групп пакетно.
+        /// </summary>
+        /// <param name="groupsToUpdate">Список групп для обновления.</param>
+        public void UpdateGroupsCourse(List<GroupDTO> groupsToUpdate)
+        {
+            if (groupsToUpdate == null || !groupsToUpdate.Any()) return;
+
+            var groupEntities = groupsToUpdate.Select(dto => new Group
+            {
+                Id = dto.Id,
+                CourseId = dto.CourseId
+            }).ToList();
+
+            try
+            {
+                _context.BulkUpdate(groupEntities, new BulkConfig
+                {
+                    PropertiesToInclude = new List<string> { "CourseId" },
+                    UpdateByProperties = new List<string> { "Id" },
+                    BatchSize = 1000
+                });
+                _logger.LogInformation($"Пакетное обновление курсов выполнено для {groupsToUpdate.Count} групп.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при пакетном обновлении курсов групп.");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Обновляет связь группы у пользователей пакетно.
+        /// </summary>
+        /// <param name="usersToUpdate">Список пользователей для обновления.</param>
+        public void UpdateUsersGroup(List<UserDTO> usersToUpdate)
+        {
+            if (usersToUpdate == null || !usersToUpdate.Any()) return;
+
+            var userEntities = usersToUpdate.Select(dto => new User
+            {
+                Id = dto.Id,
+                GroupId = dto.GroupId
+            }).ToList();
+
+            try
+            {
+                _context.BulkUpdate(userEntities, new BulkConfig
+                {
+                    PropertiesToInclude = new List<string> { "GroupId" },
+                    UpdateByProperties = new List<string> { "Id" },
+                    BatchSize = 1000
+                });
+                _logger.LogInformation($"Пакетное обновление GroupId выполнено для {usersToUpdate.Count} пользователей.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при пакетном обновлении GroupId у пользователей.");
+                throw;
+            }
+        }
 
     }
 }

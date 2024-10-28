@@ -1,4 +1,5 @@
 ﻿// UniCabinet.Infrastructure/Repositories/UserRepository.cs
+using EFCore.BulkExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UniCabinet.Application.Interfaces;
@@ -105,6 +106,53 @@ namespace UniCabinet.Infrastructure.Repositories
         {
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Получает список пользователей по идентификатору группы.
+        /// </summary>
+        /// <param name="groupId">Идентификатор группы.</param>
+        /// <returns>Список UserDTO.</returns>
+        public List<UserDTO> GetUsersByGroupId(int groupId)
+        {
+            var users = _context.Users.Where(u => u.GroupId == groupId).ToList();
+
+            return users.Select(u => new UserDTO
+            {
+                Id = u.Id,
+                GroupId = u.GroupId,
+                // Другие свойства...
+            }).ToList();
+        }
+
+        /// <summary>
+        /// Обновляет GroupId у пользователей.
+        /// </summary>
+        /// <param name="usersToUpdate">Список пользователей для обновления.</param>
+        public void UpdateUsersGroup(List<UserDTO> usersToUpdate)
+        {
+            if (usersToUpdate == null || !usersToUpdate.Any()) return;
+
+            var userEntities = usersToUpdate.Select(dto => new User
+            {
+                Id = dto.Id,
+                GroupId = dto.GroupId
+            }).ToList();
+
+            try
+            {
+                _context.BulkUpdate(userEntities, new BulkConfig
+                {
+                    PropertiesToInclude = new List<string> { "GroupId" },
+                    UpdateByProperties = new List<string> { "Id" },
+                    BatchSize = 1000
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
         }
 
     }

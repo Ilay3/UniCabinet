@@ -8,6 +8,7 @@ namespace UniCabinet.Application.Interfaces.Services
 {
     public interface ICourseService
     {
+        void UpdateCourses();
 
     }
 }

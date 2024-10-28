@@ -105,11 +105,13 @@ builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<ISemesterService, SemesterService>();
 builder.Services.AddScoped<ILectureService, LectureService>();
 
+
 // Регистрация сервиса отправки электронной почты
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 // Регистрация фонового сервиса обновления семестров
 builder.Services.AddHostedService<SemesterBackgroundService>();
+builder.Services.AddHostedService<CourseBackgroundService>();
 
 // Регистрация контроллеров API
 builder.Services.AddControllers();

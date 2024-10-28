@@ -16,5 +16,9 @@ namespace UniCabinet.Application.Interfaces
         Task<User> GetUserByIdAsync(string userId);
         Task UpdateUserAsync(User user);
         Task<UserDTO> GetUserById(string id);
+
+        List<UserDTO> GetUsersByGroupId(int groupId);
+        void UpdateUsersGroup(List<UserDTO> usersToUpdate);
+
     }
 }
