@@ -33,9 +33,9 @@ namespace UniCabinet.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult DisciplineDetailsList()
+        public async Task<IActionResult> DisciplineDetailsList()
         {
-            var disciplineDListDTO =  _disciplineDetailRepository.GetAllDisciplineDetails();
+            var disciplineDListDTO = _disciplineDetailRepository.GetAllDisciplineDetails();
 
             var disciplineDListViewModel = disciplineDListDTO
                 .Select(dd => dd.GetDisciplineDetailViewModel())
@@ -45,14 +45,16 @@ namespace UniCabinet.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult DisciplineDetailAddModal()
+        public async Task<IActionResult> DisciplineDetailAddModal(int? id)
         {
-            var disciplineList = _disciplineRepository.GetAllDisciplines();
-            var semesterList = _semesterRepository.GetAllSemesters();
-            var groupList = _groupRepository.GetAllGroups();
-            var teacherList = _userRepository.GetAllUsersWithRolesAsync();
-            var courseList = _courseRepository.GetAllCourse();
+            // Await asynchronous repository methods
+            var disciplineList =  _disciplineRepository.GetAllDisciplines();
+            var semesterList =  _semesterRepository.GetAllSemesters();
+            var groupList =  _groupRepository.GetAllGroups();
+            var teacherList = await _userRepository.GetAllUsersWithRolesAsync();
+            var courseList = await _courseRepository.GetAllCourseAsync();
 
+            // Assign the awaited results to ViewBag
             ViewBag.DisciplineList = disciplineList;
             ViewBag.SemesterList = semesterList;
             ViewBag.Group = groupList;
@@ -65,12 +67,12 @@ namespace UniCabinet.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddDisciplineDetail(DisciplineDetailAddViewModel viewModel)
+        public async Task<IActionResult> AddDisciplineDetail(DisciplineDetailAddViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                // Перезагрузим списки в ViewBag для повторного отображения формы
-                LoadSelectLists();
+                // Reload the select lists asynchronously for re-rendering the form
+                await LoadSelectListsAsync();
                 return PartialView("_DisciplineDetailAddModal", viewModel);
             }
 
@@ -81,13 +83,14 @@ namespace UniCabinet.Web.Controllers
             return Json(new { success = true });
         }
 
-        private void LoadSelectLists()
+        private async Task LoadSelectListsAsync()
         {
-            ViewBag.DisciplineList = _disciplineRepository.GetAllDisciplines();
+            // Await asynchronous repository methods
+            ViewBag.DisciplineList =  _disciplineRepository.GetAllDisciplines();
             ViewBag.SemesterList = _semesterRepository.GetAllSemesters();
-            ViewBag.Group = _groupRepository.GetAllGroups();
-            ViewBag.Teacher = _userRepository.GetAllUsersWithRolesAsync();
-            ViewBag.Course = _courseRepository.GetAllCourse();
+            ViewBag.Group =  _groupRepository.GetAllGroups();
+            ViewBag.Teacher = await _userRepository.GetAllUsersWithRolesAsync();
+            ViewBag.Course = await _courseRepository.GetAllCourseAsync();
         }
     }
 }

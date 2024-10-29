@@ -4,7 +4,7 @@ namespace UniCabinet.Application.Interfaces.Repository
 {
     public interface ICourseRepository
     {
-        List<CourseDTO> GetAllCourse();
+        Task<List<CourseDTO>> GetAllCourseAsync();
         CourseDTO GetCourseById(int id);
     }
 }

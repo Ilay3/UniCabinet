@@ -18,11 +18,11 @@ namespace UniCabinet.Infrastructure.Repository
             _context = context;
         }
 
-        public List<CourseDTO> GetAllCourse()
+        public async Task<List<CourseDTO>> GetAllCourseAsync()
         {
-            var courseEntity = _context.Courses.ToList();
+            var courseEntities = await _context.Courses.ToListAsync();
 
-            return courseEntity.Select(d => new CourseDTO
+            return courseEntities.Select(d => new CourseDTO
             {
                 Id = d.Id,
                 Number = d.Number,
