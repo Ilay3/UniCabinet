@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using UniCabinet.Application.Interfaces.Services;
 using Microsoft.Extensions.DependencyInjection;
+using EFCore.BulkExtensions;
 
 namespace UniCabinet.Infrastructure.BackgroundServices
 {
@@ -15,6 +16,7 @@ namespace UniCabinet.Infrastructure.BackgroundServices
         private readonly ILogger<CourseBackgroundService> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly List<(int Month, int Day)> _targetDates;
+        private readonly TimeZoneInfo _timeZone;
 
         public CourseBackgroundService(IServiceScopeFactory serviceScopeFactory, ILogger<CourseBackgroundService> logger)
         {
@@ -25,10 +27,14 @@ namespace UniCabinet.Infrastructure.BackgroundServices
             _targetDates = new List<(int Month, int Day)>
             {
                 (8, 30),
-                (8, 31)
+                (8, 31),
+                (10, 29)
             };
 
-            _logger.LogInformation("CourseBackgroundService: Конструктор вызван.");
+            // Установите нужный часовой пояс (по умолчанию - локальный)
+            _timeZone = TimeZoneInfo.Local;
+
+            _logger.LogInformation("CourseBackgroundService: Конструктор вызван. Часовой пояс: {TimeZone}", _timeZone.DisplayName);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -39,11 +45,13 @@ namespace UniCabinet.Infrastructure.BackgroundServices
             {
                 try
                 {
-                    var today = DateTime.Today;
-                    var currentMonth = today.Month;
-                    var currentDay = today.Day;
+                    // Получаем текущее время в заданном часовом поясе
+                    var now = TimeZoneInfo.ConvertTime(DateTime.UtcNow, _timeZone);
+                    var today = now.Date;
+                    var currentMonth = now.Month;
+                    var currentDay = now.Day;
 
-                    _logger.LogInformation($"CourseBackgroundService: Сегодня {today.ToShortDateString()}.");
+                    _logger.LogInformation("CourseBackgroundService: Сегодня {Date}.", today.ToShortDateString());
 
                     // Проверка, совпадает ли текущая дата с одной из целевых дат
                     bool isRunDay = false;
@@ -56,7 +64,7 @@ namespace UniCabinet.Infrastructure.BackgroundServices
                         if (currentMonth == Month && currentDay == adjustedDay)
                         {
                             isRunDay = true;
-                            _logger.LogInformation($"CourseBackgroundService: Сегодня совпадает с целевой датой {Month}.{adjustedDay}.");
+                            _logger.LogInformation("CourseBackgroundService: Сегодня совпадает с целевой датой {Month}.{Day}.", Month, adjustedDay);
                             break;
                         }
                     }
@@ -82,9 +90,11 @@ namespace UniCabinet.Infrastructure.BackgroundServices
                     _logger.LogError(ex, "CourseBackgroundService: Ошибка при обновлении курсов.");
                 }
 
-                // Ждем до следующего дня в полночь
-                var nextRunTime = DateTime.Today.AddDays(1).AddHours(0).AddMinutes(0).AddSeconds(0);
-                var delay = nextRunTime - DateTime.Now;
+                // Ждём до следующего дня в полночь
+                var nowUtc = DateTime.UtcNow;
+                var nowInTimeZone = TimeZoneInfo.ConvertTime(nowUtc, _timeZone);
+                var nextRunTime = nowInTimeZone.Date.AddDays(1).AddHours(0).AddMinutes(0).AddSeconds(0);
+                var delay = nextRunTime - TimeZoneInfo.ConvertTime(DateTime.UtcNow, _timeZone);
 
                 // Проверка на отрицательную задержку
                 if (delay < TimeSpan.Zero)
@@ -92,7 +102,7 @@ namespace UniCabinet.Infrastructure.BackgroundServices
                     delay = TimeSpan.Zero;
                 }
 
-                _logger.LogInformation($"CourseBackgroundService: Ожидание {delay} до следующего запуска.");
+                _logger.LogInformation("CourseBackgroundService: Ожидание {Delay} до следующего запуска ({NextRunTime}).", delay, nextRunTime);
 
                 await Task.Delay(delay, stoppingToken);
             }

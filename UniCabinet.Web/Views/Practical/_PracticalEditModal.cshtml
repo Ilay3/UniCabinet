@@ -1,0 +1,58 @@
+﻿@model UniCabinet.Domain.DTO.PracticalDTO
+
+<div class="modal-header">
+    <h5 class="modal-title">Редактировать Практическую Работу</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form id="editPracticalForm" asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="DisciplineDetailId" />
+
+        <div class="form-group">
+            <label asp-for="PracticalNumber">Номер Практической Работы</label>
+            <input asp-for="PracticalNumber" class="form-control" />
+            <span asp-validation-for="PracticalNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Date">Дата Проведения</label>
+            <input asp-for="Date" class="form-control" type="date" />
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+    <button type="submit" class="btn btn-primary" form="editPracticalForm">Сохранить</button>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            $('#editPracticalForm').submit(function (e) {
+                e.preventDefault();
+                var form = $(this);
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Edit", "Practical")',
+                    data: form.serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            // Обработка успешного обновления через глобальные обработчики
+                        } else {
+                            $('#practicalModal .modal-body').html(response); // Отображение ошибок
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Произошла ошибка при обновлении практической работы.');
+                    }
+                });
+            });
+        });
+    </script>
+}

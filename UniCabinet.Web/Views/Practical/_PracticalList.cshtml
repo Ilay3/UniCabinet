@@ -1,0 +1,19 @@
+﻿@model List<UniCabinet.Domain.DTO.PracticalDTO>
+
+@foreach (var practical in Model)
+{
+    <tr>
+        <td>@practical.PracticalNumber</td>
+        <td>@practical.Date.ToString("dd.MM.yyyy")</td>
+        <td>
+            <button type="button" class="btn btn-primary btn-sm"
+                    onclick="openModal('@Url.Action("Edit", "Practical")', 'practicalModal', @practical.Id)">
+                Редактировать
+            </button>
+            <button type="button" class="btn btn-danger btn-sm"
+                    onclick="deletePractical(@practical.Id, @ViewBag.DisciplineDetailId)">
+                Удалить
+            </button>
+        </td>
+    </tr>
+}

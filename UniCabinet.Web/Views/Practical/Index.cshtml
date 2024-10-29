@@ -1,0 +1,71 @@
+﻿@model UniCabinet.Web.ViewModel.Practical.PracticalListViewModel
+
+@{
+    ViewData["Title"] = "Практические Работы";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@{
+    bool canAddPractical = Model.CurrentPracticalCount < Model.MaxPracticalCount;
+}
+
+<button type="button" class="btn btn-success mb-3"
+        data-toggle="modal"
+        data-target="#practicalModal"
+        onclick="openModal('@Url.Action("Create", "Practical", new { disciplineDetailId = Model.DisciplineDetailId })', 'practicalModal')"
+@(canAddPractical ? "" : "disabled")>
+    Добавить Практическую Работу
+</button>
+
+@if (!canAddPractical)
+{
+    <div class="alert alert-warning">
+        Достигнуто максимальное количество практических работ для этой дисциплины.
+    </div>
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Номер Практической Работы</th>
+            <th>Дата Проведения</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody id="practicalListBody">
+        @await Html.PartialAsync("_PracticalList", Model.Practicals)
+    </tbody>
+</table>
+
+
+<div id="modalContainer"></div>
+
+@section Scripts {
+    <script src="~/js/modalHandler.js"></script>
+    <script>
+        // Функция для обновления списка практических работ после успешного добавления/редактирования/удаления
+        function refreshPracticalList(disciplineDetailId) {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetPracticals", "Practical")',
+                data: { disciplineDetailId: disciplineDetailId },
+                success: function (partialView) {
+                    $('#practicalListBody').html(partialView);
+                },
+                error: function (xhr, status, error) {
+                    alert('Произошла ошибка при обновлении списка практических работ.');
+                }
+            });
+        }
+
+        // Обработка успешного добавления практической работы
+        $(document).on('ajaxSuccess', function (event, xhr, settings) {
+            if (settings.url.includes('Create') || settings.url.includes('Edit') || settings.url.includes('Delete')) {
+                var disciplineDetailId = @Model.DisciplineDetailId;
+                refreshPracticalList(disciplineDetailId);
+                $('#modalContainer').html(''); // Очистка модального окна
+            }
+        });
+    </script>
+}
