@@ -1,29 +1,31 @@
 ﻿@model UniCabinet.Web.ViewModel.Lecture.LectureAddViewModel
 
-<div class="modal fade" id="addLectureModal" tabindex="-1" aria-labelledby="addLectureModalLabel" aria-hidden="true">
+<div class="modal fade" id="lectureAddModal" tabindex="-1" aria-labelledby="lectureAddModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addLectureModalLabel">Добавить лекцию</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form method="post" asp-action="AddLecture">
+            <form asp-action="AddLecture" asp-controller="Lecture" method="post">
+                <input type="hidden" asp-for="DisciplineDetailId" />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="lectureAddModalLabel">Добавить лекцию</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
                     <div class="mb-3">
-                        <label for="lectureNumber" class="form-label">Номер лекции</label>
-                        <input type="text" class="form-control" id="lectureNumber" name="Number" required>
-                        <input type="hidden" value="@ViewBag.DisciplineDetaildId" name="DisciplineDetailId" required>
+                        <label asp-for="Number" class="form-label"></label>
+                        <input asp-for="Number" class="form-control" />
+                        <span asp-validation-for="Number" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="lectureDate" class="form-label">Дата</label>
-                        <input type="datetime-local" class="form-control" id="lectureDate" name="Date" required>
+                        <label asp-for="Date" class="form-label"></label>
+                        <input asp-for="Date" class="form-control" />
+                        <span asp-validation-for="Date" class="text-danger"></span>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                        <button type="submit" class="btn btn-primary">Добавить группу</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

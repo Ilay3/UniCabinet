@@ -1,37 +1,28 @@
-﻿@model IEnumerable<UniCabinet.Web.ViewModel.Lecture.LectureViewModel>
+﻿@model List<UniCabinet.Web.ViewModel.Lecture.LectureViewModel>
+@{
+    ViewBag.Title = "Список лекций";
+}
 
-<h2>Лекции по "@ViewBag.Discipline"</h2>
+<h2>Список лекций по дисциплине @ViewBag.Discipline</h2>
 
-<button type="button" class="btn btn-primary" onclick="openModal('/Lecture/LectureAddModal', 'addLectureModal', @ViewBag.DisciplineDetaildId)">
-    Добавить лекцию
-</button>
+<button class="btn btn-primary" onclick="openModal('/Lecture/LectureAddModal', 'lectureAddModal', @ViewBag.DisciplineDetaildId)">Добавить лекцию</button>
 
 <table class="table">
     <thead>
         <tr>
-            <th>
-                Номер лекции
-            </th>
-            <th>
-                Дата проведения
-            </th>
-            <th></th>
+            <th>Номер лекции</th>
+            <th>Дата</th>
+            <th>Действия</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var lecture in Model)
         {
             <tr>
+                <td>@lecture.Number</td>
+                <td>@lecture.Date.ToShortDateString()</td>
                 <td>
-                    @item.Number
-                </td>
-                <td>
-                    @item.Date.ToString("yyyy-MM-dd HH:mm")
-                </td>
-                <td>
-                    <button type="button" class="btn btn-primary" onclick="openModal('/Lecture/LectureEditModal', 'editLectureModal', @item.Id)">
-                        Редактировать
-                    </button>
+                    <button class="btn btn-sm btn-warning" onclick="openModal('/Lecture/LectureEditModal', 'lectureEditModal', @lecture.Id)">Редактировать</button>
                 </td>
             </tr>
         }
@@ -39,4 +30,5 @@
 </table>
 
 <div id="modalContainer"></div>
+
 

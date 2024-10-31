@@ -1,33 +1,32 @@
 ﻿@model UniCabinet.Web.ViewModel.Lecture.LectureEditViewModel
 
-<div class="modal fade" id="editLectureModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="lectureEditModal" tabindex="-1" aria-labelledby="lectureEditModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Редактировать группу</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Закрыть"></button>
-            </div>
-            <div class="modal-body">
-                <form method="post" asp-action="EditLecture">
-                    <input type="hidden" asp-for="Id" />
-                    <input type="hidden" asp-for="DisciplineDetailId" />
-
+            <form asp-action="EditLecture" asp-controller="Lecture" method="post">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="DisciplineDetailId" />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="lectureEditModalLabel">Редактировать лекцию</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Номер лекции</label>
-                        <input type="text" class="form-control" asp-for="Number" required />
+                        <label asp-for="Number" class="form-label"></label>
+                        <input asp-for="Number" class="form-control" />
+                        <span asp-validation-for="Number" class="text-danger"></span>
                     </div>
-
                     <div class="mb-3">
-                        <label class="form-label">Дата проведения</label>
-                        <input type="date" class="form-control" asp-for="Date" required />
+                        <label asp-for="Date" class="form-label"></label>
+                        <input asp-for="Date" class="form-control" />
+                        <span asp-validation-for="Date" class="text-danger"></span>
                     </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                        <button type="submit" class="btn btn-primary">Сохранить</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
