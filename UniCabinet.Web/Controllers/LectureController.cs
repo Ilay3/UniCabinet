@@ -5,6 +5,7 @@ using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Application.Interfaces.Services;
 using UniCabinet.Domain.DTO;
 using UniCabinet.Domain.Entities;
+using UniCabinet.Infrastructure.Data.Repository;
 using UniCabinet.Infrastructure.Repository;
 using UniCabinet.Web.Extension.Lecture;
 using UniCabinet.Web.Mapping.Lecture;
@@ -17,18 +18,21 @@ public class LectureController : Controller
     private readonly IDisciplineDetailRepository _disciplineDetailRepository;
     private readonly IUserRepository _userRepository;
     private readonly ILectureVisitRepository _lectureVisitRepository;
+    private readonly IDisciplineRepository _disciplineRepository;
 
     public LectureController(ILectureRepository lectureRepository, 
         ILectureService lectureService, 
         IDisciplineDetailRepository disciplineDetailRepository,
         IUserRepository userRepository,
-        ILectureVisitRepository lectureVisitRepository)
+        ILectureVisitRepository lectureVisitRepository,
+        IDisciplineRepository disciplineRepository)
     {
         _lectureRepository = lectureRepository;
         _lectureService = lectureService;
         _disciplineDetailRepository = disciplineDetailRepository;
         _userRepository = userRepository;
         _lectureVisitRepository = lectureVisitRepository;
+        _disciplineRepository = disciplineRepository;
     }
 
     [HttpGet]
@@ -119,7 +123,6 @@ public class LectureController : Controller
         }
 
         int disciplineDetailId = lecture.DisciplineDetailId;
-
         var disciplineDetail = _disciplineDetailRepository.GetDisciplineDetailById(disciplineDetailId);
         int groupId = disciplineDetail.GroupId;
 
@@ -133,6 +136,8 @@ public class LectureController : Controller
         {
             LectureId = lectureId,
             DisciplineDetailId = disciplineDetailId,
+            LectureNumber = lecture.Number, // Заполняем номер лекции
+            DisciplineName = _disciplineRepository.GetDisciplineById(disciplineDetail.DisciplineId).Name,
             Students = students.Select(s => new StudentAttendanceViewModel
             {
                 StudentId = s.Id,
@@ -143,8 +148,9 @@ public class LectureController : Controller
             }).ToList()
         };
 
-        return View(attendanceViewModel);
+        return View("LectureAttendance", attendanceViewModel);
     }
+
 
 
     [HttpPost]

@@ -13,6 +13,7 @@ namespace UniCabinet.Web.Extension.Lecture
                 Date = modelDTO.Date,
                 DisciplineDetailId = modelDTO.DisciplineDetailId,
                 Number = modelDTO.Number,
+                PointsCount = modelDTO.PointsCount,
             };
 
             return lecture;

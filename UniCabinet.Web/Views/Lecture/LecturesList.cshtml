@@ -16,6 +16,7 @@
         <tr>
             <th>Номер лекции</th>
             <th>Дата</th>
+            <th>Баллы</th>
             <th>Действия</th>
             <th>Действия</th>
         </tr>
@@ -26,6 +27,8 @@
             <tr>
                 <td>@lecture.Number</td>
                 <td>@lecture.Date.ToShortDateString()</td>
+                <td>@lecture.PointsCount</td>
+
                 <td>
                     <button class="btn btn-sm btn-warning" onclick="openModal('/Lecture/LectureEditModal', 'lectureEditModal', @lecture.Id)">Редактировать</button>
                 </td>

@@ -1,6 +1,7 @@
 ﻿@model UniCabinet.Web.ViewModel.Lecture.LectureAttendanceViewModel
 
-<h2>Отметка посещаемости для лекции №@Model.LectureId</h2>
+<h2>Отметка посещаемости для лекции №@Model.LectureNumber по дисциплине "@Model.DisciplineName"</h2>
+
 
 <form asp-action="SaveAttendance" method="post">
     <input type="hidden" asp-for="LectureId" />
@@ -11,6 +12,7 @@
                 <th>Имя</th>
                 <th>Фамилия</th>
                 <th>Отчество</th>
+                <th>Посещаемость</th>
             </tr>
         </thead>
         <tbody>

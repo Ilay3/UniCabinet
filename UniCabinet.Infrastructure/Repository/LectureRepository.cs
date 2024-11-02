@@ -42,6 +42,7 @@ namespace UniCabinet.Infrastructure.Repository
                     Date = l.Date,
                     DisciplineDetailId = l.DisciplineDetailId,
                     Number = l.Number,
+                    PointsCount = l.PointsCount,
                 }).ToList();
         }
 

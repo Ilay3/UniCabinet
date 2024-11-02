@@ -13,6 +13,7 @@ namespace UniCabinet.Web.Extension.Lecture
                 Id = dto.Id,
                 Date = dto.Date,
                 Number = dto.Number,
+                PointsCount = dto.PointsCount,
             };
         }
     }

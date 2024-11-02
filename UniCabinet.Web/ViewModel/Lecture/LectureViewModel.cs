@@ -8,7 +8,7 @@
         /// Номер лекции
         /// </summary>
         public int Number { get; set; }
-
+        public decimal PointsCount { get; set; }
         public DateTime Date { get; set; }
     }
 }
