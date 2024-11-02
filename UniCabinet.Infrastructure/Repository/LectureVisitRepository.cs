@@ -85,5 +85,53 @@ namespace UniCabinet.Infrastructure.Repository
 
             _context.SaveChanges();
         }
+
+        public void AddOrUpdateLectureVisit(LectureVisitDTO lectureVisitDTO)
+        {
+            var existingVisit = _context.LectureVisits.FirstOrDefault(lv =>
+                lv.LectureId == lectureVisitDTO.LectureId && lv.StudentId == lectureVisitDTO.StudentId);
+
+            if (existingVisit != null)
+            {
+                existingVisit.IsVisit = lectureVisitDTO.isVisit;
+                existingVisit.PointsCount = lectureVisitDTO.PointsCount;
+            }
+            else
+            {
+                var lectureVisitEntity = new LectureVisit
+                {
+                    LectureId = lectureVisitDTO.LectureId,
+                    StudentId = lectureVisitDTO.StudentId,
+                    IsVisit = lectureVisitDTO.isVisit,
+                    PointsCount = lectureVisitDTO.PointsCount
+                };
+                _context.LectureVisits.Add(lectureVisitEntity);
+            }
+
+            _context.SaveChanges();
+        }
+
+        public List<LectureVisitDTO> GetLectureVisitsByLectureId(int lectureId)
+        {
+            var lectureVisitEntities = _context.LectureVisits
+                .Where(lv => lv.LectureId == lectureId)
+                .Include(lv => lv.Student)
+                .AsNoTracking()
+                .ToList();
+
+            return lectureVisitEntities.Select(d => new LectureVisitDTO
+            {
+                Id = d.Id,
+                isVisit = d.IsVisit,
+                LectureId = d.LectureId,
+                StudentId = d.StudentId,
+                SudentFirstName = d.Student.FirstName,
+                StudentLastName = d.Student.LastName,
+                StudentPatronymic = d.Student.Patronymic,
+                PointsCount = d.PointsCount,
+            }).ToList();
+        }
+
+
     }
 }

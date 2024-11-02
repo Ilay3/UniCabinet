@@ -10,5 +10,6 @@ namespace UniCabinet.Application.Interfaces.Repository
         List<LectureDTO> GetAllLectures();
         LectureDTO GetLectureById(int id);
         void UpdateLecture(LectureDTO lectureDTO);
+        int GetLectureCountByDisciplineDetailId(int disciplineDetailId);
     }
 }

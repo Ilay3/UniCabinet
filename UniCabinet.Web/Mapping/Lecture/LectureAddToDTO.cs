@@ -12,6 +12,7 @@ namespace UniCabinet.Web.Mapping.Lecture
                 DisciplineDetailId = viewModel.DisciplineDetailId,
                 Date = viewModel.Date,
                 Number = viewModel.Number,
+                PointsCount = viewModel.PointsCount
             };
 
             return lecture;

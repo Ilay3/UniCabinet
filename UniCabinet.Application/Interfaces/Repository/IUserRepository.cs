@@ -20,5 +20,7 @@ namespace UniCabinet.Application.Interfaces
         List<UserDTO> GetUsersByGroupId(int groupId);
         void UpdateUsersGroup(List<UserDTO> usersToUpdate);
 
+        List<UserDTO> GetStudentsByGroupId(int groupId);
+
     }
 }

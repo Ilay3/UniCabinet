@@ -9,5 +9,7 @@ namespace UniCabinet.Application.Interfaces.Repository
         List<LectureVisitDTO> GetAllLectureVisits();
         LectureVisitDTO GetLectureVisitById(int id);
         void UpdateLectureVisit(LectureVisitDTO lectureVisitDTO);
+        void AddOrUpdateLectureVisit(LectureVisitDTO lectureVisitDTO);
+        List<LectureVisitDTO> GetLectureVisitsByLectureId(int lectureId);
     }
 }

@@ -96,6 +96,7 @@ builder.Services.AddScoped<ISemesterRepository, SemesterRepository>();
 builder.Services.AddScoped<IDisciplineRepository, DisciplineRepository>();
 builder.Services.AddScoped<IDisciplineDetailRepository, DisciplineDetailRepository>();
 builder.Services.AddScoped<ILectureRepository, LectureRepository>();
+builder.Services.AddScoped<ILectureVisitRepository, LectureVisitRepository>();
 
 // Регистрация сервисов
 builder.Services.AddScoped<IUserVerificationService, UserVerificationService>();

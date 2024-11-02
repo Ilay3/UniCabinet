@@ -155,5 +155,32 @@ namespace UniCabinet.Infrastructure.Repositories
             }
         }
 
+
+        public List<UserDTO> GetStudentsByGroupId(int groupId)
+        {
+            var students = _context.Users
+                .Where(u => u.GroupId == groupId)
+                .Join(_context.UserRoles,
+                      user => user.Id,
+                      userRole => userRole.UserId,
+                      (user, userRole) => new { user, userRole })
+                .Join(_context.Roles,
+                      ur => ur.userRole.RoleId,
+                      role => role.Id,
+                      (ur, role) => new { ur.user, role.Name })
+                .Where(u => u.Name == "Student")
+                .Select(u => u.user)
+                .ToList();
+
+            return students.Select(u => new UserDTO
+            {
+                Id = u.Id,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Patronymic = u.Patronymic,
+                GroupId = u.GroupId
+            }).ToList();
+        }
+
     }
 }

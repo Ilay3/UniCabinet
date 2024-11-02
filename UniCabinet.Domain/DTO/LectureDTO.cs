@@ -17,6 +17,10 @@ namespace UniCabinet.Domain.DTO
         /// Номер лекции
         /// </summary>
         public int Number { get; set; }
+        /// <summary>
+        /// Количество баллов за лекцию
+        /// </summary>
+        public decimal PointsCount { get; set; }
 
         public DateTime Date { get; set; }
     }

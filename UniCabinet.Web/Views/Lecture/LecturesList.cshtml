@@ -2,16 +2,21 @@
 @{
     ViewBag.Title = "Список лекций";
 }
+@{
+    var existingLecturesCount = Model.Count;
+    var maxLectures = ViewBag.MaxLectures;
+}
 
 <h2>Список лекций по дисциплине @ViewBag.Discipline</h2>
 
-<button class="btn btn-primary" onclick="openModal('/Lecture/LectureAddModal', 'lectureAddModal', @ViewBag.DisciplineDetaildId)">Добавить лекцию</button>
+<button class="btn btn-primary" @(existingLecturesCount >= maxLectures ? "disabled" : "") onclick="openModal('/Lecture/LectureAddModal', 'lectureAddModal', @ViewBag.DisciplineDetaildId)">Добавить лекцию</button>
 
 <table class="table">
     <thead>
         <tr>
             <th>Номер лекции</th>
             <th>Дата</th>
+            <th>Действия</th>
             <th>Действия</th>
         </tr>
     </thead>
@@ -23,6 +28,9 @@
                 <td>@lecture.Date.ToShortDateString()</td>
                 <td>
                     <button class="btn btn-sm btn-warning" onclick="openModal('/Lecture/LectureEditModal', 'lectureEditModal', @lecture.Id)">Редактировать</button>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-primary" href="@Url.Action("LectureAttendance", "Lecture", new { lectureId = lecture.Id })">Отметить посещаемость</a>
                 </td>
             </tr>
         }

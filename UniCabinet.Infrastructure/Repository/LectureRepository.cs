@@ -23,6 +23,7 @@ namespace UniCabinet.Infrastructure.Repository
                 Date = lectureEntity.Date,
                 DisciplineDetailId = lectureEntity.DisciplineDetailId,
                 Number = lectureEntity.Number,
+                PointsCount = lectureEntity.PointsCount
             };
         }
 
@@ -64,6 +65,7 @@ namespace UniCabinet.Infrastructure.Repository
                 Date = lectureDTO.Date,
                 DisciplineDetailId = lectureDTO.DisciplineDetailId,
                 Number = lectureDTO.Number,
+                PointsCount = lectureDTO.PointsCount
             };
 
             _context.Lectures.Add(lectureEntity);
@@ -88,8 +90,15 @@ namespace UniCabinet.Infrastructure.Repository
             lectureEntity.Number = lectureDTO.Number;
             lectureEntity.DisciplineDetailId = lectureDTO.DisciplineDetailId;
             lectureEntity.Date = lectureDTO.Date;
+            lectureEntity.PointsCount = lectureDTO.PointsCount;
 
             _context.SaveChanges();
         }
+
+        public int GetLectureCountByDisciplineDetailId(int disciplineDetailId)
+        {
+            return _context.Lectures.Count(l => l.DisciplineDetailId == disciplineDetailId);
+        }
+
     }
 }

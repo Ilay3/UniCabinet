@@ -1,4 +1,6 @@
-﻿namespace UniCabinet.Web.ViewModel.Lecture
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace UniCabinet.Web.ViewModel.Lecture
 {
     public class LectureEditViewModel
     {
@@ -12,5 +14,7 @@
         public int Number { get; set; }
 
         public DateTime Date { get; set; }
+        [Display(Name = "Количество баллов за лекцию")]
+        public decimal PointsCount { get; set; }
     }
 }
