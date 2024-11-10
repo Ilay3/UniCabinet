@@ -4,9 +4,9 @@ using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Infrastructure.Data.EntityConfigurations
 {
-    public class GroupConfiguration : IEntityTypeConfiguration<Group>
+    public class GroupConfiguration : IEntityTypeConfiguration<GroupEntity>
     {
-        public void Configure(EntityTypeBuilder<Group> builder)
+        public void Configure(EntityTypeBuilder<GroupEntity> builder)
         {
             builder.HasKey(g => g.Id);
 

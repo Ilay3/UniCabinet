@@ -1,10 +1,10 @@
-﻿using UniCabinet.Domain.DTO;
+﻿using UniCabinet.Core.DTOs.Entites;
 
 namespace UniCabinet.Application.Interfaces.Repository
 {
     public interface ICourseRepository
     {
         Task<List<CourseDTO>> GetAllCourseAsync();
-        CourseDTO GetCourseById(int id);
+        Task<CourseDTO> GetCourseById(int id);
     }
 }

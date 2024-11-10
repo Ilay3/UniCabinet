@@ -9,10 +9,10 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account.Manage
 {
     public class EmailModel : PageModel
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<UserEntity> _userManager;
         private readonly IEmailSender _emailSender;
 
-        public EmailModel(UserManager<User> userManager, IEmailSender emailSender)
+        public EmailModel(UserManager<UserEntity> userManager, IEmailSender emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;

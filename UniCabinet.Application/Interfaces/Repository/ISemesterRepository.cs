@@ -1,4 +1,4 @@
-﻿using UniCabinet.Domain.DTO;
+﻿using UniCabinet.Core.DTOs.Entites;
 using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Application.Interfaces.Repository
@@ -9,11 +9,11 @@ namespace UniCabinet.Application.Interfaces.Repository
         List<SemesterDTO> GetAllSemesters();
         SemesterDTO GetSemesterById(int id);
         SemesterDTO GetCurrentSemester(DateTime currentDate);
-        Semester GetSemesterEntityById(int id);
+        SemesterEntity GetSemesterEntityById(int id);
 
-        void Add(Semester semester);
-        void Update(Semester semester);
-        void Remove(Semester semester);
+        void Add(SemesterEntity semester);
+        void Update(SemesterEntity semester);
+        void Remove(SemesterEntity semester);
 
         void SaveChanges();
     }

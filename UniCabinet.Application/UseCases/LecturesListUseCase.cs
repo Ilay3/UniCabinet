@@ -1,0 +1,37 @@
+﻿using UniCabinet.Application.Interfaces.Repository;
+using UniCabinet.Core.DTOs;
+
+namespace UniCabinet.Application.UseCases
+{
+    public class LecturesListUseCase
+    {
+        private readonly ILectureRepository _lectureRepository;
+        private readonly IDisciplineDetailRepository _disciplineDetailRepository;
+        private readonly IDisciplineRepository _disciplineRepository;
+        public LecturesListUseCase(ILectureRepository lectureRepository,
+            IDisciplineDetailRepository disciplineDetailRepository,
+            IDisciplineRepository disciplineRepository)
+        {
+            _lectureRepository = lectureRepository;
+            _disciplineDetailRepository = disciplineDetailRepository;
+            _disciplineRepository = disciplineRepository;
+        }
+
+
+        public async Task<LectureListDTO> ExecuteAsync(int id)
+        {
+            var lectureListDTO = await _lectureRepository.GetLectureListByDisciplineDetailId(id);
+            var disciplineDetail = _disciplineDetailRepository.GetDisciplineDetailById(id);
+
+            var disciplineDetailDTO = _disciplineDetailRepository.GetDisciplineDetailById(id);
+            var disciplineDTO = _disciplineRepository.GetDisciplineById(disciplineDetailDTO.DisciplineId);
+            var result = new LectureListDTO
+            {
+                DisciplineName = disciplineDTO.Name,
+                MaxLectures = disciplineDetail.LectureCount,
+                LectureDTO = lectureListDTO
+            };
+            return result;
+        }
+    }
+}

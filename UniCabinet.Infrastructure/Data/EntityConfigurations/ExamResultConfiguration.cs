@@ -4,9 +4,9 @@ using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Infrastructure.Data.EntityConfigurations
 {
-    public class ExamResultConfiguration : IEntityTypeConfiguration<ExamResult>
+    public class ExamResultConfiguration : IEntityTypeConfiguration<ExamResultEntity>
     {
-        public void Configure(EntityTypeBuilder<ExamResult> builder)
+        public void Configure(EntityTypeBuilder<ExamResultEntity> builder)
         {
             builder.HasKey(e => e.Id);
 

@@ -1,11 +1,11 @@
-﻿using UniCabinet.Domain.DTO;
+﻿using UniCabinet.Core.DTOs.Entites;
 
 namespace UniCabinet.Application.Interfaces.Repository
 {
     public interface ILectureRepository
     {
         void AddLecture(LectureDTO lectureDTO);
-        IEnumerable<LectureDTO> GetLectureListByDisciplineDetailId(int id);
+        Task<List<LectureDTO>> GetLectureListByDisciplineDetailId(int id);
         Task DeleteLecture(int id);
         List<LectureDTO> GetAllLectures();
         LectureDTO GetLectureById(int id);

@@ -1,27 +1,26 @@
 ﻿// UniCabinet.Web/Controllers/AdminController.cs
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Threading.Tasks;
 using UniCabinet.Application.Interfaces;
 using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Domain.DTO;
+using UniCabinet.Core.DTOs.Entites;
+using UniCabinet.Core.Models;
+using UniCabinet.Core.Models.ViewModel;
+using UniCabinet.Core.Models.ViewModel.User;
 using UniCabinet.Domain.Entities;
-using UniCabinet.Web.Models;
-using UniCabinet.Web.ViewModel;
-using UniCabinet.Web.ViewModel.User;
+using UniCabinet.Web.Models.VM.User;
 
 [Authorize(Roles = "Administrator")]
 public class AdminController : Controller
 {
     private readonly IUserService _userService;
     private readonly IGroupRepository _groupRepository;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<UserEntity> _userManager;
 
 
-    public AdminController(IUserService userService, IGroupRepository groupRepository, UserManager<User> userManager)
+    public AdminController(IUserService userService, IGroupRepository groupRepository, UserManager<UserEntity> userManager)
     {
         _userService = userService;
         _groupRepository = groupRepository;
@@ -60,8 +59,8 @@ public class AdminController : Controller
                 .ToList();
         }
 
-        // Преобразуем DTO в ViewModel
-        var userViewModels = userDTOs.Select(user => new UserViewModel
+        // Преобразуем DTO в VM
+        var userVMs = userDTOs.Select(user => new UserVM
         {
             Id = user.Id,
             Email = user.Email,
@@ -76,8 +75,8 @@ public class AdminController : Controller
         }).ToList();
 
         // Пагинация
-        var totalUsers = userViewModels.Count;
-        var paginatedUsers = userViewModels
+        var totalUsers = userVMs.Count;
+        var paginatedUsers = userVMs
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToList();
@@ -108,7 +107,7 @@ public class AdminController : Controller
         };
 
         // Создание модели представления
-        var model = new StudentGroupViewModel
+        var model = new StudentGroupVM
         {
             Users = paginatedUsers,
             Groups = groups,
@@ -130,7 +129,7 @@ public class AdminController : Controller
     {
         if (string.IsNullOrEmpty(query))
         {
-            return Json(new List<UserViewModel>());
+            return Json(new List<UserVM>());
         }
 
         var userDTOs = await _userService.GetAllUsersAsync();
@@ -155,7 +154,7 @@ public class AdminController : Controller
                 (user.LastName != null && user.LastName.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
                 (user.Patronymic != null && user.Patronymic.Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
                 user.Email.Contains(query, StringComparison.CurrentCultureIgnoreCase))
-            .Select(user => new UserViewModel
+            .Select(user => new UserVM
             {
                 Id = user.Id,
                 Email = user.Email,
@@ -184,7 +183,7 @@ public class AdminController : Controller
 
         var roles = new List<string> { "Student", "Teacher", "Administrator", "Verified" };
 
-        var model = new UserRolesViewModel
+        var model = new UserRolesVM
         {
             UserId = userDTO.Id,
             FullName = $"{userDTO.FirstName} {userDTO.LastName} {userDTO.Patronymic}".Trim(),
@@ -196,7 +195,7 @@ public class AdminController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateUserRoles(UserRolesViewModel model)
+    public async Task<IActionResult> UpdateUserRoles(UserRolesVM model)
     {
         var user = await _userManager.FindByIdAsync(model.UserId);
         if (user == null)
@@ -250,7 +249,7 @@ public class AdminController : Controller
 
         var groups = _groupRepository.GetAllGroups();
 
-        var model = new UserGroupViewModel
+        var model = new UserGroupVM
         {
             UserId = userDTO.Id,
             FullName = $"{userDTO.FirstName} {userDTO.LastName} {userDTO.Patronymic}".Trim(),
@@ -262,7 +261,7 @@ public class AdminController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateUserGroup(UserGroupViewModel model)
+    public async Task<IActionResult> UpdateUserGroup(UserGroupVM model)
     {
         if (string.IsNullOrEmpty(model.UserId) || model.GroupId == null)
         {
@@ -300,7 +299,7 @@ public class AdminController : Controller
             return NotFound();
         }
 
-        var model = new UserDetailViewModel
+        var model = new UserDetailVM
         {
             Id = userDTO.Id,
             Email = userDTO.Email,
@@ -314,15 +313,15 @@ public class AdminController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateUserDetails(UserDetailViewModel model)
+    public async Task<IActionResult> UpdateUserDetails(UserDetailVM model)
     {
         if (!ModelState.IsValid)
         {
             return PartialView("_UserDetailModal", model);
         }
 
-        // Создаём DTO из ViewModel
-        var userDetailDTO = new UserDetailDTO
+        // Создаём DTO из VM
+        var userDetailDTO = new UserDTO
         {
             Id = model.Id,
             Email = model.Email,
