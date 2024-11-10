@@ -1,4 +1,4 @@
-﻿using UniCabinet.Domain.DTO;
+﻿using UniCabinet.Core.DTOs.Entites;
 
 namespace UniCabinet.Application.Interfaces.Repository
 {

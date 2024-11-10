@@ -1,48 +1,47 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Web.Extension.Discipline;
-using UniCabinet.Web.Mapping;
-using UniCabinet.Web.Mapping.Discipline;
-using UniCabinet.Web.ViewModel.Discipline;
+using UniCabinet.Core.DTOs.Entites;
+using UniCabinet.Core.Models.ViewModel.Discipline;
 
 namespace UniCabinet.Web.Controllers
 {
     public class DisciplineController : Controller
     {
         private readonly IDisciplineRepository _disciplineRepository;
+        private readonly IMapper _mapper;
 
-        public DisciplineController(IDisciplineRepository disciplineRepository)
+        public DisciplineController(IDisciplineRepository disciplineRepository, IMapper mapper)
         {
             _disciplineRepository = disciplineRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult DisciplinesList()
         {
             var disciplineDTOs = _disciplineRepository.GetAllDisciplines();
-            var disciplineViewModels = disciplineDTOs
-                .Select(dto => dto.GetDisciplineViewModel())
-                .ToList();
+            var disciplineVMs = _mapper.Map<List<DisciplineListVM>>(disciplineDTOs);
 
-            return View(disciplineViewModels);
+            return View(disciplineVMs);
         }
 
         [HttpGet]
         public IActionResult DisciplineAddModal()
         {
-            var viewModel = new DisciplineAddViewModel();
-            return PartialView("_DisciplineAddModal", viewModel);
+            var viewModal = new DisciplineAddVM();
+            return PartialView("_DisciplineAddModal", viewModal);
         }
 
         [HttpPost]
-        public IActionResult AddDiscipline(DisciplineAddViewModel viewModel)
+        public IActionResult AddDiscipline(DisciplineAddVM viewModal)
         {
             if (!ModelState.IsValid)
             {
-                return PartialView("_DisciplineAddModal", viewModel);
+                return PartialView("_DisciplineAddModal", viewModal);
             }
 
-            var disciplineDTO = viewModel.GetDisciplineDTO();
+            var disciplineDTO = _mapper.Map<DisciplineDTO>(viewModal);
             _disciplineRepository.AddDiscipline(disciplineDTO);
 
             return Json(new { success = true });
@@ -57,19 +56,19 @@ namespace UniCabinet.Web.Controllers
                 return NotFound();
             }
 
-            var viewModel = disciplineDTO.GetDisciplineEditViewModel();
-            return PartialView("_DisciplineEditModal", viewModel);
+            var viewModal = _mapper.Map<DisciplineEditVM>(disciplineDTO);
+            return PartialView("_DisciplineEditModal", viewModal);
         }
 
         [HttpPost]
-        public IActionResult EditDiscipline(DisciplineEditViewModel viewModel)
+        public IActionResult EditDiscipline(DisciplineEditVM viewModal)
         {
             if (!ModelState.IsValid)
             {
-                return PartialView("_DisciplineEditModal", viewModel);
+                return PartialView("_DisciplineEditModal", viewModal);
             }
 
-            var disciplineDTO = viewModel.GetDisciplineDTO();
+            var disciplineDTO = _mapper.Map<DisciplineDTO>(viewModal);
             _disciplineRepository.UpdateDiscipline(disciplineDTO);
 
             return Json(new { success = true });

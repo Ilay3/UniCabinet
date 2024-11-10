@@ -1,90 +1,84 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using UniCabinet.Application.Interfaces;
 using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Application.Interfaces.Services;
-using UniCabinet.Domain.DTO;
-using UniCabinet.Domain.Entities;
-using UniCabinet.Infrastructure.Data.Repository;
-using UniCabinet.Infrastructure.Repository;
-using UniCabinet.Web.Extension.Lecture;
-using UniCabinet.Web.Mapping.Lecture;
-using UniCabinet.Web.ViewModel.Lecture;
+using UniCabinet.Application.UseCases;
+using UniCabinet.Core.DTOs;
+using UniCabinet.Core.DTOs.Entites;
+using UniCabinet.Core.Models.ViewModel;
+using UniCabinet.Core.Models.ViewModel.Lecture;
 
 public class LectureController : Controller
 {
     private readonly ILectureRepository _lectureRepository;
-    private readonly ILectureService _lectureService;
     private readonly IDisciplineDetailRepository _disciplineDetailRepository;
     private readonly IUserRepository _userRepository;
     private readonly ILectureVisitRepository _lectureVisitRepository;
     private readonly IDisciplineRepository _disciplineRepository;
+    private readonly IMapper _mapper;
 
-    public LectureController(ILectureRepository lectureRepository, 
-        ILectureService lectureService, 
+    public LectureController(ILectureRepository lectureRepository,
         IDisciplineDetailRepository disciplineDetailRepository,
         IUserRepository userRepository,
         ILectureVisitRepository lectureVisitRepository,
-        IDisciplineRepository disciplineRepository)
+        IDisciplineRepository disciplineRepository,
+        IMapper mapper)
     {
         _lectureRepository = lectureRepository;
-        _lectureService = lectureService;
         _disciplineDetailRepository = disciplineDetailRepository;
         _userRepository = userRepository;
         _lectureVisitRepository = lectureVisitRepository;
         _disciplineRepository = disciplineRepository;
+        _mapper = mapper;
     }
 
     [HttpGet]
-    public IActionResult LecturesList(int id)
+    public  async Task<IActionResult> LecturesListAsync(int id, [FromServices] LecturesListUseCase lecturesListUseCase)
     {
-        var lectureListDTO = _lectureRepository.GetLectureListByDisciplineDetailId(id);
-        var disciplineDetail = _disciplineDetailRepository.GetDisciplineDetailById(id);
 
-        var lectureListViewModel = lectureListDTO
-            .Select(l => l.GetLectureViewModel())
-            .ToList();
+        var result = await lecturesListUseCase.ExecuteAsync(id);
 
-        ViewBag.Discipline = _lectureService.GetDisciplineById(id);
+        ViewBag.Discipline = result.DisciplineName;
         ViewBag.DisciplineDetaildId = id;
-        ViewBag.MaxLectures = disciplineDetail.LectureCount;
+        ViewBag.MaxLectures = result.MaxLectures;
 
+        var lectureListVM = _mapper.Map<List<LectureListVM>>(result.LectureDTO);
 
-        return View(lectureListViewModel);
+        return View(lectureListVM);
     }
 
     [HttpGet]
     public IActionResult LectureAddModal(int id)
     {
-        var viewModel = new LectureAddViewModel
+        var viewModal = new LectureAddVM
         {
             DisciplineDetailId = id
         };
-        return PartialView("_LectureAddModal", viewModel);
+        return PartialView("_LectureAddModal", viewModal);
     }
 
     [HttpPost]
-    public IActionResult AddLecture(LectureAddViewModel viewModel)
+    public IActionResult AddLecture(LectureAddVM viewModal)
     {
         if (ModelState.IsValid)
         {
-            var existingLecturesCount = _lectureRepository.GetLectureCountByDisciplineDetailId(viewModel.DisciplineDetailId);
-            var disciplineDetail = _disciplineDetailRepository.GetDisciplineDetailById(viewModel.DisciplineDetailId);
+            var existingLecturesCount = _lectureRepository.GetLectureCountByDisciplineDetailId(viewModal.DisciplineDetailId);
+            var disciplineDetail = _disciplineDetailRepository.GetDisciplineDetailById(viewModal.DisciplineDetailId);
             int maxLectures = disciplineDetail.LectureCount;
 
             if (existingLecturesCount >= maxLectures)
             {
                 ModelState.AddModelError("", "Достигнуто максимальное количество лекций.");
-                return PartialView("_LectureAddModal", viewModel);
+                return PartialView("_LectureAddModal", viewModal);
             }
 
-            var lectureDTO = viewModel.GetLectureDTO();
+            var lectureDTO = _mapper.Map<LectureDTO>(viewModal);
             _lectureRepository.AddLecture(lectureDTO);
 
-            return Json(new { success = true, redirectUrl = Url.Action("LecturesList", new { id = viewModel.DisciplineDetailId }) });
+            return Json(new { success = true, redirectUrl = Url.Action("LecturesList", new { id = viewModal.DisciplineDetailId }) });
         }
 
-        return PartialView("_LectureAddModal", viewModel);
+        return PartialView("_LectureAddModal", viewModal);
     }
 
 
@@ -92,25 +86,25 @@ public class LectureController : Controller
     public IActionResult LectureEditModal(int id)
     {
         var lectureDTO = _lectureRepository.GetLectureById(id);
-        var lectureViewModel = lectureDTO.GetLectureEditViewModel();
+        var lectureVM = _mapper.Map<LectureEditVM>(lectureDTO);
 
-        return PartialView("_LectureEditModal", lectureViewModel);
+        return PartialView("_LectureEditModal", lectureVM);
     }
 
     [HttpPost]
-    public IActionResult EditLecture(LectureEditViewModel viewModel)
+    public IActionResult EditLecture(LectureEditVM viewModal)
     {
         if (ModelState.IsValid)
         {
-            var lectureDTO = viewModel.GetLectureDTO();
+            var lectureDTO = _mapper.Map<LectureDTO>(viewModal);
             _lectureRepository.UpdateLecture(lectureDTO);
 
-            var disciplineDId = viewModel.DisciplineDetailId;
+            var disciplineDId = viewModal.DisciplineDetailId;
 
             return Json(new { success = true, redirectUrl = Url.Action("LecturesList", new { id = disciplineDId }) });
         }
 
-        return PartialView("_LectureEditModal", viewModel);
+        return PartialView("_LectureEditModal", viewModal);
     }
 
     [HttpGet]
@@ -132,13 +126,13 @@ public class LectureController : Controller
         var existingVisits = _lectureVisitRepository.GetLectureVisitsByLectureId(lectureId)
             .ToDictionary(lv => lv.StudentId, lv => lv);
 
-        var attendanceViewModel = new LectureAttendanceViewModel
+        var attendanceVM = new LectureAttendanceVM
         {
             LectureId = lectureId,
             DisciplineDetailId = disciplineDetailId,
             LectureNumber = lecture.Number, // Заполняем номер лекции
             DisciplineName = _disciplineRepository.GetDisciplineById(disciplineDetail.DisciplineId).Name,
-            Students = students.Select(s => new StudentAttendanceViewModel
+            Students = students.Select(s => new StudentAttendanceVM
             {
                 StudentId = s.Id,
                 FirstName = s.FirstName,
@@ -148,28 +142,28 @@ public class LectureController : Controller
             }).ToList()
         };
 
-        return View("LectureAttendance", attendanceViewModel);
+        return View("LectureAttendance", attendanceVM);
     }
 
 
 
     [HttpPost]
-    public IActionResult SaveAttendance(LectureAttendanceViewModel viewModel)
+    public IActionResult SaveAttendance(LectureAttendanceVM viewModal)
     {
-        foreach (var studentAttendance in viewModel.Students)
+        foreach (var studentAttendance in viewModal.Students)
         {
             var lectureVisitDTO = new LectureVisitDTO
             {
-                LectureId = viewModel.LectureId,
+                LectureId = viewModal.LectureId,
                 StudentId = studentAttendance.StudentId,
                 isVisit = studentAttendance.IsPresent,
-                PointsCount = studentAttendance.IsPresent ? CalculatePointsForLecture(viewModel.LectureId) : 0
+                PointsCount = studentAttendance.IsPresent ? CalculatePointsForLecture(viewModal.LectureId) : 0
             };
 
             _lectureVisitRepository.AddOrUpdateLectureVisit(lectureVisitDTO);
         }
 
-        return RedirectToAction("LecturesList", new { id = viewModel.DisciplineDetailId });
+        return RedirectToAction("LecturesList", new { id = viewModal.DisciplineDetailId });
     }
 
 

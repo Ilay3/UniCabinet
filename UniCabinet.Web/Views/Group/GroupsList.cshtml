@@ -1,4 +1,4 @@
-﻿@model IEnumerable<UniCabinet.Web.ViewModel.GroupViewModel>
+﻿@model IEnumerable<UniCabinet.Core.Models.ViewModel.Group.GroupListVM>
 
 <h2>Список групп</h2>
 
@@ -20,8 +20,8 @@
             <tr>
                 <td>@group.Name</td>
                 <td>@group.TypeGroup</td>
-                <td>@group.CourseNumber</td>
-                <td>@group.SemesterNumber</td>
+                <td>@group.CourseId</td>
+                <td>@group.SemesterId</td>
                 <td>
                     <button class="btn btn-info" data-url="@Url.Action("GroupEditModal", "Group", new { id = group.Id })">Редактировать</button>
                 </td>

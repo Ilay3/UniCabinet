@@ -1,4 +1,4 @@
-﻿@inject SignInManager<UniCabinet.Domain.Entities.User> SignInManager
+﻿@inject SignInManager<UniCabinet.Domain.Entities.UserEntity> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }

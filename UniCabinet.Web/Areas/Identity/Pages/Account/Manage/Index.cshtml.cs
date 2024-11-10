@@ -2,27 +2,23 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using UniCabinet.Application.Interfaces.Services;
+using UniCabinet.Application.UseCases;
 using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Web.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IUserVerificationService _verificationService;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<UserEntity> _userManager;
+        private readonly SignInManager<UserEntity> _signInManager;
         private readonly ILogger<IndexModel> _logger;
 
         public IndexModel(
-            UserManager<User> userManager,
-            IUserVerificationService verificationService,
-            SignInManager<User> signInManager,
+            UserManager<UserEntity> userManager,
+            SignInManager<UserEntity> signInManager,
             ILogger<IndexModel> logger)
         {
             _userManager = userManager;
-            _verificationService = verificationService;
             _signInManager = signInManager;
             _logger = logger;
         }
@@ -53,7 +49,7 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account.Manage
             public DateTime? DateBirthday { get; set; }
         }
 
-        private async Task LoadAsync(User user)
+        private async Task LoadAsync(UserEntity user)
         {
             Input = new InputModel
             {
@@ -89,7 +85,7 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account.Manage
         }
 
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync([FromServices] UserVerificationUseCase userVerificationUseCase)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -117,7 +113,7 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account.Manage
                 _logger.LogInformation("Профиль пользователя обновлен.");
 
                 // Вызываем VerifyUserAsync после обновления профиля
-                await _verificationService.VerifyUserAsync(user.Id);
+                await userVerificationUseCase.ExecuteAsync(user.Id);
 
                 await _signInManager.RefreshSignInAsync(user);
                 TempData["StatusMessage"] = "Ваш профиль обновлен";

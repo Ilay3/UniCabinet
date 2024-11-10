@@ -10,9 +10,9 @@ using System.Reflection.Emit;
 
 namespace UniCabinet.Infrastructure.Data.EntityConfigurations
 {
-    public class SpecialtyConfiguration : IEntityTypeConfiguration<Specialty>
+    public class SpecialtyConfiguration : IEntityTypeConfiguration<SpecialtyEntity>
     {
-        public void Configure(EntityTypeBuilder<Specialty> builder)
+        public void Configure(EntityTypeBuilder<SpecialtyEntity> builder)
         {
             builder.HasKey(s => s.Id);
 

@@ -4,9 +4,9 @@ using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Infrastructure.Data.EntityConfigurations
 {
-    public class PracticalConfiguration : IEntityTypeConfiguration<Practical>
+    public class PracticalConfiguration : IEntityTypeConfiguration<PracticalEntity>
     {
-        public void Configure(EntityTypeBuilder<Practical> builder)
+        public void Configure(EntityTypeBuilder<PracticalEntity> builder)
         {
             builder.HasKey(p => p.Id);
 

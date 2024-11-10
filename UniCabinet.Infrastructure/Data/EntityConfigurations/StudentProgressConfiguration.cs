@@ -4,9 +4,9 @@ using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Infrastructure.Data.EntityConfigurations
 {
-    public class StudentProgressConfiguration : IEntityTypeConfiguration<StudentProgress>
+    public class StudentProgressConfiguration : IEntityTypeConfiguration<StudentProgressEntity>
     {
-        public void Configure(EntityTypeBuilder<StudentProgress> builder)
+        public void Configure(EntityTypeBuilder<StudentProgressEntity> builder)
         {
             builder.HasKey(sp => sp.Id);
 

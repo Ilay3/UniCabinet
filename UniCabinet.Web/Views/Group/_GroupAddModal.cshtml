@@ -1,4 +1,4 @@
-﻿@model UniCabinet.Web.ViewModel.GroupCreateEditViewModel
+﻿@model UniCabinet.Core.Models.ViewModel.Group.GroupAddVM
 
 <div class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog">
@@ -38,7 +38,7 @@
                         </select>
                     </div>
 
-                    <p>Текущий семестр: @Model.CurrentSemester</p>
+                    <p>Текущий семестр: @Model.SemesterId</p>
 
                     <!-- Подвал модального окна -->
                     <div class="modal-footer">

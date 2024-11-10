@@ -4,9 +4,9 @@ using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Infrastructure.Data.EntityConfigurations
 {
-    public class LectureConfiguration : IEntityTypeConfiguration<Lecture>
+    public class LectureConfiguration : IEntityTypeConfiguration<LectureEntity>
     {
-        public void Configure(EntityTypeBuilder<Lecture> builder)
+        public void Configure(EntityTypeBuilder<LectureEntity> builder)
         {
             builder.HasKey(l => l.Id);
 

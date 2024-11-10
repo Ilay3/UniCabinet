@@ -6,7 +6,7 @@ using UniCabinet.Infrastructure.Data.EntityConfigurations;
 
 namespace UniCabinet.Infrastructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string>
+    public class ApplicationDbContext : IdentityDbContext<UserEntity, IdentityRole, string>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -14,26 +14,26 @@ namespace UniCabinet.Infrastructure.Data
         }
 
         // DbSet для сущностей
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<Semester> Semesters { get; set; }
-        public DbSet<Group> Groups { get; set; }
-        public DbSet<Discipline> Disciplines { get; set; }
-        public DbSet<DisciplineDetail> DisciplineDetails { get; set; }
-        public DbSet<Lecture> Lectures { get; set; }
-        public DbSet<Practical> Practicals { get; set; }
-        public DbSet<Exam> Exams { get; set; }
-        public DbSet<LectureVisit> LectureVisits { get; set; }
-        public DbSet<PracticalResult> PracticalResults { get; set; }
-        public DbSet<ExamResult> ExamResults { get; set; }
-        public DbSet<StudentProgress> StudentProgresses { get; set; }
-        public DbSet<Specialty> Specialties { get; set; }
+        public DbSet<CourseEntity> Courses { get; set; }
+        public DbSet<SemesterEntity> Semesters { get; set; }
+        public DbSet<GroupEntity> Groups { get; set; }
+        public DbSet<DisciplineEntity> Disciplines { get; set; }
+        public DbSet<DisciplineDetailEntity> DisciplineDetails { get; set; }
+        public DbSet<LectureEntity> Lectures { get; set; }
+        public DbSet<PracticalEntity> Practicals { get; set; }
+        public DbSet<ExamEntity> Exams { get; set; }
+        public DbSet<LectureVisitEntity> LectureVisits { get; set; }
+        public DbSet<PracticalResultEntity> PracticalResults { get; set; }
+        public DbSet<ExamResultEntity> ExamResults { get; set; }
+        public DbSet<StudentProgressEntity> StudentProgresses { get; set; }
+        public DbSet<SpecialtyEntity> Specialties { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             // Переименовываем таблицы Identity
-            builder.Entity<User>(b => b.ToTable("Users"));
+            builder.Entity<UserEntity>(b => b.ToTable("Users"));
             builder.Entity<IdentityRole>(b => b.ToTable("Roles"));
             builder.Entity<IdentityUserRole<string>>(b => b.ToTable("UserRoles"));
             builder.Entity<IdentityUserClaim<string>>(b => b.ToTable("UserClaims"));
@@ -55,16 +55,16 @@ namespace UniCabinet.Infrastructure.Data
             builder.ApplyConfiguration(new ExamConfiguration());
             builder.ApplyConfiguration(new StudentProgressConfiguration());
 
-            builder.Entity<Course>().HasData(
-                new Course {Id = 1, Number = 1 },
-                new Course {Id = 2, Number = 2 },
-                new Course {Id = 3, Number = 3 },
-                new Course {Id = 4, Number = 4 },
-                new Course {Id = 5, Number = 5 });
+            builder.Entity<CourseEntity>().HasData(
+                new CourseEntity {Id = 1, Number = 1 },
+                new CourseEntity {Id = 2, Number = 2 },
+                new CourseEntity {Id = 3, Number = 3 },
+                new CourseEntity {Id = 4, Number = 4 },
+                new CourseEntity {Id = 5, Number = 5 });
             
-            builder.Entity<Semester>().HasData(
-                new Semester { Id = 1, Number = 1, DayStart = 1, MounthStart = 9, DayEnd = 25, MounthEnd = 1 },
-                new Semester { Id = 2, Number = 2, DayStart = 7, MounthStart = 2, DayEnd = 30, MounthEnd = 6 });
+            builder.Entity<SemesterEntity>().HasData(
+                new SemesterEntity { Id = 1, Number = 1, DayStart = 1, MounthStart = 9, DayEnd = 25, MounthEnd = 1 },
+                new SemesterEntity { Id = 2, Number = 2, DayStart = 7, MounthStart = 2, DayEnd = 30, MounthEnd = 6 });
         }
     }
 }

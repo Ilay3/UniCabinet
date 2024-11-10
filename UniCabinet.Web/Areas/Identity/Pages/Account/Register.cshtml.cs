@@ -1,24 +1,22 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Threading.Tasks;
-using UniCabinet.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
-using UniCabinet.Application.Interfaces.Services;
+using UniCabinet.Application.UseCases;
+using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Web.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
-        private readonly IUserVerificationService _verificationService;
-
-        public RegisterModel(UserManager<User> userManager, SignInManager<User> signInManager, IUserVerificationService verificationService)
+        private readonly SignInManager<UserEntity> _signInManager;
+        private readonly UserManager<UserEntity> _userManager;
+        private readonly UserVerificationUseCase _userVerificationUseCase;
+        public RegisterModel(UserManager<UserEntity> userManager, SignInManager<UserEntity> signInManager, UserVerificationUseCase userVerificationUseCase)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _verificationService = verificationService;
+            _userVerificationUseCase = userVerificationUseCase;
         }
 
         [BindProperty]
@@ -48,8 +46,9 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account
         {
             if (ModelState.IsValid)
             {
-                var user = new User { 
-                    UserName = Input.Email, 
+                var user = new UserEntity
+                {
+                    UserName = Input.Email,
                     Email = Input.Email,
                     Id = Guid.NewGuid().ToString(),
                     LockoutEnabled = true
@@ -60,7 +59,7 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     // Присвоение роли "Не идентифицирован"
-                    await _verificationService.AssignRoleAsync(user.Id, "Not Verified");
+                    await _userVerificationUseCase.AssignRoleAsync(user.Id, "Not Verified");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(Url.Content("~/"));

@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Domain.DTO;
-using UniCabinet.Web.Extension;
-using UniCabinet.Web.Mapping;
-using UniCabinet.Web.ViewModel;
+using UniCabinet.Core.DTOs.Entites;
+using UniCabinet.Core.Models.ViewModel;
+using UniCabinet.Core.Models.ViewModel.Group;
 
 namespace UniCabinet.Web.Controllers
 {
@@ -12,77 +12,93 @@ namespace UniCabinet.Web.Controllers
         private readonly IGroupRepository _groupRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly ISemesterRepository _semesterRepository;
-
-        public GroupController(IGroupRepository groupRepository, ICourseRepository courseRepository, ISemesterRepository semesterRepository)
+        private readonly IMapper _mapper;
+        public GroupController(IGroupRepository groupRepository, ICourseRepository courseRepository, ISemesterRepository semesterRepository, IMapper mapper)
         {
             _groupRepository = groupRepository;
             _courseRepository = courseRepository;
             _semesterRepository = semesterRepository;
+            _mapper = mapper;
         }
 
-        public IActionResult GroupsList()
+        public async Task<IActionResult> GroupsListAsync()
         {
             var groupListDTO = _groupRepository.GetAllGroups();
 
-            var groupViewModelList = new List<GroupViewModel>();
+            var groupVMList = new List<GroupListVM>();
 
             foreach (var dto in groupListDTO)
             {
-                var courseGroup = _courseRepository.GetCourseById(dto.CourseId);
+                var courseGroup = await _courseRepository.GetCourseById(dto.CourseId);
                 var semesterGroup = _semesterRepository.GetSemesterById(dto.SemesterId);
 
-                var groupViewModel = dto.GetGroupViewModel(courseGroup.Number, semesterGroup.Number);
-                groupViewModelList.Add(groupViewModel);
+                var groupVM = new GroupListVM
+                {
+                    CourseId = courseGroup.Number,
+                    SemesterId = semesterGroup.Number,
+                    Id = dto.Id,
+                    Name = dto.Name,
+                    TypeGroup = dto.TypeGroup,
+                };
+
+                groupVMList.Add(groupVM);
             }
 
-            return View(groupViewModelList);
+            return View(groupVMList);
         }
 
 
         public IActionResult GroupAddModal()
         {
             var currentSemester = _semesterRepository.GetCurrentSemester(DateTime.Now);
-            var viewModel = new GroupCreateEditViewModel
+            var viewModal = new GroupAddVM
             {
-                CurrentSemester = currentSemester != null ? $"Семестр №{currentSemester.Number}" : "Не определён"
+                SemesterId = currentSemester != null ? currentSemester.Number : 0
             };
-            return PartialView("_GroupAddModal", viewModel);
+            return PartialView("_GroupAddModal", viewModal);
         }
 
         public IActionResult GroupEditModal(int id)
         {
             var groupDTO = _groupRepository.GetGroupById(id);
-            var groupViewModel = groupDTO.GetGroupCreateEditViewModel();
+            var groupVM = new GroupEditVM
+            {
+                Id = groupDTO.Id,
+                Name = groupDTO.Name,
+                TypeGroup = groupDTO.TypeGroup,
+                CourseId = groupDTO.CourseId,
+            };
+
 
             var currentSemester = _semesterRepository.GetCurrentSemester(DateTime.Now);
-            groupViewModel.CurrentSemester = currentSemester != null ? $"Семестр №{currentSemester.Number}" : "Не определён";
+            groupVM.SemesterId = currentSemester != null ? currentSemester.Number : 0;
 
-            if (groupViewModel.TypeGroup == "Очно")
+            if (groupVM.TypeGroup == "Очно")
             {
-                groupViewModel.TypeGroup = "1";
+                groupVM.TypeGroup = "1";
             }
-            else if (groupViewModel.TypeGroup == "Заочно")
+            else if (groupVM.TypeGroup == "Заочно")
             {
-                groupViewModel.TypeGroup = "2";
+                groupVM.TypeGroup = "2";
             }
 
-            return PartialView("_GroupEditModal", groupViewModel);
+            return PartialView("_GroupEditModal", groupVM);
         }
 
 
         [HttpPost]
-        public IActionResult AddGroup(GroupCreateEditViewModel viewModel)
+        public IActionResult AddGroup(GroupAddVM viewModal)
         {
-            if (!ModelState.IsValid) return PartialView("_GroupAddModal", viewModel);
+            if (!ModelState.IsValid) return PartialView("_GroupAddModal", viewModal);
 
-            if (viewModel.TypeGroup == "1")
+            if (viewModal.TypeGroup == "1")
             {
-                viewModel.TypeGroup = "Очно";
+                viewModal.TypeGroup = "Очно";
             }
 
-            if (viewModel.TypeGroup == "2")
+            if (viewModal.TypeGroup == "2")
             {
-                viewModel.TypeGroup = "Заочно";
+                viewModal.TypeGroup = "Заочно";
             }
 
             // Определение текущего семестра
@@ -94,10 +110,16 @@ namespace UniCabinet.Web.Controllers
             catch (InvalidOperationException)
             {
                 ModelState.AddModelError("", "Текущий семестр не определён.");
-                return PartialView("_GroupAddModal", viewModel);
+                return PartialView("_GroupAddModal", viewModal);
             }
 
-            var groupDTO = viewModel.GetGroupDTO();
+            var groupDTO = new GroupDTO
+            {
+                Name = viewModal.Name,
+                TypeGroup = viewModal.TypeGroup,
+                CourseId = viewModal.CourseId,
+
+            };
             groupDTO.SemesterId = currentSemester.Id; // Автоматическое присваивание SemesterId
 
             _groupRepository.AddGroup(groupDTO);
@@ -108,20 +130,20 @@ namespace UniCabinet.Web.Controllers
 
 
         [HttpPost]
-        public IActionResult EditGroup(GroupCreateEditViewModel viewModel)
+        public IActionResult EditGroup(GroupEditVM viewModal)
         {
             if (!ModelState.IsValid)
             {
-                return PartialView("_GroupEditModal", viewModel);
+                return PartialView("_GroupEditModal", viewModal);
             }
 
-            if (viewModel.TypeGroup == "1")
+            if (viewModal.TypeGroup == "1")
             {
-                viewModel.TypeGroup = "Очно";
+                viewModal.TypeGroup = "Очно";
             }
-            else if (viewModel.TypeGroup == "2")
+            else if (viewModal.TypeGroup == "2")
             {
-                viewModel.TypeGroup = "Заочно";
+                viewModal.TypeGroup = "Заочно";
             }
 
             // Определение текущего семестра
@@ -129,10 +151,17 @@ namespace UniCabinet.Web.Controllers
             if (currentSemester == null)
             {
                 ModelState.AddModelError("", "Текущий семестр не определён.");
-                return PartialView("_GroupEditModal", viewModel);
+                return PartialView("_GroupEditModal", viewModal);
             }
 
-            var groupDTO = viewModel.GetGroupDTO();
+            var groupDTO = new GroupDTO
+            {
+                Id = viewModal.Id,
+                Name = viewModal.Name,
+                TypeGroup = viewModal.TypeGroup,
+                CourseId = viewModal.CourseId,
+
+            };
             groupDTO.SemesterId = currentSemester.Id; // Автоматическое присваивание SemesterId
 
             _groupRepository.UpdateGroup(groupDTO);
