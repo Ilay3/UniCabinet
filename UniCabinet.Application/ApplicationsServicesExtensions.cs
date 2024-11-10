@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using UniCabinet.Application.BackgroundServices;
 using UniCabinet.Application.UseCases;
+using UniCabinet.Application.UseCases.GroupUseCase;
 
 namespace UniCabinet.Infrastructure
 {
@@ -17,6 +18,14 @@ namespace UniCabinet.Infrastructure
             services.AddTransient<UpdateCoursesUseCase>();
             services.AddTransient<UpdateCurrentSemesterAsyncUseCase>();
             services.AddTransient<UserVerificationUseCase>();
+
+            //Группы
+            services.AddTransient<GetGroupsListUseCase>();
+            services.AddTransient<GetGroupAddModalUseCase>();
+            services.AddTransient<GetGroupEditModalUseCase>();
+            services.AddTransient<AddGroupUseCase>();
+            services.AddTransient<EditGroupUseCase>();
+
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             try

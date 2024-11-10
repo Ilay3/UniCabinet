@@ -28,7 +28,7 @@ namespace UniCabinet.Application.BackgroundServices
                     using (var scope = _serviceScopeFactory.CreateScope())
                     {
                         var updateCoursesUseCase = scope.ServiceProvider.GetRequiredService<UpdateCoursesUseCase>();
-                         updateCoursesUseCase.Execute();
+                        await updateCoursesUseCase.Execute();
                     }
 
                     _logger.LogInformation("CourseBackgroundService: Обновление курсов выполнено успешно.");

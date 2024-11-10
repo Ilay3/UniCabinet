@@ -14,6 +14,7 @@ namespace UniCabinet.Application.Profiles
              .ForSourceMember(src => src.Id, opt => opt.DoNotValidate())
              .ReverseMap();
             CreateMap<GroupDTO, GroupListVM>().ReverseMap();
+            CreateMap<GroupDTO, GroupEditVM>().ReverseMap();
 
         }
     }

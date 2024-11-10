@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.DTOs.Entites;
 using UniCabinet.Domain.Entities;
@@ -48,9 +49,9 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             };
         }
 
-        public SemesterDTO GetCurrentSemester(DateTime currentDate)
+        public async Task<SemesterDTO> GetCurrentSemesterAsync(DateTime currentDate)
         {
-            var semesters = _context.Semesters.ToList();
+            var semesters = await _context.Semesters.ToListAsync();
             SemesterEntity semesterEntity = null;
 
             foreach (var s in semesters)

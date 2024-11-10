@@ -20,11 +20,11 @@ namespace UniCabinet.Application.UseCases
             var currentDate = DateTime.Now;
 
             // Получаем текущий семестр
-            var currentSemester = _semesterRepository.GetCurrentSemester(currentDate);
+            var currentSemester = await _semesterRepository.GetCurrentSemesterAsync(currentDate);
             _logger.LogInformation($"Текущий семестр: №{currentSemester.Number}, период: {currentSemester.DayStart}.{currentSemester.MounthStart} - {currentSemester.DayEnd}.{currentSemester.MounthEnd}");
 
             // Получаем все группы
-            var groups = _groupRepository.GetAllGroups();
+            var groups = await _groupRepository.GetAllGroupsAsync();
             var groupsToUpdate = groups.Where(g => g.SemesterId != currentSemester.Id).ToList();
 
             if (groupsToUpdate.Any())

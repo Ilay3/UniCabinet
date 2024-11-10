@@ -8,7 +8,7 @@ namespace UniCabinet.Application.Interfaces.Repository
         // Существующие методы
         List<SemesterDTO> GetAllSemesters();
         SemesterDTO GetSemesterById(int id);
-        SemesterDTO GetCurrentSemester(DateTime currentDate);
+        Task<SemesterDTO> GetCurrentSemesterAsync(DateTime currentDate);
         SemesterEntity GetSemesterEntityById(int id);
 
         void Add(SemesterEntity semester);

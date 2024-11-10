@@ -16,11 +16,11 @@ namespace UniCabinet.Application.UseCases
             _logger = logger;
 
         }
-        public  void Execute()
+        public async Task Execute()
         {
             _logger.LogInformation("Начинается обновление курсов групп.");
 
-            var groups = _groupRepository.GetAllGroups();
+            var groups = await _groupRepository.GetAllGroupsAsync();
 
             if (groups == null || !groups.Any())
             {
@@ -48,7 +48,7 @@ namespace UniCabinet.Application.UseCases
                     groupsToUpdate.Add(group);
 
                     // Обнуляем GroupId у пользователей этой группы
-                    var users = _groupRepository.GetUsersByGroupId(group.Id);
+                    var users = await _groupRepository.GetUsersByGroupIdAsync(group.Id);
                     if (users != null && users.Any())
                     {
                         foreach (var user in users)
@@ -61,13 +61,13 @@ namespace UniCabinet.Application.UseCases
             }
 
             // Обновляем курсы групп
-            _groupRepository.UpdateGroupsCourse(groupsToUpdate);
+            await _groupRepository.UpdateGroupsCourseAsync(groupsToUpdate);
             _logger.LogInformation($"Обновлены курсы у {groupsToUpdate.Count} групп.");
 
             // Обновляем пользователей, обнуляя их GroupId
             if (usersToUpdate.Any())
             {
-                _groupRepository.UpdateUsersGroup(usersToUpdate);
+                await _groupRepository.UpdateUsersGroupAsync(usersToUpdate);
                 _logger.LogInformation($"Обновлены связи группы у {usersToUpdate.Count} пользователей.");
             }
 
