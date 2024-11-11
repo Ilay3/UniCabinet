@@ -19,8 +19,8 @@ namespace UniCabinet.Infrastructure
             services.AddScoped<ICourseRepository, CourseRepositoryImpl>();
             services.AddScoped<ISemesterRepository, SemesterRepository>();
             services.AddScoped<IDisciplineRepository, DisciplineRepositoryImpl>();
-            services.AddScoped<ILectureRepository, LectureRepository>();
-            services.AddScoped<ILectureVisitRepository, LectureVisitRepository>();
+            services.AddScoped<ILectureRepository, LectureRepositoryImpl>();
+            services.AddScoped<ILectureVisitRepository, LectureVisitRepositoryImpl>();
             services.AddScoped<IDisciplineDetailRepository, DisciplineDetailRepositoryImpl>();
 
         }

@@ -3,7 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using UniCabinet.Application.BackgroundServices;
 using UniCabinet.Application.UseCases;
+using UniCabinet.Application.UseCases.DisciplineUseCase;
 using UniCabinet.Application.UseCases.GroupUseCase;
+using UniCabinet.Application.UseCases.LectureUseCase;
 
 namespace UniCabinet.Infrastructure
 {
@@ -14,7 +16,14 @@ namespace UniCabinet.Infrastructure
             services.AddHostedService<SemesterBackgroundService>();
             services.AddHostedService<CourseBackgroundService>();
 
-            services.AddTransient<LecturesListUseCase>();
+            services.AddTransient<GetLecturesListDataUseCase>();
+            services.AddTransient<GetLecturesListDataUseCase>();
+            services.AddTransient<AddLectureUseCase>();
+            services.AddTransient<GetLectureForEditUseCase>();
+            services.AddTransient<UpdateLectureUseCase>();
+            services.AddTransient<GetLectureAttendanceUseCase>();
+            services.AddTransient<SaveLectureAttendanceUseCase>();
+
             services.AddTransient<UpdateCoursesUseCase>();
             services.AddTransient<UpdateCurrentSemesterAsyncUseCase>();
             services.AddTransient<UserVerificationUseCase>();
@@ -26,6 +35,10 @@ namespace UniCabinet.Infrastructure
             services.AddTransient<AddGroupUseCase>();
             services.AddTransient<EditGroupUseCase>();
 
+            services.AddTransient<GetDisciplinesListUseCase>();
+            services.AddTransient<AddDisciplineUseCase>();
+            services.AddTransient<GetDisciplineForEditUseCase>();
+            services.AddTransient<UpdateDisciplineUseCase>();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             try

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using UniCabinet.Application.Interfaces.Repository;
+using UniCabinet.Application.UseCases.DisciplineUseCase;
 using UniCabinet.Core.DTOs.Entites;
 using UniCabinet.Core.Models.ViewModel.Discipline;
 
@@ -8,20 +8,18 @@ namespace UniCabinet.Web.Controllers
 {
     public class DisciplineController : Controller
     {
-        private readonly IDisciplineRepository _disciplineRepository;
         private readonly IMapper _mapper;
 
-        public DisciplineController(IDisciplineRepository disciplineRepository, IMapper mapper)
+        public DisciplineController(IMapper mapper)
         {
-            _disciplineRepository = disciplineRepository;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult DisciplinesList()
+        public async Task<IActionResult> DisciplinesListAsync([FromServices] GetDisciplinesListUseCase getDisciplinesListUseCase)
         {
-            var disciplineDTOs = _disciplineRepository.GetAllDisciplines();
-            var disciplineVMs = _mapper.Map<List<DisciplineListVM>>(disciplineDTOs);
+            var result = await getDisciplinesListUseCase.ExecuteAsync();
+            var disciplineVMs = _mapper.Map<List<DisciplineListVM>>(result);
 
             return View(disciplineVMs);
         }
@@ -29,49 +27,57 @@ namespace UniCabinet.Web.Controllers
         [HttpGet]
         public IActionResult DisciplineAddModal()
         {
-            var viewModal = new DisciplineAddVM();
-            return PartialView("_DisciplineAddModal", viewModal);
+            var viewModel = new DisciplineAddVM();
+            return PartialView("_DisciplineAddModal", viewModel);
         }
 
         [HttpPost]
-        public IActionResult AddDiscipline(DisciplineAddVM viewModal)
+        public async Task<IActionResult> AddDisciplineAsync(
+            DisciplineAddVM viewModel,
+            [FromServices] AddDisciplineUseCase addDisciplineUseCase)
         {
-            if (!ModelState.IsValid)
+            var disciplineDTO = _mapper.Map<DisciplineDTO>(viewModel);
+
+            var success = await addDisciplineUseCase.ExecuteAsync(disciplineDTO, ModelState);
+
+            if (success)
             {
-                return PartialView("_DisciplineAddModal", viewModal);
+                return Json(new { success = true });
             }
 
-            var disciplineDTO = _mapper.Map<DisciplineDTO>(viewModal);
-            _disciplineRepository.AddDiscipline(disciplineDTO);
-
-            return Json(new { success = true });
+            return PartialView("_DisciplineAddModal", viewModel);
         }
 
         [HttpGet]
-        public IActionResult DisciplineEditModal(int id)
+        public async Task<IActionResult> DisciplineEditModalAsync(
+            int id,
+            [FromServices] GetDisciplineForEditUseCase getDisciplineForEditUseCase)
         {
-            var disciplineDTO = _disciplineRepository.GetDisciplineById(id);
+            var disciplineDTO = await getDisciplineForEditUseCase.ExecuteAsync(id);
             if (disciplineDTO == null)
             {
                 return NotFound();
             }
+            var disciplineVM = _mapper.Map<DisciplineEditVM>(disciplineDTO);
 
-            var viewModal = _mapper.Map<DisciplineEditVM>(disciplineDTO);
-            return PartialView("_DisciplineEditModal", viewModal);
+            return PartialView("_DisciplineEditModal", disciplineVM);
         }
 
         [HttpPost]
-        public IActionResult EditDiscipline(DisciplineEditVM viewModal)
+        public async Task<IActionResult> EditDisciplineAsync(
+            DisciplineEditVM viewModel,
+            [FromServices] UpdateDisciplineUseCase updateDisciplineUseCase)
         {
-            if (!ModelState.IsValid)
+            var disciplineDTO = _mapper.Map<DisciplineDTO>(viewModel);
+
+            var success = await updateDisciplineUseCase.ExecuteAsync(disciplineDTO, ModelState);
+
+            if (success)
             {
-                return PartialView("_DisciplineEditModal", viewModal);
+                return Json(new { success = true });
             }
 
-            var disciplineDTO = _mapper.Map<DisciplineDTO>(viewModal);
-            _disciplineRepository.UpdateDiscipline(disciplineDTO);
-
-            return Json(new { success = true });
+            return PartialView("_DisciplineEditModal", viewModel);
         }
     }
 }

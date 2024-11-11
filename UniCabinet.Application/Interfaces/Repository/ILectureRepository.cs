@@ -4,12 +4,13 @@ namespace UniCabinet.Application.Interfaces.Repository
 {
     public interface ILectureRepository
     {
-        void AddLecture(LectureDTO lectureDTO);
-        Task<List<LectureDTO>> GetLectureListByDisciplineDetailId(int id);
-        Task DeleteLecture(int id);
-        List<LectureDTO> GetAllLectures();
-        LectureDTO GetLectureById(int id);
-        void UpdateLecture(LectureDTO lectureDTO);
-        int GetLectureCountByDisciplineDetailId(int disciplineDetailId);
+        Task AddLectureAsync(LectureDTO lectureDTO);
+        Task<List<LectureDTO>> GetLectureListByDisciplineDetailIdAsync(int id);
+        Task DeleteLectureAsync(int id);
+        Task<List<LectureDTO>> GetAllLecturesAsync();
+        Task<LectureDTO> GetLectureByIdAsync(int id);
+        Task UpdateLectureAsync(LectureDTO lectureDTO);
+        Task<int> GetLectureCountByDisciplineDetailIdAsync(int disciplineDetailId);
     }
+
 }
