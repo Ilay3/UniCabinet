@@ -19,7 +19,7 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
 
         public LectureEditVM Execute(int id)
         {
-            var lectureDTO = _lectureRepository.GetLectureByIdAsync(id);
+            var lectureDTO = await _lectureRepository.GetLectureByIdAsync(id);
             var lectureVM = _mapper.Map<LectureEditVM>(lectureDTO);
             return lectureVM;
         }

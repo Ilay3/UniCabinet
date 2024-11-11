@@ -23,10 +23,10 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
             _mapper = mapper;
         }
 
-        public bool Execute(LectureAddVM viewModel, ModelStateDictionary modelState)
+        public async Task<bool> ExecuteAsync(LectureAddVM viewModel, ModelStateDictionary modelState)
         {
-            var existingLecturesCount = _lectureRepository.GetLectureCountByDisciplineDetailIdAsync(viewModel.DisciplineDetailId);
-            var disciplineDetail = _disciplineDetailRepository.GetDisciplineDetailByIdAsync(viewModel.DisciplineDetailId);
+            var existingLecturesCount = await _lectureRepository.GetLectureCountByDisciplineDetailIdAsync(viewModel.DisciplineDetailId);
+            var disciplineDetail =  _disciplineDetailRepository.GetDisciplineDetailByIdAsync(viewModel.DisciplineDetailId);
             int maxLectures = disciplineDetail.LectureCount;
 
             if (existingLecturesCount >= maxLectures)
@@ -36,7 +36,7 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
             }
 
             var lectureDTO = _mapper.Map<LectureDTO>(viewModel);
-            _lectureRepository.AddLecture(lectureDTO);
+            await _lectureRepository.AddLectureAsync(lectureDTO);
 
             return true;
         }

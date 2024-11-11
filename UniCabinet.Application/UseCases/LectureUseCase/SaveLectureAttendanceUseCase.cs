@@ -17,9 +17,9 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
             _lectureRepository = lectureRepository;
         }
 
-        public void Execute(LectureAttendanceVM viewModel)
+        public async Task ExecuteAsync(LectureAttendanceVM viewModel)
         {
-            decimal points = CalculatePointsForLecture(viewModel.LectureId);
+            decimal points = await CalculatePointsForLectureAsync(viewModel.LectureId);
 
             foreach (var studentAttendance in viewModel.Students)
             {
@@ -35,9 +35,9 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
             }
         }
 
-        private decimal CalculatePointsForLecture(int lectureId)
+        private async Task<decimal> CalculatePointsForLectureAsync(int lectureId)
         {
-            var lecture = _lectureRepository.GetLectureByIdAsync(lectureId);
+            var lecture = await _lectureRepository.GetLectureByIdAsync(lectureId);
             return lecture.PointsCount;
         }
     }

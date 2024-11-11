@@ -37,13 +37,13 @@ public class LectureController : Controller
     }
 
     [HttpPost]
-    public IActionResult AddLecture(
+    public async Task<IActionResult> AddLectureAsync(
         LectureAddVM viewModal,
         [FromServices] AddLectureUseCase addLectureUseCase)
     {
         if (ModelState.IsValid)
         {
-            var success = addLectureUseCase.Execute(viewModal, ModelState);
+            var success = await addLectureUseCase.ExecuteAsync(viewModal, ModelState);
 
             if (success)
             {
@@ -68,7 +68,7 @@ public class LectureController : Controller
     {
         if (ModelState.IsValid)
         {
-            updateLectureUseCase.Execute(viewModal);
+            updateLectureUseCase.ExecuteAsync(viewModal);
             var disciplineDId = viewModal.DisciplineDetailId;
 
             return Json(new { success = true, redirectUrl = Url.Action("LecturesList", new { id = disciplineDId }) });
@@ -82,7 +82,7 @@ public class LectureController : Controller
         int lectureId,
         [FromServices] GetLectureAttendanceUseCase getLectureAttendanceUseCase)
     {
-        var attendanceVM = getLectureAttendanceUseCase.Execute(lectureId);
+        var attendanceVM = getLectureAttendanceUseCase.ExecuteAsync(lectureId);
         if (attendanceVM == null)
         {
             return NotFound();
@@ -95,7 +95,7 @@ public class LectureController : Controller
         LectureAttendanceVM viewModal,
         [FromServices] SaveLectureAttendanceUseCase saveLectureAttendanceUseCase)
     {
-        saveLectureAttendanceUseCase.Execute(viewModal);
+        saveLectureAttendanceUseCase.ExecuteAsync(viewModal);
         return RedirectToAction("LecturesList", new { id = viewModal.DisciplineDetailId });
     }
 }

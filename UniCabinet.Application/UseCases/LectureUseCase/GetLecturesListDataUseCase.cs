@@ -20,7 +20,7 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
 
         public async Task<LectureListDTO> ExecuteAsync(int id)
         {
-            var lectureListDTO = await _lectureRepository.GetLectureListByDisciplineDetailId(id);
+            var lectureListDTO = await _lectureRepository.GetLectureListByDisciplineDetailIdAsync(id);
             var disciplineDetail = _disciplineDetailRepository.GetDisciplineDetailByIdAsync(id);
 
             var disciplineDetailDTO = _disciplineDetailRepository.GetDisciplineDetailByIdAsync(id);

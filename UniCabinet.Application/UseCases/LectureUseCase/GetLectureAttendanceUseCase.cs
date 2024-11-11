@@ -27,9 +27,9 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
             _disciplineRepository = disciplineRepository;
         }
 
-        public LectureAttendanceVM Execute(int lectureId)
+        public async Task<LectureAttendanceVM> ExecuteAsync(int lectureId)
         {
-            var lecture = _lectureRepository.GetLectureByIdAsync(lectureId);
+            var lecture = await _lectureRepository.GetLectureByIdAsync(lectureId);
             if (lecture == null)
             {
                 return null;
