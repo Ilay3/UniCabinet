@@ -55,7 +55,7 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
                     FirstName = s.FirstName,
                     LastName = s.LastName,
                     Patronymic = s.Patronymic,
-                    IsPresent = existingVisits.ContainsKey(s.Id) ? existingVisits[s.Id].isVisit : false
+                    IsPresent = existingVisits.ContainsKey(s.Id) ? existingVisits[s.Id].IsVisit : false
                 }).ToList()
             };
 

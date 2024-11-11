@@ -27,7 +27,7 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
                 {
                     LectureId = viewModel.LectureId,
                     StudentId = studentAttendance.StudentId,
-                    isVisit = studentAttendance.IsPresent,
+                    IsVisit = studentAttendance.IsPresent,
                     PointsCount = studentAttendance.IsPresent ? points : 0
                 };
 
