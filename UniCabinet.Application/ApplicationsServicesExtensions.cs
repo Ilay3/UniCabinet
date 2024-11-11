@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using UniCabinet.Application.BackgroundServices;
 using UniCabinet.Application.UseCases;
+using UniCabinet.Application.UseCases.DisciplineUseCase;
 using UniCabinet.Application.UseCases.GroupUseCase;
 using UniCabinet.Application.UseCases.LectureUseCase;
 
@@ -34,6 +35,10 @@ namespace UniCabinet.Infrastructure
             services.AddTransient<AddGroupUseCase>();
             services.AddTransient<EditGroupUseCase>();
 
+            services.AddTransient<GetDisciplinesListUseCase>();
+            services.AddTransient<AddDisciplineUseCase>();
+            services.AddTransient<GetDisciplineForEditUseCase>();
+            services.AddTransient<UpdateDisciplineUseCase>();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             try
