@@ -16,9 +16,9 @@ namespace UniCabinet.Application.UseCases.DisciplineUseCase
             _mapper = mapper;
         }
 
-        public List<DisciplineListVM> Execute()
+        public async Task<List<DisciplineListVM>> ExecuteAsync()
         {
-            var disciplineDTOs = _disciplineRepository.GetAllDisciplines();
+            var disciplineDTOs = await _disciplineRepository.GetAllDisciplinesAsync();
             var disciplineVMs = _mapper.Map<List<DisciplineListVM>>(disciplineDTOs);
             return disciplineVMs;
         }

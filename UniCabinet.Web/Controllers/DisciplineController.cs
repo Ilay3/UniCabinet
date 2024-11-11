@@ -15,9 +15,9 @@ namespace UniCabinet.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult DisciplinesList([FromServices] GetDisciplinesListUseCase getDisciplinesListUseCase)
+        public async Task<IActionResult> DisciplinesListAsync([FromServices] GetDisciplinesListUseCase getDisciplinesListUseCase)
         {
-            var disciplineVMs = getDisciplinesListUseCase.Execute();
+            var disciplineVMs = await getDisciplinesListUseCase.ExecuteAsync();
             return View(disciplineVMs);
         }
 
@@ -29,11 +29,11 @@ namespace UniCabinet.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddDiscipline(
+        public async Task<IActionResult> AddDisciplineAsync(
             DisciplineAddVM viewModel,
             [FromServices] AddDisciplineUseCase addDisciplineUseCase)
         {
-            var success = addDisciplineUseCase.Execute(viewModel, ModelState);
+            var success = await addDisciplineUseCase.ExecuteAsync(viewModel, ModelState);
 
             if (success)
             {
@@ -44,11 +44,11 @@ namespace UniCabinet.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult DisciplineEditModal(
+        public async Task<IActionResult> DisciplineEditModalAsync(
             int id,
             [FromServices] GetDisciplineForEditUseCase getDisciplineForEditUseCase)
         {
-            var disciplineVM = getDisciplineForEditUseCase.Execute(id);
+            var disciplineVM = await getDisciplineForEditUseCase.ExecuteAsync(id);
             if (disciplineVM == null)
             {
                 return NotFound();
@@ -58,11 +58,11 @@ namespace UniCabinet.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditDiscipline(
+        public async Task<IActionResult> EditDisciplineAsync(
             DisciplineEditVM viewModel,
             [FromServices] UpdateDisciplineUseCase updateDisciplineUseCase)
         {
-            var success = updateDisciplineUseCase.Execute(viewModel, ModelState);
+            var success = await updateDisciplineUseCase.ExecuteAsync(viewModel, ModelState);
 
             if (success)
             {

@@ -16,9 +16,9 @@ namespace UniCabinet.Application.UseCases.DisciplineUseCase
             _mapper = mapper;
         }
 
-        public DisciplineEditVM Execute(int id)
+        public async Task<DisciplineEditVM> ExecuteAsync(int id)
         {
-            var disciplineDTO = _disciplineRepository.GetDisciplineByIdAsync(id);
+            var disciplineDTO = await _disciplineRepository.GetDisciplineByIdAsync(id);
             if (disciplineDTO == null)
             {
                 return null;

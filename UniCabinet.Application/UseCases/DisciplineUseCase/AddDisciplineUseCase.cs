@@ -17,7 +17,7 @@ namespace UniCabinet.Application.UseCases.DisciplineUseCase
             _mapper = mapper;
         }
 
-        public bool Execute(DisciplineAddVM viewModel, ModelStateDictionary modelState)
+        public async Task<bool> ExecuteAsync(DisciplineAddVM viewModel, ModelStateDictionary modelState)
         {
             if (!modelState.IsValid)
             {
@@ -25,7 +25,7 @@ namespace UniCabinet.Application.UseCases.DisciplineUseCase
             }
 
             var disciplineDTO = _mapper.Map<DisciplineDTO>(viewModel);
-            _disciplineRepository.AddDiscipline(disciplineDTO);
+           await _disciplineRepository.AddDisciplineAsync(disciplineDTO);
             return true;
         }
     }
