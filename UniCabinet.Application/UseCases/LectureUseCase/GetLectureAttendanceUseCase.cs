@@ -2,10 +2,6 @@
 using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.Models.ViewModel;
 using UniCabinet.Core.Models.ViewModel.Lecture;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using UniCabinet.Core.DTOs;
 
 namespace UniCabinet.Application.UseCases.LectureUseCase
 {
@@ -31,7 +27,7 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
             _disciplineRepository = disciplineRepository;
         }
 
-        public async Task<LectureAttendanceDTO> ExecuteAsync(int lectureId)
+        public async Task<LectureAttendanceVM> ExecuteAsync(int lectureId)
         {
             var lecture = await _lectureRepository.GetLectureByIdAsync(lectureId);
             if (lecture == null)
@@ -40,31 +36,20 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
             }
 
             int disciplineDetailId = lecture.DisciplineDetailId;
-
-            var disciplineDetail = await _disciplineDetailRepository.GetDisciplineDetailByIdAsync(disciplineDetailId);
-            if (disciplineDetail == null)
-            {
-                return null;
-            }
-
+            var disciplineDetail = _disciplineDetailRepository.GetDisciplineDetailByIdAsync(disciplineDetailId);
             int groupId = disciplineDetail.GroupId;
 
-            var students = await _userRepository.GetStudentsByGroupIdAsync(groupId);
-           
+            var students = _userRepository.GetStudentsByGroupIdAsync(groupId);
+            var existingVisits = _lectureVisitRepository.GetLectureVisitsByLectureIdAsync(lectureId)
+                .ToDictionary(lv => lv.StudentId, lv => lv);
 
-            var existingVisitsList = await _lectureVisitRepository.GetLectureVisitsByLectureIdAsync(lectureId);
-            var existingVisits = existingVisitsList.ToDictionary(lv => lv.StudentId, lv => lv);
-
-            var discipline = await _disciplineRepository.GetDisciplineByIdAsync(disciplineDetail.DisciplineId);
-            string disciplineName = discipline != null ? discipline.Name : string.Empty;
-
-            var attendanceVM = new LectureAttendanceDTO
+            var attendanceVM = new LectureAttendanceVM
             {
                 LectureId = lectureId,
                 DisciplineDetailId = disciplineDetailId,
                 LectureNumber = lecture.Number,
-                DisciplineName = disciplineName,
-                Students = students.Select(s => new StudentAttendanceDTO
+                DisciplineName = _disciplineRepository.GetDisciplineByIdAsync(disciplineDetail.DisciplineId).Name,
+                Students = students.Select(s => new StudentAttendanceVM
                 {
                     StudentId = s.Id,
                     FirstName = s.FirstName,

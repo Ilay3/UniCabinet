@@ -18,8 +18,9 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
             _mapper = mapper;
         }
 
-        public async Task ExecuteAsync(LectureDTO lectureDTO)
+        public async Task ExecuteAsync(LectureEditVM viewModel)
         {
+            var lectureDTO = _mapper.Map<LectureDTO>(viewModel);
             await _lectureRepository.UpdateLectureAsync(lectureDTO);
         }
     }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Core.DTOs.Entites;
 using UniCabinet.Core.Models.ViewModel.Lecture;
 
 namespace UniCabinet.Application.UseCases.LectureUseCase
@@ -18,10 +17,11 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
             _mapper = mapper;
         }
 
-        public async Task<LectureDTO> ExecuteAsync(int id)
+        public LectureEditVM Execute(int id)
         {
             var lectureDTO = await _lectureRepository.GetLectureByIdAsync(id);
-            return lectureDTO;
+            var lectureVM = _mapper.Map<LectureEditVM>(lectureDTO);
+            return lectureVM;
         }
     }
 }
