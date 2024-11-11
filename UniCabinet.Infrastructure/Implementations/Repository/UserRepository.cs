@@ -156,9 +156,9 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
         }
 
 
-        public List<UserDTO> GetStudentsByGroupId(int groupId)
+        public async Task<List<UserDTO>> GetStudentsByGroupIdAsync(int groupId)
         {
-            var students = _context.Users
+            var students = await _context.Users
                 .Where(u => u.GroupId == groupId)
                 .Join(_context.UserRoles,
                       user => user.Id,
@@ -170,7 +170,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
                       (ur, role) => new { ur.user, role.Name })
                 .Where(u => u.Name == "Student")
                 .Select(u => u.user)
-                .ToList();
+                .ToListAsync();
 
             return students.Select(u => new UserDTO
             {

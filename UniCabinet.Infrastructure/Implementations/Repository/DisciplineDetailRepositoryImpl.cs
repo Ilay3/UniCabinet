@@ -20,7 +20,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             throw new NotImplementedException();
         }
 
-        public DisciplineDetailDTO GetDisciplineDetailById(int id)
+        public Task<DisciplineDetailDTO> GetDisciplineDetailByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
