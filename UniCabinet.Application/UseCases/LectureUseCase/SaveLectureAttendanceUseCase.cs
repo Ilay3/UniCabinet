@@ -17,15 +17,15 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
             _lectureRepository = lectureRepository;
         }
 
-        public async Task ExecuteAsync(LectureAttendanceVM viewModel)
+        public async Task ExecuteAsync(LectureAttendanceDTO lectureAttendanceDTO)
         {
-            decimal points = await CalculatePointsForLectureAsync(viewModel.LectureId);
+            decimal points = await CalculatePointsForLectureAsync(lectureAttendanceDTO.LectureId);
 
-            foreach (var studentAttendance in viewModel.Students)
+            foreach (var studentAttendance in lectureAttendanceDTO.Students)
             {
                 var lectureVisitDTO = new LectureVisitDTO
                 {
-                    LectureId = viewModel.LectureId,
+                    LectureId = lectureAttendanceDTO.LectureId,
                     StudentId = studentAttendance.StudentId,
                     IsVisit = studentAttendance.IsPresent,
                     PointsCount = studentAttendance.IsPresent ? points : 0
