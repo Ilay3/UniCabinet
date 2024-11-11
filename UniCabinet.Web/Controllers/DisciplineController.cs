@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using UniCabinet.Application.UseCases.DisciplineUseCase;
+using UniCabinet.Core.DTOs.Entites;
 using UniCabinet.Core.Models.ViewModel.Discipline;
 
 namespace UniCabinet.Web.Controllers
@@ -17,7 +18,9 @@ namespace UniCabinet.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> DisciplinesListAsync([FromServices] GetDisciplinesListUseCase getDisciplinesListUseCase)
         {
-            var disciplineVMs = await getDisciplinesListUseCase.ExecuteAsync();
+            var result = await getDisciplinesListUseCase.ExecuteAsync();
+            var disciplineVMs = _mapper.Map<List<DisciplineListVM>>(result);
+
             return View(disciplineVMs);
         }
 
@@ -33,7 +36,9 @@ namespace UniCabinet.Web.Controllers
             DisciplineAddVM viewModel,
             [FromServices] AddDisciplineUseCase addDisciplineUseCase)
         {
-            var success = await addDisciplineUseCase.ExecuteAsync(viewModel, ModelState);
+            var disciplineDTO = _mapper.Map<DisciplineDTO>(viewModel);
+
+            var success = await addDisciplineUseCase.ExecuteAsync(disciplineDTO, ModelState);
 
             if (success)
             {
@@ -48,11 +53,12 @@ namespace UniCabinet.Web.Controllers
             int id,
             [FromServices] GetDisciplineForEditUseCase getDisciplineForEditUseCase)
         {
-            var disciplineVM = await getDisciplineForEditUseCase.ExecuteAsync(id);
-            if (disciplineVM == null)
+            var disciplineDTO = await getDisciplineForEditUseCase.ExecuteAsync(id);
+            if (disciplineDTO == null)
             {
                 return NotFound();
             }
+            var disciplineVM = _mapper.Map<DisciplineEditVM>(disciplineDTO);
 
             return PartialView("_DisciplineEditModal", disciplineVM);
         }
@@ -62,7 +68,9 @@ namespace UniCabinet.Web.Controllers
             DisciplineEditVM viewModel,
             [FromServices] UpdateDisciplineUseCase updateDisciplineUseCase)
         {
-            var success = await updateDisciplineUseCase.ExecuteAsync(viewModel, ModelState);
+            var disciplineDTO = _mapper.Map<DisciplineDTO>(viewModel);
+
+            var success = await updateDisciplineUseCase.ExecuteAsync(disciplineDTO, ModelState);
 
             if (success)
             {

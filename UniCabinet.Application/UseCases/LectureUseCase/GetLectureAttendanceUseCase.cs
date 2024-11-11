@@ -1,5 +1,6 @@
 ﻿using UniCabinet.Application.Interfaces;
 using UniCabinet.Application.Interfaces.Repository;
+using UniCabinet.Core.DTOs;
 using UniCabinet.Core.Models.ViewModel;
 using UniCabinet.Core.Models.ViewModel.Lecture;
 
@@ -27,7 +28,7 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
             _disciplineRepository = disciplineRepository;
         }
 
-        public async Task<LectureAttendanceVM> ExecuteAsync(int lectureId)
+        public async Task<LectureAttendanceDTO> ExecuteAsync(int lectureId)
         {
             var lecture = await _lectureRepository.GetLectureByIdAsync(lectureId);
             if (lecture == null)
@@ -36,20 +37,31 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
             }
 
             int disciplineDetailId = lecture.DisciplineDetailId;
-            var disciplineDetail = _disciplineDetailRepository.GetDisciplineDetailByIdAsync(disciplineDetailId);
+
+            var disciplineDetail = await _disciplineDetailRepository.GetDisciplineDetailByIdAsync(disciplineDetailId);
+            if (disciplineDetail == null)
+            {
+                return null;
+            }
+
             int groupId = disciplineDetail.GroupId;
 
-            var students = _userRepository.GetStudentsByGroupIdAsync(groupId);
-            var existingVisits = _lectureVisitRepository.GetLectureVisitsByLectureIdAsync(lectureId)
-                .ToDictionary(lv => lv.StudentId, lv => lv);
+            var students = await _userRepository.GetStudentsByGroupIdAsync(groupId);
 
-            var attendanceVM = new LectureAttendanceVM
+
+            var existingVisitsList = await _lectureVisitRepository.GetLectureVisitsByLectureIdAsync(lectureId);
+            var existingVisits = existingVisitsList.ToDictionary(lv => lv.StudentId, lv => lv);
+
+            var discipline = await _disciplineRepository.GetDisciplineByIdAsync(disciplineDetail.DisciplineId);
+            string disciplineName = discipline != null ? discipline.Name : string.Empty;
+
+            var attendanceDTO = new LectureAttendanceDTO
             {
                 LectureId = lectureId,
                 DisciplineDetailId = disciplineDetailId,
                 LectureNumber = lecture.Number,
-                DisciplineName = _disciplineRepository.GetDisciplineByIdAsync(disciplineDetail.DisciplineId).Name,
-                Students = students.Select(s => new StudentAttendanceVM
+                DisciplineName = disciplineName,
+                Students = students.Select(s => new StudentAttendanceDTO
                 {
                     StudentId = s.Id,
                     FirstName = s.FirstName,
@@ -59,7 +71,7 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
                 }).ToList()
             };
 
-            return attendanceVM;
+            return attendanceDTO;
         }
     }
 }

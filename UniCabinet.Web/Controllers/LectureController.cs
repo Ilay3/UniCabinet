@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using UniCabinet.Application.UseCases.LectureUseCase;
+using UniCabinet.Core.DTOs;
+using UniCabinet.Core.DTOs.Entites;
 using UniCabinet.Core.Models.ViewModel.Lecture;
 
 public class LectureController : Controller
@@ -43,7 +45,9 @@ public class LectureController : Controller
     {
         if (ModelState.IsValid)
         {
-            var success = await addLectureUseCase.ExecuteAsync(viewModal, ModelState);
+            var lectureDTO = _mapper.Map<LectureDTO>(viewModal);
+
+            var success = await addLectureUseCase.ExecuteAsync(lectureDTO, ModelState);
 
             if (success)
             {
@@ -57,18 +61,22 @@ public class LectureController : Controller
     [HttpGet]
     public IActionResult LectureEditModal(int id, [FromServices] GetLectureForEditUseCase getLectureForEditUseCase)
     {
-        var lectureVM = getLectureForEditUseCase.Execute(id);
+        var lectureDTO = getLectureForEditUseCase.ExecuteAsync(id);
+        var lectureVM = _mapper.Map<LectureEditVM>(lectureDTO);
+
         return PartialView("_LectureEditModal", lectureVM);
     }
 
     [HttpPost]
-    public IActionResult EditLecture(
+    public async Task<IActionResult> EditLectureAsync(
         LectureEditVM viewModal,
         [FromServices] UpdateLectureUseCase updateLectureUseCase)
     {
         if (ModelState.IsValid)
         {
-            updateLectureUseCase.ExecuteAsync(viewModal);
+            var lectureDTO = _mapper.Map<LectureDTO>(viewModal);
+
+           await updateLectureUseCase.ExecuteAsync(lectureDTO);
             var disciplineDId = viewModal.DisciplineDetailId;
 
             return Json(new { success = true, redirectUrl = Url.Action("LecturesList", new { id = disciplineDId }) });
@@ -82,7 +90,8 @@ public class LectureController : Controller
         int lectureId,
         [FromServices] GetLectureAttendanceUseCase getLectureAttendanceUseCase)
     {
-        var attendanceVM = getLectureAttendanceUseCase.ExecuteAsync(lectureId);
+        var result = getLectureAttendanceUseCase.ExecuteAsync(lectureId);
+        var attendanceVM = _mapper.Map< LectureAttendanceVM>(result);
         if (attendanceVM == null)
         {
             return NotFound();
@@ -95,7 +104,8 @@ public class LectureController : Controller
         LectureAttendanceVM viewModal,
         [FromServices] SaveLectureAttendanceUseCase saveLectureAttendanceUseCase)
     {
-        saveLectureAttendanceUseCase.ExecuteAsync(viewModal);
+        var lectureAttendanceDTO = _mapper.Map< LectureAttendanceDTO >(viewModal);
+        saveLectureAttendanceUseCase.ExecuteAsync(lectureAttendanceDTO);
         return RedirectToAction("LecturesList", new { id = viewModal.DisciplineDetailId });
     }
 }

@@ -16,7 +16,7 @@ namespace UniCabinet.Application.UseCases.DisciplineUseCase
             _mapper = mapper;
         }
 
-        public async Task<DisciplineEditVM> ExecuteAsync(int id)
+        public async Task<DisciplineDTO> ExecuteAsync(int id)
         {
             var disciplineDTO = await _disciplineRepository.GetDisciplineByIdAsync(id);
             if (disciplineDTO == null)
@@ -24,8 +24,7 @@ namespace UniCabinet.Application.UseCases.DisciplineUseCase
                 return null;
             }
 
-            var disciplineVM = _mapper.Map<DisciplineEditVM>(disciplineDTO);
-            return disciplineVM;
+            return disciplineDTO;
         }
     }
 }

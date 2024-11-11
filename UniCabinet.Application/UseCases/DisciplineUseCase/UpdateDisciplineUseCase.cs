@@ -17,14 +17,13 @@ namespace UniCabinet.Application.UseCases.DisciplineUseCase
             _mapper = mapper;
         }
 
-        public async Task<bool> ExecuteAsync(DisciplineEditVM viewModel, ModelStateDictionary modelState)
+        public async Task<bool> ExecuteAsync(DisciplineDTO disciplineDTO, ModelStateDictionary modelState)
         {
             if (!modelState.IsValid)
             {
                 return false;
             }
 
-            var disciplineDTO = _mapper.Map<DisciplineDTO>(viewModel);
             await _disciplineRepository.UpdateDisciplineAsync(disciplineDTO);
             return true;
         }
