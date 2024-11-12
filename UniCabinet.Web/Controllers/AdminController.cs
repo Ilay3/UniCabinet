@@ -235,7 +235,7 @@ public class AdminController : Controller
         }
 
         // Возвращаем успех
-        return Json(new { success = true });
+        return RedirectToAction("VerifiedUsers");
     }
 
     [HttpGet]
@@ -287,7 +287,7 @@ public class AdminController : Controller
         }
 
         // Возвращаем успех
-        return Json(new { success = true });
+        return RedirectToAction("VerifiedUsers");
     }
 
     [HttpGet]
@@ -334,7 +334,7 @@ public class AdminController : Controller
         await _userService.UpdateUserDetailsAsync(userDetailDTO);
 
         // Возвращаем успех
-        return Json(new { success = true });
+        return RedirectToAction("VerifiedUsers");
     }
 
 
