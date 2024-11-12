@@ -2,7 +2,7 @@
 
 <h2>Список групп</h2>
 
-<button class="btn btn-primary" data-url="@Url.Action("GroupAddModal", "Group")">Добавить группу</button>
+<button class="btn btn-primary" onclick="openModal('/Group/GroupAddModal', 'addGroupModal')">Добавить группу</button>
 
 <table class="table">
     <thead>
@@ -23,10 +23,11 @@
                 <td>@group.CourseId</td>
                 <td>@group.SemesterId</td>
                 <td>
-                    <button class="btn btn-info" data-url="@Url.Action("GroupEditModal", "Group", new { id = group.Id })">Редактировать</button>
+                    <button class="btn btn-info" onclick="openModal('/Group/GroupEditModal', 'editGroupModal', @group.Id)">Редактировать</button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
+<div id="modalContainer"></div>
