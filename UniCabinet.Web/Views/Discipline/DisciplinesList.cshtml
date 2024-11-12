@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<UniCabinet.Core.Models.ViewModel.Discipline.DisciplineListVM>
 
-<button type="button" class="btn btn-primary" data-url="@Url.Action("DisciplineAddModal", "Discipline")">
+<button type="button" class="btn btn-primary" onclick="openModal('/Discipline/DisciplineAddModal', 'addDisciplineModal')">
     Добавить дисциплину
 </button>
 
@@ -19,7 +19,7 @@
                 <td>@item.Name</td>
                 <td>@item.Description</td>
                 <td>
-                    <button type="button" class="btn btn-secondary" data-url="@Url.Action("DisciplineEditModal", "Discipline", new { id = item.Id })">
+                    <button type="button" class="btn btn-secondary" onclick="openModal('/Discipline/DisciplineEditModal', 'editDisciplineModal', @item.Id)">
                         Редактировать
                     </button>
                 </td>
@@ -27,10 +27,5 @@
         }
     </tbody>
 </table>
-
-@section Scripts {
-    <script src="~/js/ajax-modal.js"></script>
-}
-
 
 <div id="modalContainer"></div>
