@@ -15,13 +15,10 @@ namespace UniCabinet.Application.UseCases.GroupUseCase
             _semesterRepository = semesterRepository;
         }
 
-        public async Task<bool> Execute(GroupDTO groupDTO)
+        public async Task<bool> ExecuteAsync(GroupDTO groupDTO)
         {
-            var currentSemester = _semesterRepository.GetCurrentSemesterAsync(DateTime.Now);
-            if (currentSemester == null)
-                throw new InvalidOperationException("Текущий семестр не определён.");
 
-            groupDTO.SemesterId = currentSemester.Id;
+
             await _groupRepository.UpdateGroupAsync(groupDTO);
             return true;
         }

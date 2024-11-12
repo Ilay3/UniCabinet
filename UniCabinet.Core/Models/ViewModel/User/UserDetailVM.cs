@@ -8,7 +8,6 @@
         public string LastName { get; set; }
         public string Patronymic { get; set; }
         public DateTime? DateBirthday { get; set; }
-        public List<string> Roles { get; set; }
-        public string GroupName { get; set; }
+
     }
 }

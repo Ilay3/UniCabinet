@@ -1,14 +1,12 @@
 ﻿@model UniCabinet.Core.Models.ViewModel.Discipline.DisciplineAddVM
 
-<div class="modal fade" tabindex="-1" role="dialog">
+<div class="modal fade" id="addDisciplineModal" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <!-- Заголовок модального окна -->
             <div class="modal-header">
                 <h5 class="modal-title">Добавить дисциплину</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
             </div>
-            <!-- Тело модального окна -->
             <div class="modal-body">
                 <form id="addDisciplineForm" asp-action="AddDiscipline">
                     <div class="mb-3">
@@ -21,7 +19,6 @@
                         <textarea class="form-control" id="disciplineDescription" asp-for="Description" required></textarea>
                     </div>
 
-                    <!-- Подвал модального окна -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                         <button type="submit" class="btn btn-primary">Сохранить</button>

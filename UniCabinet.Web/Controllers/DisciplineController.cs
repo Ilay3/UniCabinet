@@ -42,7 +42,7 @@ namespace UniCabinet.Web.Controllers
 
             if (success)
             {
-                return Json(new { success = true });
+                return RedirectToAction("DisciplinesList");
             }
 
             return PartialView("_DisciplineAddModal", viewModel);
@@ -74,7 +74,7 @@ namespace UniCabinet.Web.Controllers
 
             if (success)
             {
-                return Json(new { success = true });
+                return RedirectToAction("DisciplinesList");
             }
 
             return PartialView("_DisciplineEditModal", viewModel);

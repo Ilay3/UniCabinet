@@ -24,7 +24,8 @@
                     <td>
                         @if (user.Roles.Contains("Student") && user.Roles.Contains("Verified"))
                         {
-                            <button type="button" class="btn btn-primary btn-sm" data-url="@Url.Action("GroupEditModal", "Admin", new { userId = user.Id })">
+                            <button type="button" class="btn btn-primary btn-sm"
+                                    onclick="openModal('@Url.Action("GroupEditModal", "Admin", new { userId = user.Id })', 'groupModal')">
                                 Изменить группу
                             </button>
                         }
@@ -34,12 +35,14 @@
                         }
                     </td>
                     <td>
-                        <button type="button" class="btn btn-secondary btn-sm" data-url="@Url.Action("RoleEditModal", "Admin", new { userId = user.Id })">
+                        <button type="button" class="btn btn-secondary btn-sm"
+                                onclick="openModal('@Url.Action("RoleEditModal", "Admin", new { userId = user.Id })', 'roleModal')">
                             Изменить роль
                         </button>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-info btn-sm" data-url="@Url.Action("UserDetailModal", "Admin", new { userId = user.Id })">
+                        <button type="button" class="btn btn-info btn-sm"
+                                onclick="openModal('@Url.Action("UserDetailModal", "Admin", new { userId = user.Id })', 'userDetailModal')">
                             Подробнее
                         </button>
                     </td>

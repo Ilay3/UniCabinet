@@ -47,7 +47,7 @@ namespace UniCabinet.Web.Controllers
             try
             {
                 await addGroupUseCase.Execute(groupDTO);
-                return Json(new { success = true, redirectUrl = Url.Action("GroupsList") });
+                return RedirectToAction("GroupsList");
             }
             catch (InvalidOperationException ex)
             {
@@ -66,8 +66,8 @@ namespace UniCabinet.Web.Controllers
 
             try
             {
-                await editGroupUseCase.Execute(groupDTO);
-                return Json(new { success = true });
+                await editGroupUseCase.ExecuteAsync(groupDTO);
+                return RedirectToAction("GroupsList");
             }
             catch (InvalidOperationException ex)
             {

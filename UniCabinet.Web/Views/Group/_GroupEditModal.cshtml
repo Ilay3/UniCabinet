@@ -1,23 +1,20 @@
 ﻿@model UniCabinet.Core.Models.ViewModel.Group.GroupEditVM
 
-<div class="modal fade" tabindex="-1" role="dialog">
+<div class="modal fade" id="editGroupModal" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <!-- Заголовок модального окна -->
             <div class="modal-header">
                 <h5 class="modal-title">Редактировать группу</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <!-- Тело модального окна -->
             <div class="modal-body">
                 <form id="editGroupForm" asp-action="EditGroup">
                     <input type="hidden" asp-for="Id" />
-
+                    <input type="hidden" asp-for="SemesterId" />
                     <div class="form-group">
                         <label for="groupName">Название группы</label>
                         <input type="text" class="form-control" id="groupName" asp-for="Name" required />
                     </div>
-
                     <div class="form-group">
                         <label for="groupType">Тип группы</label>
                         <select asp-for="TypeGroup" class="form-control" required>
@@ -26,7 +23,6 @@
                             <option value="2">Заочно</option>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label for="courseNumber">Курс</label>
                         <select asp-for="CourseId" class="form-control" required>
@@ -38,10 +34,6 @@
                             <option value="5">5 Курс</option>
                         </select>
                     </div>
-
-                    <p>Текущий семестр: @Model.SemesterId</p>
-
-                    <!-- Подвал модального окна -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                         <button type="submit" class="btn btn-primary">Сохранить</button>
