@@ -1,5 +1,5 @@
 ﻿using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Core.DTOs;
+using UniCabinet.Core.DTOs.LectureManagement;
 
 namespace UniCabinet.Application.UseCases.LectureUseCase
 {

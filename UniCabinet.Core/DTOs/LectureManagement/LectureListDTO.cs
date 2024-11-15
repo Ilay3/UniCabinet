@@ -1,6 +1,4 @@
-﻿using UniCabinet.Core.DTOs.Entites;
-
-namespace UniCabinet.Core.DTOs
+﻿namespace UniCabinet.Core.DTOs.LectureManagement
 {
     public class LectureListDTO
     {

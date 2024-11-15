@@ -1,6 +1,6 @@
 ﻿using UniCabinet.Application.Interfaces;
 using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Core.DTOs;
+using UniCabinet.Core.DTOs.LectureManagement;
 using UniCabinet.Core.Models.ViewModel;
 using UniCabinet.Core.Models.ViewModel.Lecture;
 

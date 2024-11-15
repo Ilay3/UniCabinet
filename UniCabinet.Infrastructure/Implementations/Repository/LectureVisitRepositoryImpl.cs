@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Core.DTOs;
+using UniCabinet.Core.DTOs.LectureManagement;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
 

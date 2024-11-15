@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using UniCabinet.Core.DTOs.Entites;
+using UniCabinet.Core.DTOs.LectureManagement;
 using UniCabinet.Core.Models.ViewModel.Lecture;
 using UniCabinet.Domain.Entities;
 

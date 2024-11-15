@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Core.DTOs.Entites;
+using UniCabinet.Core.DTOs.LectureManagement;
 using UniCabinet.Core.Models.ViewModel.Lecture;
 
 namespace UniCabinet.Application.UseCases.LectureUseCase
