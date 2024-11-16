@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
+using UniCabinet.Domain.Models;
 
 namespace UniCabinet.Domain.Entities;
 
@@ -40,6 +41,7 @@ public class UserEntity : IdentityUser<string>
     public SpecialtyEntity Specialty { get; set; }
 
     // Навигационные свойства
+    public DepartmentEntity DepartmentEntity { get; set; }
     public ICollection<LectureVisitEntity> LectureVisits { get; set; }
     public ICollection<PracticalResultEntity> PracticalResults { get; set; }
     public ICollection<ExamResultEntity> ExamResults { get; set; }
