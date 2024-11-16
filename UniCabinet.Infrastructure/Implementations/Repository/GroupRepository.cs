@@ -2,12 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Core.DTOs.Entites;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UniCabinet.Core.DTOs.UserManagement;
+using UniCabinet.Core.DTOs.CourseManagement;
 
 namespace UniCabinet.Infrastructure.Implementations.Repository
 {

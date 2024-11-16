@@ -3,7 +3,7 @@ using EFCore.BulkExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UniCabinet.Application.Interfaces;
-using UniCabinet.Core.DTOs.Entites;
+using UniCabinet.Core.DTOs.UserManagement;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
 

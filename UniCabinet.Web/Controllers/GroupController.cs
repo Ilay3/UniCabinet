@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using UniCabinet.Application.UseCases.GroupUseCase;
-using UniCabinet.Core.DTOs.Entites;
+using UniCabinet.Core.DTOs.CourseManagement;
 using UniCabinet.Core.Models.ViewModel.Group;
 
 namespace UniCabinet.Web.Controllers

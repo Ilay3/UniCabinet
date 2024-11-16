@@ -1,4 +1,6 @@
-﻿namespace UniCabinet.Core.DTOs
+﻿using UniCabinet.Core.DTOs.StudentManagement;
+
+namespace UniCabinet.Core.DTOs.LectureManagement
 {
     public class LectureAttendanceDTO
     {

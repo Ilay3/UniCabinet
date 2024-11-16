@@ -1,4 +1,4 @@
-﻿using UniCabinet.Core.DTOs.Entites;
+﻿using UniCabinet.Core.DTOs.ExamManagement;
 
 namespace UniCabinet.Application.Interfaces.Repository
 {

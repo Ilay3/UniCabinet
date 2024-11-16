@@ -1,4 +1,4 @@
-﻿namespace UniCabinet.Core.DTOs
+﻿namespace UniCabinet.Core.DTOs.LectureManagement
 {
     public class LectureVisitDTO
     {

@@ -1,6 +1,6 @@
 ﻿using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Core.DTOs.Entites;
 using System;
+using UniCabinet.Core.DTOs.CourseManagement;
 
 namespace UniCabinet.Application.UseCases.GroupUseCase
 {

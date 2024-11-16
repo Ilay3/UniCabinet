@@ -1,5 +1,5 @@
 ﻿using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Core.DTOs;
+using UniCabinet.Core.DTOs.PracticalManagement;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
 

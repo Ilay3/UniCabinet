@@ -1,4 +1,4 @@
-﻿using UniCabinet.Core.DTOs.Entites;
+﻿using UniCabinet.Core.DTOs.PracticalManagement;
 
 namespace UniCabinet.Application.Interfaces.Repository
 {

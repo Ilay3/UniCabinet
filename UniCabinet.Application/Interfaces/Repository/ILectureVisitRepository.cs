@@ -1,4 +1,4 @@
-﻿using UniCabinet.Core.DTOs;
+﻿using UniCabinet.Core.DTOs.LectureManagement;
 
 namespace UniCabinet.Application.Interfaces.Repository
 {

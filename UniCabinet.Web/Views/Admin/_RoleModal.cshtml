@@ -1,4 +1,4 @@
-﻿@model UniCabinet.Web.Models.VM.User.UserRolesVM
+﻿@model UniCabinet.Core.Models.ViewModel.User.UserRolesVM
 
 <div class="modal fade" id="roleModal" tabindex="-1" role="dialog">
     <div class="modal-dialog">
@@ -21,7 +21,8 @@
                                     @role.Text
                                 </label>
                             </div>
-                        }
+                        }                      
+                        <input type="hidden" name="FullName" value="@Model.FullName" />
                         <input type="hidden" name="UserId" value="@Model.UserId" />
                     </div>
                     <!-- Подвал модального окна -->

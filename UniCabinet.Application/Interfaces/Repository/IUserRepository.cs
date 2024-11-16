@@ -1,5 +1,5 @@
 ﻿// UniCabinet.Application/Interfaces/IUserRepository.cs
-using UniCabinet.Core.DTOs.Entites;
+using UniCabinet.Core.DTOs.UserManagement;
 using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Application.Interfaces

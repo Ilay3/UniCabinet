@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using UniCabinet.Application.UseCases.LectureUseCase;
-using UniCabinet.Core.DTOs;
-using UniCabinet.Core.DTOs.Entites;
+using UniCabinet.Core.DTOs.LectureManagement;
 using UniCabinet.Core.Models.ViewModel.Lecture;
 
 public class LectureController : Controller

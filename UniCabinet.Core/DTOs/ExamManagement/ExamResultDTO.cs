@@ -1,4 +1,4 @@
-﻿namespace UniCabinet.Core.DTOs.Entites
+﻿namespace UniCabinet.Core.DTOs.ExamManagement
 {
     public class ExamResultDTO
     {

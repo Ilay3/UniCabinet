@@ -1,4 +1,4 @@
-﻿using UniCabinet.Core.DTOs.Entites;
+﻿using UniCabinet.Core.DTOs.CourseManagement;
 
 namespace UniCabinet.Application.Interfaces.Repository
 {

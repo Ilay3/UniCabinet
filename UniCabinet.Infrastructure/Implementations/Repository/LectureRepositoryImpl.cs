@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Core.DTOs.Entites;
+using UniCabinet.Core.DTOs.LectureManagement;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
 

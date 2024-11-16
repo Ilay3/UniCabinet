@@ -1,7 +1,7 @@
 ﻿using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Core.DTOs.Entites;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UniCabinet.Core.DTOs.CourseManagement;
 
 namespace UniCabinet.Application.UseCases.GroupUseCase
 {

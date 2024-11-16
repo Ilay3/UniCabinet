@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Core.DTOs.Entites;
+using UniCabinet.Core.DTOs.CourseManagement;
 using UniCabinet.Core.Models.ViewModel.Discipline;
 
 namespace UniCabinet.Application.UseCases.DisciplineUseCase
