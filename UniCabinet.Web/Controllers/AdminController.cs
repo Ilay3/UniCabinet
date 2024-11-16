@@ -119,10 +119,7 @@ public class AdminController : Controller
         [FromServices] UpdateUserGroupUseCase updateUserGroupUseCase,
         [FromServices] UserManager<UserEntity> userManager)
     {
-        if (!ModelState.IsValid)
-        {
-            return PartialView("_GroupModal", model);
-        }
+      
 
         var user = await userManager.FindByIdAsync(model.UserId);
         if (user == null)
