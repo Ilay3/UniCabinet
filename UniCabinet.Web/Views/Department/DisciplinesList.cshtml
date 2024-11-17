@@ -1,0 +1,25 @@
+﻿@model IEnumerable<UniCabinet.Core.Models.ViewModel.Discipline.DisciplineListVM>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var discipline in Model)
+        {
+            <tr>
+                <td>@discipline.Name</td>
+                <td>@discipline.Description</td>
+                <td>
+                    <button type="button" class="btn btn-secondary">
+                        Подробнее
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
