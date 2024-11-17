@@ -16,6 +16,10 @@
     <ProjectReference Include="..\UniCabinet.Infrastructure\UniCabinet.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Department\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>disable</Nullable>
