@@ -22,5 +22,11 @@ namespace UniCabinet.Web.Controllers
 
             return View(disciplineVMs);
         }
+        public async Task<IActionResult> GetDepartmentUsersAsync([FromServices] GetUsersByDepartmentIdUseCase getUsersByDepartmentIdUseCase)
+        {
+            int departmentId = 1;
+            var result = await getUsersByDepartmentIdUseCase.ExecuteAsync(departmentId);
+            return Json(result);
+        }
     }
 }
