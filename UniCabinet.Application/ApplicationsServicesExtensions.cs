@@ -50,7 +50,7 @@ namespace UniCabinet.Infrastructure
             services.AddTransient<UpdateUserGroupUseCase>();
             services.AddTransient<GetUserDetailModalUseCase>();
             services.AddTransient<UpdateUserDetailsUseCase>();
-
+            services.AddTransient<GetDisciplineDetailUseCase>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             try
             {

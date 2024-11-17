@@ -9,5 +9,7 @@ namespace UniCabinet.Application.Interfaces.Repository
         List<DisciplineDetailDTO> GetAllDisciplineDetails();
         Task<DisciplineDetailDTO> GetDisciplineDetailByIdAsync(int id);
         void UpdateDisciplineDetail(DisciplineDetailDTO disciplineDetailDTO);
+        Task<DisciplineDetailDTO> GetDetailByUserAndDisciplineAsync(string userId, int disciplineId);
+
     }
 }
