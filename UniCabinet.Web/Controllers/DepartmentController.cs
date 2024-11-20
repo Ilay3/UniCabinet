@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Application.UseCases.DepartmentUseCase;
 using UniCabinet.Application.UseCases.DisciplineUseCase;
 using UniCabinet.Core.Models.ViewModel.Departmet;
 using UniCabinet.Core.Models.ViewModel.Discipline;
+using UniCabinet.Core.Models.ViewModel.User;
 
 namespace UniCabinet.Web.Controllers
 {
@@ -20,15 +22,9 @@ namespace UniCabinet.Web.Controllers
         {
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             var result = await getDisciplinesByHeadUseCase.ExecuteAsync(userId);
-            var disciplineVMs = _mapper.Map<List<DisciplineListVM>>(result);
+            var disciplineVMs = _mapper.Map<DisciplineListVM>(result);
 
             return View(disciplineVMs);
-        }
-        public async Task<IActionResult> GetDepartmentUsersAsync([FromServices] GetUsersByDepartmentIdUseCase getUsersByDepartmentIdUseCase)
-        {
-            int departmentId = 1;
-            var result = await getUsersByDepartmentIdUseCase.ExecuteAsync(departmentId);
-            return Json(result);
         }
     }
 }

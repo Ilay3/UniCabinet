@@ -12,6 +12,7 @@ public class DepartmentProfile : Profile
     public DepartmentProfile()
     {
         CreateMap<DepartmentEntity, DepartmentDTO>().ReverseMap();
-        CreateMap<DepartmentDTO, DepartmantVM>().ReverseMap();
+        CreateMap<DepartmentDTO, GetDepartmantAndUserVM>().ReverseMap();
+        CreateMap<GetDepartmantAndUserDTO, GetDepartmantAndUserVM>().ReverseMap();
     }
 }
