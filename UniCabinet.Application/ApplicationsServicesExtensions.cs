@@ -4,6 +4,7 @@ using System.Reflection;
 using UniCabinet.Application.BackgroundServices;
 using UniCabinet.Application.UseCases;
 using UniCabinet.Application.UseCases.AdminUseCase;
+using UniCabinet.Application.UseCases.DepartmentUseCase;
 using UniCabinet.Application.UseCases.DisciplineUseCase;
 using UniCabinet.Application.UseCases.GroupUseCase;
 using UniCabinet.Application.UseCases.LectureUseCase;
@@ -50,7 +51,14 @@ namespace UniCabinet.Infrastructure
             services.AddTransient<UpdateUserGroupUseCase>();
             services.AddTransient<GetUserDetailModalUseCase>();
             services.AddTransient<UpdateUserDetailsUseCase>();
+
             services.AddTransient<GetDisciplineDetailUseCase>();
+
+
+            services.AddTransient<GetDisciplinesByHeadUseCase>();
+            services.AddTransient<GetUsersByDepartmentIdUseCase>();
+
+
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             try
             {
