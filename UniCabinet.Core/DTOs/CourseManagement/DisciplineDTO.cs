@@ -6,7 +6,7 @@
 
         public string Name { get; set; }
 
-        public int? SpecialtyId { get; set; }
+        public string SpecialtyName { get; set; }
 
         public string Description { get; set; }
     }

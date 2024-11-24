@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.DTOs.CourseManagement;
 using UniCabinet.Domain.Entities;
@@ -12,10 +10,12 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
     public class DisciplineRepositoryImpl : IDisciplineRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public DisciplineRepositoryImpl(ApplicationDbContext context)
+        public DisciplineRepositoryImpl(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<DisciplineDTO> GetDisciplineByIdAsync(int id)
@@ -75,6 +75,23 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
 
             _context.Disciplines.Update(disciplineEntity);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<DisciplineDTO>> GetDisciplinesBySpecialtyIdAsync(int? specialtyId)
+        {
+            if (specialtyId == null)
+                return new List<DisciplineDTO>();
+
+            return await _context.Disciplines
+                    .Where(d => d.SpecialtyId == specialtyId)
+                    .Select(d => new DisciplineDTO
+                    {
+                        Id = d.Id,
+                        Name = d.Name,
+                        Description = d.Description,
+                        SpecialtyName = d.Specialty.Name
+                    })
+                    .ToListAsync();
         }
     }
 }

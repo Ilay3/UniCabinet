@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using UniCabinet.Application.UseCases.DisciplineUseCase;
 using UniCabinet.Core.DTOs.CourseManagement;
 using UniCabinet.Core.Models.ViewModel.Discipline;
@@ -18,7 +19,9 @@ namespace UniCabinet.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> DisciplinesListAsync([FromServices] GetDisciplinesListUseCase getDisciplinesListUseCase)
         {
-            var result = await getDisciplinesListUseCase.ExecuteAsync();
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            var result = await getDisciplinesListUseCase.ExecuteAsync(userId);
             var disciplineVMs = _mapper.Map<List<DisciplineListVM>>(result);
 
             return View(disciplineVMs);
@@ -78,6 +81,13 @@ namespace UniCabinet.Web.Controllers
             }
 
             return PartialView("_DisciplineEditModal", viewModel);
+        }
+        public async Task<IActionResult> GetDisciplineDetailModalAsync([FromServices] GetDisciplineDetailUseCase getDispiclineDetailUseCase)
+        {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            int disciplineId = 1;
+           var result = await getDispiclineDetailUseCase.ExecuteAsync(userId, disciplineId);
+            return Json(result);
         }
     }
 }

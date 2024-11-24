@@ -52,8 +52,12 @@ namespace UniCabinet.Infrastructure
             services.AddTransient<GetUserDetailModalUseCase>();
             services.AddTransient<UpdateUserDetailsUseCase>();
 
+            services.AddTransient<GetDisciplineDetailUseCase>();
+
+
             services.AddTransient<GetDisciplinesByHeadUseCase>();
             services.AddTransient<GetUsersByDepartmentIdUseCase>();
+
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             try
