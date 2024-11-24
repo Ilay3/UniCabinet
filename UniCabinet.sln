@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniCabinet.Web", "UniCabine
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniCabinet.Application", "UniCabinet.Application\UniCabinet.Application.csproj", "{D13196CC-32E5-4D2B-B906-E8B1AFED8868}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniCabinet.Core", "UniCabinet.Core\UniCabinet.Core.csproj", "{34EEB7AC-46AA-4882-B9F0-89EE7EC976C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniCabinet.Core", "UniCabinet.Core\UniCabinet.Core.csproj", "{34EEB7AC-46AA-4882-B9F0-89EE7EC976C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -29,6 +29,13 @@
                                 Изменить группу
                             </button>
                         }
+                        @if (user.Roles.Contains("Student") && user.Roles.Contains("Verified"))
+                        {
+                            <button type="button" class="btn btn-primary btn-sm"
+                                    onclick="openModal('@Url.Action("GroupEditModal", "Admin", new { userId = user.Id })', 'groupModal')">
+                                Изменить группу
+                            </button>
+                        }
                         else
                         {
                             <span class="text-muted">Изменение группы недоступно</span>

@@ -1,0 +1,47 @@
+﻿@model UniCabinet.Core.Models.ViewModel.Departmet.GetDepartmantAndUserVM
+
+@{
+    ViewData["Title"] = "Список дисциплин";
+}
+
+<h1>Список дисциплин</h1>
+
+<form method="get" id="teacherFilterForm" action="@Url.Action("GetDepartmentUsersAsync", "Department")">
+    <div class="form-group">
+        <label for="teacher">Выберите преподавателя</label>
+        <select id="teacher" name="teacherId" class="form-control">
+            <option value="">Все преподаватели</option>
+            @foreach (var teacher in Model.User)
+            {
+                <option value="@teacher.Id">@teacher.FirstName @teacher.LastName</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Фильтровать</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название дисциплины</th>
+            <th>Описание</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var discipline in Model.Discipline)
+        {
+            <tr>
+                <td>@discipline.Name</td>
+                <td>@discipline.Description</td>
+                <td>
+                    <a href="@Url.Action("DisciplineDetail", "Department", new { id = discipline.Id })" class="btn btn-info">Подробнее</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="~/js/filterDiscipline.js"></script>
+}

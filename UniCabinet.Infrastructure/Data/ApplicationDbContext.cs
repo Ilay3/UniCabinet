@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using UniCabinet.Domain.Entities;
+using UniCabinet.Domain.Models;
 using UniCabinet.Infrastructure.Data.EntityConfigurations;
 
 namespace UniCabinet.Infrastructure.Data
@@ -27,6 +28,7 @@ namespace UniCabinet.Infrastructure.Data
         public DbSet<ExamResultEntity> ExamResults { get; set; }
         public DbSet<StudentProgressEntity> StudentProgresses { get; set; }
         public DbSet<SpecialtyEntity> Specialties { get; set; }
+        public DbSet<DepartmentEntity> Departments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -54,6 +56,7 @@ namespace UniCabinet.Infrastructure.Data
             builder.ApplyConfiguration(new PracticalConfiguration());
             builder.ApplyConfiguration(new ExamConfiguration());
             builder.ApplyConfiguration(new StudentProgressConfiguration());
+            builder.ApplyConfiguration(new DepartmentConfiguration());
 
             builder.Entity<CourseEntity>().HasData(
                 new CourseEntity {Id = 1, Number = 1 },
