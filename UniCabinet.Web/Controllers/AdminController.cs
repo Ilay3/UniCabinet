@@ -8,6 +8,8 @@ using UniCabinet.Core.Models.ViewModel.User;
 using UniCabinet.Core.Models.ViewModel;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Core.DTOs.UserManagement;
+using UniCabinet.Application.UseCases.DepartmentUseCase;
+using UniCabinet.Core.Models.ViewModel.Departmet;
 
 public class AdminController : Controller
 {
@@ -176,4 +178,13 @@ public class AdminController : Controller
 
         return RedirectToAction("VerifiedUsers");
     }
+
+    public async Task<IActionResult> GetDepatrmentData([FromServices] GetDepartmnetDataUseCase getDepartmnetDataUseCase)
+    {
+        var result = await getDepartmnetDataUseCase.ExecutreAsync();
+
+        var viewModel = _mapper.Map<List<DepartmantVM>>(result);
+        return PartialView("_SpecializationAndDepartmentModal",viewModel);
+    }
+
 }

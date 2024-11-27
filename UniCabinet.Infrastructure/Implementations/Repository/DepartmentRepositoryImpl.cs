@@ -20,10 +20,10 @@ public class DepartmentRepositoryImpl : IDepartmentRepository
         _mapper = mapper;
     }
 
-    public async Task<DepartmentDTO> GetAllDepartment()
+    public async Task<List<DepartmentDTO>> GetAllDepartment()
     {
         var departmentEntity = await _context.Departments.ToListAsync();
-        return _mapper.Map<DepartmentDTO>(departmentEntity);
+        return _mapper.Map<List<DepartmentDTO>>(departmentEntity);
 
     }
     public async Task<DepartmentDTO> GetDepartmentByUserIdAsync(string userId)
