@@ -187,4 +187,22 @@ public class AdminController : Controller
         return PartialView("_SpecializationAndDepartmentModal",viewModel);
     }
 
+    [HttpPost]
+    public async Task<IActionResult> UpdateSpecAndDep(string UserId, int DepartmentId, int SpecialytyId)
+    {
+        if (!ModelState.IsValid)
+        {
+            return PartialView("_UserDetailModal", model);
+        }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> SpecAndDepEditModal([FromServices] SpecAndDepUseCase specAndDepUseCase , string UserId)
+    {
+        var rezult = await specAndDepUseCase.ExecuteAsync(UserId);
+        var viewModel = _mapper.Map<SpecAndDepVM>(rezult);
+
+        return PartialView("_SpecializationAndDepartmentModal", viewModel);
+
+    }
 }

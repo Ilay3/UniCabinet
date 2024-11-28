@@ -1,4 +1,4 @@
-﻿@model UniCabinet.Core.Models.ViewModel.User.UserGroupVM
+﻿@model UniCabinet.Core.Models.ViewModel.Departmet.SpecAndDepVM
 
 <div class="modal fade" id="groupModal" tabindex="-1" role="dialog">
     <div class="modal-dialog">
@@ -10,24 +10,24 @@
             </div>
             <!-- Тело модального окна -->
             <div class="modal-body">
-                <form asp-action="UpdateUserGroup">
+                <form asp-action="UpdateSpecAndDep">
                     <input type="hidden" name="UserId" value="@Model.UserId" />
                     <div class="mb-3">
                         <label for="groupSelect">Выберите новую Кафедру:</label>
-                        <select name="GroupId" class="form-select">
-                            @foreach (var group in Model.AvailableGroups)
+                        <select name="DepartmentId" class="form-select">
+                            @foreach (var departmet in Model.DepartmetVM)
                             {
-                                <option value="@group.Value">@group.Text</option>
+                                <option value="@departmet.Id">@departmet.DepartmentName</option>
                             }
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label for="groupSelect">Выберите новую Специальность:</label>
-                        <select name="GroupId" class="form-select">
-                            @foreach (var group in Model.AvailableGroups)
+                        <select name="SpecializationId" class="form-select">
+                            @foreach (var specialization in Model.SpecializationVM)
                             {
-                                <option value="@group.Value">@group.Text</option>
+                                <option value="@specialization.Id">@specialization.Name</option>
                             }
                         </select>
                     </div>

@@ -9,18 +9,18 @@ using UniCabinet.Infrastructure.Data;
 
 #nullable disable
 
-namespace UniCabinet.Infrastructure.Data.Migrations
+namespace UniCabinet.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241018104314_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241128172904_DB")]
+    partial class DB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -162,7 +162,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Course", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.CourseEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -205,31 +205,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Discipline", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("SpecialtyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SpecialtyId");
-
-                    b.ToTable("Disciplines");
-                });
-
-            modelBuilder.Entity("UniCabinet.Domain.Entities.DisciplineDetail", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.DisciplineDetailEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -291,7 +267,36 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.ToTable("DisciplineDetails");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Exam", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.DisciplineEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SpecialtyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("SpecialtyId");
+
+                    b.ToTable("Disciplines");
+                });
+
+            modelBuilder.Entity("UniCabinet.Domain.Entities.ExamEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -312,7 +317,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.ToTable("Exams");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.ExamResult", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.ExamResultEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -344,7 +349,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.ToTable("ExamResults");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Group", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.GroupEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -373,7 +378,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Lecture", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.LectureEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -390,6 +395,9 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Property<decimal>("Number")
                         .HasColumnType("decimal(18, 2)");
 
+                    b.Property<decimal>("PointsCount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DisciplineDetailId");
@@ -397,7 +405,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.ToTable("Lectures");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.LectureVisit", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.LectureVisitEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -426,7 +434,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.ToTable("LectureVisits");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Practical", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.PracticalEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -450,7 +458,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.ToTable("Practicals");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.PracticalResult", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.PracticalResultEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -479,7 +487,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.ToTable("PracticalResults");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Semester", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.SemesterEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -527,7 +535,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Specialty", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.SpecialtyEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -543,7 +551,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.ToTable("Specialties");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.StudentProgress", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.StudentProgressEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -581,7 +589,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.ToTable("StudentProgresses");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.User", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.UserEntity", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -595,6 +603,9 @@ namespace UniCabinet.Infrastructure.Data.Migrations
 
                     b.Property<DateTime?>("DateBirthday")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -644,6 +655,8 @@ namespace UniCabinet.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DepartmentId");
+
                     b.HasIndex("GroupId");
 
                     b.HasIndex("NormalizedEmail")
@@ -659,6 +672,22 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("UniCabinet.Domain.Models.DepartmentEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("DepartmentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Departments");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -670,7 +699,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.User", null)
+                    b.HasOne("UniCabinet.Domain.Entities.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -679,7 +708,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.User", null)
+                    b.HasOne("UniCabinet.Domain.Entities.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -694,7 +723,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniCabinet.Domain.Entities.User", null)
+                    b.HasOne("UniCabinet.Domain.Entities.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -703,50 +732,40 @@ namespace UniCabinet.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.User", null)
+                    b.HasOne("UniCabinet.Domain.Entities.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Discipline", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.DisciplineDetailEntity", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.Specialty", "Specialty")
-                        .WithMany()
-                        .HasForeignKey("SpecialtyId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Specialty");
-                });
-
-            modelBuilder.Entity("UniCabinet.Domain.Entities.DisciplineDetail", b =>
-                {
-                    b.HasOne("UniCabinet.Domain.Entities.Course", "Course")
+                    b.HasOne("UniCabinet.Domain.Entities.CourseEntity", "Course")
                         .WithMany("DisciplineDetails")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniCabinet.Domain.Entities.Discipline", "Discipline")
+                    b.HasOne("UniCabinet.Domain.Entities.DisciplineEntity", "Discipline")
                         .WithMany("DisciplineDetails")
                         .HasForeignKey("DisciplineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniCabinet.Domain.Entities.Group", "Group")
+                    b.HasOne("UniCabinet.Domain.Entities.GroupEntity", "Group")
                         .WithMany("DisciplineDetails")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniCabinet.Domain.Entities.Semester", "Semester")
+                    b.HasOne("UniCabinet.Domain.Entities.SemesterEntity", "Semester")
                         .WithMany("DisciplineDetials")
                         .HasForeignKey("SemesterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniCabinet.Domain.Entities.User", "Teacher")
+                    b.HasOne("UniCabinet.Domain.Entities.UserEntity", "Teacher")
                         .WithMany()
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -762,9 +781,26 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Exam", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.DisciplineEntity", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.DisciplineDetail", "DisciplineDetails")
+                    b.HasOne("UniCabinet.Domain.Models.DepartmentEntity", "Department")
+                        .WithMany("Discipline")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("UniCabinet.Domain.Entities.SpecialtyEntity", "Specialty")
+                        .WithMany()
+                        .HasForeignKey("SpecialtyId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Specialty");
+                });
+
+            modelBuilder.Entity("UniCabinet.Domain.Entities.ExamEntity", b =>
+                {
+                    b.HasOne("UniCabinet.Domain.Entities.DisciplineDetailEntity", "DisciplineDetails")
                         .WithMany("Exams")
                         .HasForeignKey("DisciplineDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -773,15 +809,15 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Navigation("DisciplineDetails");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.ExamResult", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.ExamResultEntity", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.Exam", "Exam")
+                    b.HasOne("UniCabinet.Domain.Entities.ExamEntity", "Exam")
                         .WithMany("ExamResults")
                         .HasForeignKey("ExamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniCabinet.Domain.Entities.User", "Student")
+                    b.HasOne("UniCabinet.Domain.Entities.UserEntity", "Student")
                         .WithMany("ExamResults")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -791,15 +827,15 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Group", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.GroupEntity", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.Course", "Course")
+                    b.HasOne("UniCabinet.Domain.Entities.CourseEntity", "Course")
                         .WithMany("Groups")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("UniCabinet.Domain.Entities.Semester", "Semester")
+                    b.HasOne("UniCabinet.Domain.Entities.SemesterEntity", "Semester")
                         .WithMany("Groups")
                         .HasForeignKey("SemesterId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -810,9 +846,9 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Navigation("Semester");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Lecture", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.LectureEntity", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.DisciplineDetail", "DisciplineDetails")
+                    b.HasOne("UniCabinet.Domain.Entities.DisciplineDetailEntity", "DisciplineDetails")
                         .WithMany("Lectures")
                         .HasForeignKey("DisciplineDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -821,15 +857,15 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Navigation("DisciplineDetails");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.LectureVisit", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.LectureVisitEntity", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.Lecture", "Lecture")
+                    b.HasOne("UniCabinet.Domain.Entities.LectureEntity", "Lecture")
                         .WithMany("LectureVisits")
                         .HasForeignKey("LectureId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniCabinet.Domain.Entities.User", "Student")
+                    b.HasOne("UniCabinet.Domain.Entities.UserEntity", "Student")
                         .WithMany("LectureVisits")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -839,9 +875,9 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Practical", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.PracticalEntity", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.DisciplineDetail", "DisciplineDetails")
+                    b.HasOne("UniCabinet.Domain.Entities.DisciplineDetailEntity", "DisciplineDetails")
                         .WithMany("Practicals")
                         .HasForeignKey("DisciplineDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -850,15 +886,15 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Navigation("DisciplineDetails");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.PracticalResult", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.PracticalResultEntity", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.Practical", "Practical")
+                    b.HasOne("UniCabinet.Domain.Entities.PracticalEntity", "Practical")
                         .WithMany("PracticalResults")
                         .HasForeignKey("PracticalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniCabinet.Domain.Entities.User", "Student")
+                    b.HasOne("UniCabinet.Domain.Entities.UserEntity", "Student")
                         .WithMany("PracticalResults")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -868,15 +904,15 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.StudentProgress", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.StudentProgressEntity", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.DisciplineDetail", "DisciplineDetails")
+                    b.HasOne("UniCabinet.Domain.Entities.DisciplineDetailEntity", "DisciplineDetails")
                         .WithMany("StudentProgresses")
                         .HasForeignKey("DisciplineDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniCabinet.Domain.Entities.User", "Student")
+                    b.HasOne("UniCabinet.Domain.Entities.UserEntity", "Student")
                         .WithMany("StudentProgresses")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -886,34 +922,36 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.User", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.UserEntity", b =>
                 {
-                    b.HasOne("UniCabinet.Domain.Entities.Group", "Group")
+                    b.HasOne("UniCabinet.Domain.Models.DepartmentEntity", "DepartmentEntity")
+                        .WithMany("User")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("UniCabinet.Domain.Entities.GroupEntity", "Group")
                         .WithMany("Users")
                         .HasForeignKey("GroupId");
 
-                    b.HasOne("UniCabinet.Domain.Entities.Specialty", "Specialty")
+                    b.HasOne("UniCabinet.Domain.Entities.SpecialtyEntity", "Specialty")
                         .WithMany("Teachers")
                         .HasForeignKey("SpecialtyId");
+
+                    b.Navigation("DepartmentEntity");
 
                     b.Navigation("Group");
 
                     b.Navigation("Specialty");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Course", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.CourseEntity", b =>
                 {
                     b.Navigation("DisciplineDetails");
 
                     b.Navigation("Groups");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Discipline", b =>
-                {
-                    b.Navigation("DisciplineDetails");
-                });
-
-            modelBuilder.Entity("UniCabinet.Domain.Entities.DisciplineDetail", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.DisciplineDetailEntity", b =>
                 {
                     b.Navigation("Exams");
 
@@ -924,41 +962,46 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Navigation("StudentProgresses");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Exam", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.DisciplineEntity", b =>
+                {
+                    b.Navigation("DisciplineDetails");
+                });
+
+            modelBuilder.Entity("UniCabinet.Domain.Entities.ExamEntity", b =>
                 {
                     b.Navigation("ExamResults");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Group", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.GroupEntity", b =>
                 {
                     b.Navigation("DisciplineDetails");
 
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Lecture", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.LectureEntity", b =>
                 {
                     b.Navigation("LectureVisits");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Practical", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.PracticalEntity", b =>
                 {
                     b.Navigation("PracticalResults");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Semester", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.SemesterEntity", b =>
                 {
                     b.Navigation("DisciplineDetials");
 
                     b.Navigation("Groups");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.Specialty", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.SpecialtyEntity", b =>
                 {
                     b.Navigation("Teachers");
                 });
 
-            modelBuilder.Entity("UniCabinet.Domain.Entities.User", b =>
+            modelBuilder.Entity("UniCabinet.Domain.Entities.UserEntity", b =>
                 {
                     b.Navigation("ExamResults");
 
@@ -967,6 +1010,13 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Navigation("PracticalResults");
 
                     b.Navigation("StudentProgresses");
+                });
+
+            modelBuilder.Entity("UniCabinet.Domain.Models.DepartmentEntity", b =>
+                {
+                    b.Navigation("Discipline");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

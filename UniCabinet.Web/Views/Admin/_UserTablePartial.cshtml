@@ -29,10 +29,10 @@
                                 Изменить группу
                             </button>
                         }
-                        @if (user.Roles.Contains("Student") && user.Roles.Contains("Verified"))
+                        @if (user.Roles.Contains("Teacher") && user.Roles.Contains("Verified"))
                         {
                             <button type="button" class="btn btn-primary btn-sm"
-                                    onclick="openModal('@Url.Action("GroupEditModal", "Admin", new { userId = user.Id })', 'groupModal')">
+                                    onclick="openModal('@Url.Action("SpecAndDepEditModal", "Admin", new { userId = user.Id })', 'groupModal')">
                                 Изменить группу
                             </button>
                         }
