@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using UniCabinet.Application.Interfaces;
 using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.DTOs.DepartmentManagmnet;
 using UniCabinet.Core.DTOs.UserManagement;
@@ -14,10 +15,14 @@ public class DepartmentRepositoryImpl : IDepartmentRepository
 {
     private readonly ApplicationDbContext _context;
     private readonly IMapper _mapper;
-    public DepartmentRepositoryImpl(ApplicationDbContext context, IMapper mapper)
+    private readonly IUserService _userService;
+
+    public DepartmentRepositoryImpl(ApplicationDbContext context, IMapper mapper, IUserService userService)
+
     {
         _context = context;
         _mapper = mapper;
+        _userService = userService;
     }
 
     public async Task<List<DepartmentDTO>> GetAllDepartment()
@@ -28,9 +33,11 @@ public class DepartmentRepositoryImpl : IDepartmentRepository
     }
     public async Task<DepartmentDTO> GetDepartmentByUserIdAsync(string userId)
     {
+        var user = await _userService.GetUserByIdAsync(userId);
+
         var departmentEntity = await _context.Departments
-            .Include(d => d.Discipline)
-            .FirstOrDefaultAsync(d => d.UserId == userId);
+            .Include(d=>d.Discipline)
+            .FirstOrDefaultAsync(d=>d.Id == user.DepartmentId);
 
         return _mapper.Map<DepartmentDTO>(departmentEntity);
     }

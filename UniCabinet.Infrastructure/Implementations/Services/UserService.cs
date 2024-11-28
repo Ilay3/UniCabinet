@@ -84,29 +84,6 @@ namespace UniCabinet.Infrastructure.Implementations.Services
             return users;
         }
 
-        public async Task<UserDTO> GetUserDetailsAsync(string userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return null;
-            }
-
-            var roles = await _userManager.GetRolesAsync(user);
-            var UserDTO = new UserDTO
-            {
-                Id = user.Id,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Patronymic = user.Patronymic,
-                DateBirthday = user.DateBirthday,
-                Roles = roles.ToList(),
-                GroupName = user.Group != null ? user.Group.Name : "Без группы"
-            };
-
-            return UserDTO;
-        }
 
         public async Task UpdateUserDetailsAsync(UserDTO model)
         {
@@ -145,7 +122,8 @@ namespace UniCabinet.Infrastructure.Implementations.Services
                 DateBirthday = user.DateBirthday,
                 Roles = roles.ToList(),
                 GroupName = user.Group != null ? user.Group.Name : "Без группы",
-                GroupId = user.GroupId
+                GroupId = user.GroupId,
+                DepartmentId = user.DepartmentId
             };
         }
 

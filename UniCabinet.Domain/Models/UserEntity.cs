@@ -40,6 +40,8 @@ public class UserEntity : IdentityUser<string>
     public int? SpecialtyId { get; set; }
     public SpecialtyEntity Specialty { get; set; }
 
+    public int? DepartmentId { get; set; }
+
     // Навигационные свойства
     public DepartmentEntity DepartmentEntity { get; set; }
     public ICollection<LectureVisitEntity> LectureVisits { get; set; }
