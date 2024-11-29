@@ -12,6 +12,7 @@ namespace UniCabinet.Application.Interfaces
         Task<IEnumerable<UserEntity>> SearchUsersByNameOrEmailAndRoleAsync(string query, string role);
         Task UpdateUserDetailsAsync(UserDTO model);
         Task<UserDTO> GetUserByIdAsync(string userId);
+        Task UpdateUserSpecAndDepAsync(UserDTO userDto);
 
     }
 }

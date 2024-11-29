@@ -29,7 +29,7 @@ namespace UniCabinet.Application.UseCases.AdminUseCase
             user.DepartmentId = DepartmentId;
             user.SpecializationId = SpecialytyId;
 
-            await _userService.UpdateUserDetailsAsync(user);
+            await _userService.UpdateUserSpecAndDepAsync(user);
         }
     }
 }

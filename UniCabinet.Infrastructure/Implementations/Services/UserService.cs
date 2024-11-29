@@ -126,6 +126,20 @@ namespace UniCabinet.Infrastructure.Implementations.Services
                 DepartmentId = user.DepartmentId
             };
         }
+        public async Task UpdateUserSpecAndDepAsync(UserDTO userDto)
+        {
+            var userEntity = await _userRepository.GetUserByIdAsync(userDto.Id);
+            if (userEntity == null)
+            {
+                throw new InvalidOperationException("Пользователь не найден.");
+            }
+
+            userEntity.DepartmentId = userDto.DepartmentId;
+            userEntity.SpecialtyId = userDto.SpecializationId;
+
+            await _userRepository.UpdateUserAsync(userEntity);
+        }
+
 
     }
 }

@@ -26,6 +26,7 @@ namespace UniCabinet.Infrastructure
             services.AddTransient<GetLectureAttendanceUseCase>();
             services.AddTransient<SaveLectureAttendanceUseCase>();
             services.AddTransient<SpecAndDepUseCase>();
+            services.AddTransient<UpdateSpecAndDepUseCase>();
 
             services.AddTransient<UpdateCoursesUseCase>();
             services.AddTransient<UpdateCurrentSemesterAsyncUseCase>();

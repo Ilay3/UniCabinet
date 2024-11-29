@@ -188,13 +188,31 @@ public class AdminController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateSpecAndDep(string UserId, int DepartmentId, int SpecialytyId)
+    public async Task<IActionResult> UpdateSpecAndDep(
+     string UserId,
+     int DepartmentId,
+     int SpecializationId,
+     [FromServices] UpdateSpecAndDepUseCase updateSpecAndDepUseCase)
     {
         if (!ModelState.IsValid)
         {
-            return PartialView("_UserDetailModal", model);
+
+            return PartialView("_SpecializationAndDepartmentModal");
+        }
+
+        try
+        {
+            await updateSpecAndDepUseCase.ExecuteAsync(UserId, DepartmentId, SpecializationId);
+
+            return RedirectToAction("VerifiedUsers");
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError("", "Произошла ошибка при обновлении данных.");
+            return PartialView("_SpecializationAndDepartmentModal");
         }
     }
+
 
     [HttpGet]
     public async Task<IActionResult> SpecAndDepEditModal([FromServices] SpecAndDepUseCase specAndDepUseCase , string UserId)
