@@ -79,4 +79,15 @@ public class DepartmentRepositoryImpl : IDepartmentRepository
 
         return userDTOs;
     }
+
+    public async Task<List<DepartmentEntity>> GetDepartmentsWithUsersAsync()
+    {
+        var departments = await _context.Departments
+            .Include(d => d.User)
+            .Include(d => d.Discipline)
+                .ThenInclude(di => di.Specialty)
+            .ToListAsync();
+
+        return departments;
+    }
 }
