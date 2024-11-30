@@ -1,62 +1,86 @@
 ﻿@model UniCabinet.Core.Models.ViewModel.StudentGroupVM
 
-<div class="table-responsive">
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>Email</th>
-                <th>Полное Имя</th>
-                <th>Роли</th>
-                <th>Текущая Группа</th>
-                <th>Изменить Группу</th>
-                <th>Изменить Роль</th>
-                <th>Информация</th>
-            </tr>
-        </thead>
-        <tbody id="userTableBody">
-            @foreach (var user in Model.Users)
-            {
-                <tr data-user-id="@user.Id" class="user-row">
-                    <td>@user.Email</td>
-                    <td>@user.FirstName @user.LastName @user.Patronymic</td>
-                    <td>@string.Join(", ", user.Roles)</td>
-                    <td>@user.GroupName</td>
-                    <td>
-                        @if (user.Roles.Contains("Student") && user.Roles.Contains("Verified"))
-                        {
-                            <button type="button" class="btn btn-primary btn-sm"
-                                    onclick="openModal('@Url.Action("GroupEditModal", "Admin", new { userId = user.Id })', 'groupModal')">
-                                Изменить группу
-                            </button>
-                        }
-                        @if (user.Roles.Contains("Teacher") && user.Roles.Contains("Verified"))
-                        {
-                            <button type="button" class="btn btn-primary btn-sm"
-                                    onclick="openModal('@Url.Action("SpecAndDepEditModal", "Admin", new { userId = user.Id })', 'groupModal')">
-                                Изменить группу
-                            </button>
-                        }
-                        else
-                        {
-                            <span class="text-muted">Изменение группы недоступно</span>
-                        }
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-secondary btn-sm"
-                                onclick="openModal('@Url.Action("RoleEditModal", "Admin", new { userId = user.Id })', 'roleModal')">
-                            Изменить роль
-                        </button>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-sm"
-                                onclick="openModal('@Url.Action("UserDetailModal", "Admin", new { userId = user.Id })', 'userDetailModal')">
-                            Подробнее
-                        </button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+<div class="container mt-4">
+    <h2 class="mb-4">Список пользователей</h2>
 
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered align-middle" id="userTable">
+            <thead class="table-primary">
+                <tr>
+                    <th scope="col">ФИО</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Роли</th>
+                    <th scope="col">Группа</th>
+                    <th scope="col">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                @if (user.Roles.Contains("Admin"))
+                                {
+                                    <span class="badge bg-danger me-2">A</span>
+                                }
+                                else if (user.Roles.Contains("Teacher"))
+                                {
+                                    <span class="badge bg-success me-2">T</span>
+                                }
+                                else if (user.Roles.Contains("Student"))
+                                {
+                                    <span class="badge bg-info me-2">S</span>
+                                }
+                                @user.LastName @user.FirstName @user.Patronymic
+                            </div>
+                        </td>
+                        <td>@user.Email</td>
+                        <td>@string.Join(", ", user.Roles)</td>
+                        <td>@(string.IsNullOrEmpty(user.GroupName) ? "Не назначена" : user.GroupName)</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                @if (user.Roles.Contains("Verified"))
+                                {
+                                    @if (user.Roles.Contains("Student"))
+                                    {
+                                        <button type="button" class="btn btn-success btn-sm me-1"
+                                                onclick="openModal('@Url.Action("GroupEditModal", "Admin", new { userId = user.Id })', 'groupModal')">
+                                            <i class="bi bi-pencil-square"></i> Группа
+                                        </button>
+                                    }
+                                    else if (user.Roles.Contains("Teacher"))
+                                    {
+                                        <button type="button" class="btn btn-success btn-sm me-1"
+                                                onclick="openModal('@Url.Action("SpecAndDepEditModal", "Admin", new { userId = user.Id })', 'groupModal')">
+                                            <i class="bi bi-pencil-square"></i> Кафедра и спец.
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Изменение недоступно</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Не верифицирован</span>
+                                }
+
+                                <button type="button" class="btn btn-secondary btn-sm me-1"
+                                        onclick="openModal('@Url.Action("RoleEditModal", "Admin", new { userId = user.Id })', 'roleModal')">
+                                    <i class="bi bi-shield-lock"></i> Роль
+                                </button>
+
+                                <button type="button" class="btn btn-info btn-sm"
+                                        onclick="openModal('@Url.Action("UserDetailModal", "Admin", new { userId = user.Id })', 'userDetailModal')">
+                                    <i class="bi bi-info-circle"></i> Инфо
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 @await Html.PartialAsync("_Pagination", Model.Pagination)

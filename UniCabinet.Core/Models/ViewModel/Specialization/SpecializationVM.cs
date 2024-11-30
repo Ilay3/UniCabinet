@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using UniCabinet.Core.Models.ViewModel.User;
 
 namespace UniCabinet.Core.Models.ViewModel.Specialization
 {
@@ -10,5 +6,6 @@ namespace UniCabinet.Core.Models.ViewModel.Specialization
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public List<UserVM>Teacher { get; set; }
     }
 }

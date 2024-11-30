@@ -10,6 +10,8 @@ using UniCabinet.Domain.Entities;
 using UniCabinet.Core.DTOs.UserManagement;
 using UniCabinet.Application.UseCases.DepartmentUseCase;
 using UniCabinet.Core.Models.ViewModel.Departmet;
+using UniCabinet.Core.DTOs.SpecializationManagement;
+using UniCabinet.Core.Models.ViewModel.Specialization;
 
 public class AdminController : Controller
 {
@@ -21,11 +23,11 @@ public class AdminController : Controller
     }
 
     public async Task<IActionResult> VerifiedUsers(
-        [FromServices] GetVerifiedUsersUseCase getVerifiedUsersUseCase,
-        string role,
-        string query = null,
-        int pageNumber = 1,
-        int pageSize = 10)
+     [FromServices] GetVerifiedUsersUseCase getVerifiedUsersUseCase,
+     string role,
+     string query = null,
+     int pageNumber = 1,
+     int pageSize = 10)
     {
         var studentGroupDTO = await getVerifiedUsersUseCase.Execute(role, query, pageNumber, pageSize);
 
@@ -48,6 +50,7 @@ public class AdminController : Controller
 
         return View(studentGroupVM);
     }
+
 
     [HttpGet]
     public async Task<IActionResult> SearchUsers(
@@ -121,7 +124,7 @@ public class AdminController : Controller
         [FromServices] UpdateUserGroupUseCase updateUserGroupUseCase,
         [FromServices] UserManager<UserEntity> userManager)
     {
-      
+
 
         var user = await userManager.FindByIdAsync(model.UserId);
         if (user == null)
@@ -184,7 +187,7 @@ public class AdminController : Controller
         var result = await getDepartmnetDataUseCase.ExecutreAsync();
 
         var viewModel = _mapper.Map<List<DepartmantVM>>(result);
-        return PartialView("_SpecializationAndDepartmentModal",viewModel);
+        return PartialView("_SpecializationAndDepartmentModal", viewModel);
     }
 
     [HttpPost]
@@ -194,7 +197,7 @@ public class AdminController : Controller
      int SpecializationId,
      [FromServices] UpdateSpecAndDepUseCase updateSpecAndDepUseCase)
     {
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid)    
         {
 
             return PartialView("_SpecializationAndDepartmentModal");
@@ -215,7 +218,7 @@ public class AdminController : Controller
 
 
     [HttpGet]
-    public async Task<IActionResult> SpecAndDepEditModal([FromServices] SpecAndDepUseCase specAndDepUseCase , string UserId)
+    public async Task<IActionResult> SpecAndDepEditModal([FromServices] SpecAndDepUseCase specAndDepUseCase, string UserId)
     {
         var rezult = await specAndDepUseCase.ExecuteAsync(UserId);
         var viewModel = _mapper.Map<SpecAndDepVM>(rezult);
@@ -223,4 +226,16 @@ public class AdminController : Controller
         return PartialView("_SpecializationAndDepartmentModal", viewModel);
 
     }
+
+    public async Task<IActionResult> GetDataSpecialization([FromServices] GetTeacherSpecializationUseCase getDataSpecializationUseCase)
+    {
+        var result = await getDataSpecializationUseCase.ExecuteAsync();
+        var viewModel = _mapper.Map<List<SpecializationVM>>(result);
+
+        return View("SpecializationList", viewModel);
+    }
+        
+
 }
+
+

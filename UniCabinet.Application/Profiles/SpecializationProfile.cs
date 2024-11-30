@@ -14,7 +14,8 @@ namespace UniCabinet.Application.Profiles
     {
         public SpecializationProfile()
         {
-            CreateMap<SpecialtyEntity, SpecializationDTO>().ReverseMap();
+            CreateMap<SpecialtyEntity, SpecializationDTO>()
+                        .ForMember(dest => dest.Teacher, opt => opt.MapFrom(src => src.Teachers));
             CreateMap<SpecializationDTO, SpecializationVM>().ReverseMap();
         }
           
