@@ -18,7 +18,6 @@ namespace UniCabinet.Core.Models.ViewModel.User
         public string GroupName { get; set; }
         public int? GroupId { get; set; }
 
-        // Добавляем свойство FullName
         public string FullName => $"{FirstName} {LastName} {Patronymic}".Trim();
     }
 

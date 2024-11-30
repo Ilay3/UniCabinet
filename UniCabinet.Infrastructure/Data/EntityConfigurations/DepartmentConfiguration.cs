@@ -10,9 +10,9 @@ namespace UniCabinet.Infrastructure.Data.EntityConfigurations
         public void Configure(EntityTypeBuilder<DepartmentEntity> builder)
         {
 
-            builder.HasOne(d => d.User)
+            builder.HasMany(d => d.User)
                 .WithOne(user => user.DepartmentEntity)
-                .HasForeignKey<DepartmentEntity>(department => department.UserId)
+                .HasForeignKey(department => department.DepartmentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(d => d.Discipline)

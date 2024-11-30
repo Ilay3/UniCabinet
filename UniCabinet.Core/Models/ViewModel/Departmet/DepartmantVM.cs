@@ -6,7 +6,6 @@ namespace UniCabinet.Core.Models.ViewModel.Departmet
     {
         public int Id { get; set; }
         public string DepartmentName { get; set; }
-        public string UserId { get; set; }
         public List<DisciplineListVM> Discipline { get; set; }
     }
 }

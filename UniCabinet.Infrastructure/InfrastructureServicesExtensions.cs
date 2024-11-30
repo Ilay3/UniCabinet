@@ -22,7 +22,8 @@ namespace UniCabinet.Infrastructure
             services.AddScoped<ILectureRepository, LectureRepositoryImpl>();
             services.AddScoped<ILectureVisitRepository, LectureVisitRepositoryImpl>();
             services.AddScoped<IDisciplineDetailRepository, DisciplineDetailRepositoryImpl>();
-            services.AddTransient<IDepartmentRepository,DepartmentRepositoryImpl>();
+            services.AddTransient<IDepartmentRepository, DepartmentRepositoryImpl>();
+            services.AddTransient<ISpecializationRepository, SpecializationRepositoryImpl>();
 
         }
     }

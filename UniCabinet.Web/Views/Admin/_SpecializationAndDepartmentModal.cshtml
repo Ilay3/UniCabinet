@@ -1,0 +1,43 @@
+﻿@model UniCabinet.Core.Models.ViewModel.Departmet.SpecAndDepVM
+
+<div class="modal fade" id="groupModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Заголовок модального окна -->
+            <div class="modal-header">
+                <h5 class="modal-title">Изменить специальность и кафедру для @Model.FullName</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <!-- Тело модального окна -->
+            <div class="modal-body">
+                <form asp-action="UpdateSpecAndDep">
+                    <input type="hidden" name="UserId" value="@Model.UserId" />
+                    <div class="mb-3">
+                        <label for="groupSelect">Выберите новую Кафедру:</label>
+                        <select name="DepartmentId" class="form-select">
+                            @foreach (var departmet in Model.DepartmetVM)
+                            {
+                                <option value="@departmet.Id">@departmet.DepartmentName</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="groupSelect">Выберите новую Специальность:</label>
+                        <select name="SpecializationId" class="form-select">
+                            @foreach (var specialization in Model.SpecializationVM)
+                            {
+                                <option value="@specialization.Id">@specialization.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <!-- Подвал модального окна -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+﻿@model List<UniCabinet.Core.Models.ViewModel.Departmet.DepartmentsWithUsersVM>
+
+
+<div id="departments">
+    @foreach (var department in Model)
+    {
+        <div class="department">
+            <h3>
+                <a data-toggle="collapse" href="#department-@department.Id" role="button" aria-expanded="false" aria-controls="department-@department.Id">
+                    @department.DepartmentName
+                </a>
+            </h3>
+            <div class="collapse" id="department-@department.Id">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Имя пользователя</th>
+                            <th>Роли</th>
+                            <th>Специальности</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in department.Users)
+                        {
+                            <tr>
+                                <td>@user.FirstName @user.LastName</td>
+                                <td>@string.Join(", ", user.Roles)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

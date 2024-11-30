@@ -6,8 +6,9 @@ namespace UniCabinet.Application.Interfaces.Repository;
 
 public interface IDepartmentRepository
 {
-    Task<DepartmentDTO> GetAllDepartment();
+    Task<List<DepartmentDTO>> GetAllDepartment();
     Task<DepartmentDTO> GetDepartmentByUserIdAsync(string userId);
     Task<List<UserDTO>> GetUsersByDepartmentAsync(int departmentId);
+    Task<List<DepartmentEntity>> GetDepartmentsWithUsersAsync();
 
 }

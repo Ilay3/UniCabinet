@@ -24,6 +24,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
@@ -39,6 +40,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="DisciplineDetail" asp-action="DisciplineDetailsList">Детали дисциплин</a>
                         </li>
+
                     </ul>
                     <ul class="navbar-nav">
                         @if (User?.Identity?.IsAuthenticated == true)
@@ -94,6 +96,7 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
 
     <script src="~/js/loadingIndicator.js"></script>
     <script src="~/js/load-modal.js" defer></script>

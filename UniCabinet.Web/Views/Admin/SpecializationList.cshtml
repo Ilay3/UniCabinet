@@ -1,0 +1,44 @@
+﻿@model List<UniCabinet.Core.Models.ViewModel.Specialization.SpecializationVM>
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Список специальностей и преподавателей</h2>
+
+    <div class="table-responsive shadow-sm">
+        <table class="table table-striped table-hover table-bordered align-middle">
+            <thead class="table-primary text-center">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Название специальности</th>
+                    <th scope="col">Преподаватели</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var specialization in Model)
+                {
+                    <tr>
+                        <td class="text-center fw-bold">@specialization.Id</td>
+                        <td class="fw-semibold">@specialization.Name</td>
+                        <td>
+                            @if (specialization.Teacher != null && specialization.Teacher.Any())
+                            {
+                                <ul class="list-unstyled">
+                                    @foreach (var teacher in specialization.Teacher)
+                                    {
+                                        <li>
+                                            <span class="fw-semibold">@teacher.FirstName @teacher.LastName</span>
+                                            <span class="text-muted">(@teacher.Email)</span>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Преподаватели не назначены</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

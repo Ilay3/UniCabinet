@@ -9,11 +9,11 @@ using UniCabinet.Infrastructure.Data;
 
 #nullable disable
 
-namespace UniCabinet.Infrastructure.Data.Migrations
+namespace UniCabinet.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241116180055_AddTableDepartment")]
-    partial class AddTableDepartment
+    [Migration("20241128172904_DB")]
+    partial class DB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -604,6 +604,9 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("DateBirthday")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -652,6 +655,8 @@ namespace UniCabinet.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DepartmentId");
+
                     b.HasIndex("GroupId");
 
                     b.HasIndex("NormalizedEmail")
@@ -678,14 +683,7 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                     b.Property<string>("DepartmentName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Departments");
                 });
@@ -926,6 +924,11 @@ namespace UniCabinet.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.UserEntity", b =>
                 {
+                    b.HasOne("UniCabinet.Domain.Models.DepartmentEntity", "DepartmentEntity")
+                        .WithMany("User")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("UniCabinet.Domain.Entities.GroupEntity", "Group")
                         .WithMany("Users")
                         .HasForeignKey("GroupId");
@@ -934,19 +937,11 @@ namespace UniCabinet.Infrastructure.Data.Migrations
                         .WithMany("Teachers")
                         .HasForeignKey("SpecialtyId");
 
+                    b.Navigation("DepartmentEntity");
+
                     b.Navigation("Group");
 
                     b.Navigation("Specialty");
-                });
-
-            modelBuilder.Entity("UniCabinet.Domain.Models.DepartmentEntity", b =>
-                {
-                    b.HasOne("UniCabinet.Domain.Entities.UserEntity", "User")
-                        .WithOne("DepartmentEntity")
-                        .HasForeignKey("UniCabinet.Domain.Models.DepartmentEntity", "UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.CourseEntity", b =>
@@ -1008,8 +1003,6 @@ namespace UniCabinet.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("UniCabinet.Domain.Entities.UserEntity", b =>
                 {
-                    b.Navigation("DepartmentEntity");
-
                     b.Navigation("ExamResults");
 
                     b.Navigation("LectureVisits");
@@ -1022,6 +1015,8 @@ namespace UniCabinet.Infrastructure.Data.Migrations
             modelBuilder.Entity("UniCabinet.Domain.Models.DepartmentEntity", b =>
                 {
                     b.Navigation("Discipline");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

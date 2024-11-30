@@ -1,4 +1,4 @@
-﻿namespace UniCabinet.Core.Models.ViewModel.Group
+﻿namespace UniCabinet.Core.Models.ViewModel.Common
 {
     public class GroupBaseVM
     {

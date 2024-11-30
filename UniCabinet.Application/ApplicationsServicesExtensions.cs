@@ -18,46 +18,14 @@ namespace UniCabinet.Infrastructure
             services.AddHostedService<SemesterBackgroundService>();
             services.AddHostedService<CourseBackgroundService>();
 
-            services.AddTransient<GetLecturesListDataUseCase>();
-            services.AddTransient<GetLecturesListDataUseCase>();
-            services.AddTransient<AddLectureUseCase>();
-            services.AddTransient<GetLectureForEditUseCase>();
-            services.AddTransient<UpdateLectureUseCase>();
-            services.AddTransient<GetLectureAttendanceUseCase>();
-            services.AddTransient<SaveLectureAttendanceUseCase>();
+            var useCaseTypes = Assembly.GetExecutingAssembly()
+        .GetTypes()
+        .Where(t => t.Name.EndsWith("UseCase") && t.IsClass && !t.IsAbstract);
 
-            services.AddTransient<UpdateCoursesUseCase>();
-            services.AddTransient<UpdateCurrentSemesterAsyncUseCase>();
-            services.AddTransient<UserVerificationUseCase>();
-
-            //Группы
-            services.AddTransient<GetGroupsListUseCase>();
-            services.AddTransient<GetGroupAddModalUseCase>();
-            services.AddTransient<GetGroupEditModalUseCase>();
-            services.AddTransient<AddGroupUseCase>();
-            services.AddTransient<EditGroupUseCase>();
-
-            services.AddTransient<GetDisciplinesListUseCase>();
-            services.AddTransient<AddDisciplineUseCase>();
-            services.AddTransient<GetDisciplineForEditUseCase>();
-            services.AddTransient<UpdateDisciplineUseCase>();
-
-
-            services.AddTransient<GetVerifiedUsersUseCase>();
-            services.AddTransient<SearchUsersUseCase>();
-            services.AddTransient<GetRoleEditModalUseCase>();
-            services.AddTransient<UpdateUserRolesUseCase>();
-            services.AddTransient<GetGroupEditAdminModalUseCase>();
-            services.AddTransient<UpdateUserGroupUseCase>();
-            services.AddTransient<GetUserDetailModalUseCase>();
-            services.AddTransient<UpdateUserDetailsUseCase>();
-
-            services.AddTransient<GetDisciplineDetailUseCase>();
-
-
-            services.AddTransient<GetDisciplinesByHeadUseCase>();
-            services.AddTransient<GetUsersByDepartmentIdUseCase>();
-
+            foreach (var type in useCaseTypes)
+            {
+                services.AddTransient(type);
+            }
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             try
