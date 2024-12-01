@@ -1,0 +1,25 @@
+﻿@model UniCabinet.Core.Models.ViewModel.Specialization.SpecializationEditVM
+
+<div class="modal fade" id="editSpecializationModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Редактировать специальность</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="EditSpecialization" method="post">
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                    <div class="mb-3">
+                        <label for="specializationName" class="form-label">Название специальности:</label>
+                        <input type="text" name="Name" class="form-control" id="specializationName" value="@Model.Name" required />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

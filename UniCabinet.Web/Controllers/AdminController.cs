@@ -1,17 +1,14 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using UniCabinet.Application.UseCases.AdminUseCase;
-using UniCabinet.Core.Models.ViewModel.User;
-using UniCabinet.Core.Models.ViewModel;
-using UniCabinet.Domain.Entities;
-using UniCabinet.Core.DTOs.UserManagement;
 using UniCabinet.Application.UseCases.DepartmentUseCase;
+using UniCabinet.Core.DTOs.UserManagement;
+using UniCabinet.Core.Models.ViewModel;
 using UniCabinet.Core.Models.ViewModel.Departmet;
-using UniCabinet.Core.DTOs.SpecializationManagement;
-using UniCabinet.Core.Models.ViewModel.Specialization;
+using UniCabinet.Core.Models.ViewModel.User;
+using UniCabinet.Domain.Entities;
 
 public class AdminController : Controller
 {
@@ -197,7 +194,7 @@ public class AdminController : Controller
      int SpecializationId,
      [FromServices] UpdateSpecAndDepUseCase updateSpecAndDepUseCase)
     {
-        if (!ModelState.IsValid)    
+        if (!ModelState.IsValid)
         {
 
             return PartialView("_SpecializationAndDepartmentModal");
@@ -227,13 +224,7 @@ public class AdminController : Controller
 
     }
 
-    public async Task<IActionResult> GetDataSpecialization([FromServices] GetTeacherSpecializationUseCase getDataSpecializationUseCase)
-    {
-        var result = await getDataSpecializationUseCase.ExecuteAsync();
-        var viewModel = _mapper.Map<List<SpecializationVM>>(result);
 
-        return View("SpecializationList", viewModel);
-    }
     [HttpGet]
     public async Task<IActionResult> Departments(
     [FromServices] GetDepartmentsWithUsersUseCase getDepartmentsWithUsersUseCase)
