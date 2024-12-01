@@ -4,7 +4,7 @@ using UniCabinet.Application.UseCases.DepartmentUseCase;
 using UniCabinet.Core.DTOs.DepartmentManagmnet;
 using UniCabinet.Core.Models.ViewModel.Department;
 using UniCabinet.Core.Models.ViewModel.Departmet;
-using UniCabinet.Core.Models.ViewModel.Discipline;
+using UniCabinet.Core.UseCases;
 
 namespace UniCabinet.Web.Controllers
 {
@@ -17,13 +17,13 @@ namespace UniCabinet.Web.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<IActionResult> DisciplinesListAsync([FromServices] GetDisciplinesByHeadUseCase getDisciplinesByHeadUseCase)
+        public async Task<IActionResult> DepartmentListAsync([FromServices] GetDepartmentDisciplinesUseCase getDisciplinesByHeadUseCase)
         {
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             var result = await getDisciplinesByHeadUseCase.ExecuteAsync(userId);
-            var disciplineVMs = _mapper.Map<GetDepartmantAndUserVM>(result);
+            var getDepartmantAndUserVMVMs = _mapper.Map<DepartmentWithDisciplinesVM>(result);
 
-            return View(disciplineVMs);
+            return View(getDepartmantAndUserVMVMs);
         }
 
         [HttpGet]

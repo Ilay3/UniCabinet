@@ -1,0 +1,54 @@
+﻿@model UniCabinet.Core.DTOs.DepartmentManagmnet.DepartmentWithDisciplinesVM
+
+@{
+    ViewData["Title"] = "Список Дисциплин Кафедры";
+}
+
+<h1>@Model.DepartmentName</h1>
+
+<div class="accordion" id="disciplinesAccordion">
+    @foreach (var discipline in Model.Disciplines)
+    {
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-@discipline.Id">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@discipline.Id" aria-expanded="false" aria-controls="collapse-@discipline.Id">
+                    @discipline.Name (@discipline.SpecialtyName)
+                </button>
+            </h2>
+            <div id="collapse-@discipline.Id" class="accordion-collapse collapse" aria-labelledby="heading-@discipline.Id" data-bs-parent="#disciplinesAccordion">
+                <div class="accordion-body">
+                    <p>@discipline.Description</p>
+                    <strong>Преподаватели:</strong>
+                    <ul class="list-inline">
+                        @{
+                            var teachersToShow = discipline.Teachers.Take(3).ToList();
+                            var remainingTeachers = discipline.Teachers.Skip(3).ToList();
+                        }
+
+                        @foreach (var teacher in teachersToShow)
+                        {
+                            <li class="list-inline-item">@($"{teacher.FirstName} {teacher.LastName}")</li>
+                        }
+
+                        @if (remainingTeachers.Any())
+                        {
+                            <li class="list-inline-item">
+                                <div class="dropdown d-inline">
+                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton-@discipline.Id" data-bs-toggle="dropdown" aria-expanded="false">
+                                        +@remainingTeachers.Count
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@discipline.Id">
+                                        @foreach (var teacher in remainingTeachers)
+                                        {
+                                            <li><a class="dropdown-item" href="#">@($"{teacher.FirstName} {teacher.LastName}")</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</div>

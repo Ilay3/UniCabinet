@@ -31,15 +31,13 @@ public class DepartmentRepositoryImpl : IDepartmentRepository
         return _mapper.Map<List<DepartmentDTO>>(departmentEntity);
 
     }
-    public async Task<DepartmentDTO> GetDepartmentByUserIdAsync(string userId)
+    public async Task<DepartmentEntity> GetDepartmentWithDisciplinesAndTeachersAsync(string headUserId)
     {
-        var user = await _userService.GetUserByIdAsync(userId);
-
-        var departmentEntity = await _context.Departments
-            .Include(d=>d.Discipline)
-            .FirstOrDefaultAsync(d=>d.Id == user.DepartmentId);
-
-        return _mapper.Map<DepartmentDTO>(departmentEntity);
+        return await _context.Departments
+            .Include(d => d.Discipline)
+                .ThenInclude(disc => disc.Specialty)
+                    .ThenInclude(spec => spec.Teachers)
+            .FirstOrDefaultAsync(d => d.User.Any(u => u.Id == headUserId));
     }
 
     public async Task<List<UserDTO>> GetUsersByDepartmentAsync(int departmentId)
