@@ -90,4 +90,29 @@ public class DepartmentRepositoryImpl : IDepartmentRepository
 
         return departments;
     }
+
+    public async Task AddDepartmentAsync(DepartmentEntity department)
+    {
+        if (department == null)
+            throw new ArgumentNullException(nameof(department));
+
+        _context.Departments.Add(department);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateDepartmentAsync(DepartmentEntity department)
+    {
+        if (department == null)
+            throw new ArgumentNullException(nameof(department));
+
+        _context.Departments.Update(department);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<DepartmentEntity> GetDepartmentByIdAsync(int departmentId)
+    {
+        return await _context.Departments.FindAsync(departmentId);
+    }
+
+
 }
