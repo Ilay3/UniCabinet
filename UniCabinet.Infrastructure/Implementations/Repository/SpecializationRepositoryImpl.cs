@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using UniCabinet.Application.Interfaces;
 using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.DTOs.SpecializationManagement;
+using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
 
 namespace UniCabinet.Infrastructure.Implementations.Repository
@@ -31,13 +32,46 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             var specializationEntity = await _context.Specialties.ToListAsync();
             return _mapper.Map<List<SpecializationDTO>>(specializationEntity);
         }
-        public async Task<List<SpecializationDTO>> GetDataSpecializationAndTeacher()
+        public async Task<List<SpecializationListDTO>> GetDataSpecializationAndTeacher()
         {
 
             var specializationEntity = await _context.Specialties
                 .Include(t => t.Teachers)
                 .ToListAsync();
-            return _mapper.Map<List<SpecializationDTO>>(specializationEntity);
+            return _mapper.Map<List<SpecializationListDTO>>(specializationEntity);
         }
+
+        public async Task<SpecializationDTO> GetSpecializationById(int id)
+        {
+            var specialization = await _context.Specialties.Include(s => s.Teachers).FirstOrDefaultAsync(s => s.Id == id);
+            if (specialization == null)
+            {
+                throw new KeyNotFoundException($"Specialization with ID {id} not found.");
+            }
+
+            return _mapper.Map<SpecializationDTO>(specialization);
+        }
+
+        public async Task AddSpecialization(SpecializationAddDTO specializationDTO)
+        {
+            var entity = _mapper.Map<SpecialtyEntity>(specializationDTO);
+            await _context.Specialties.AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateSpecialization(SpecializationEditDTO specializationDTO)
+        {
+            var entity = await _context.Specialties.FirstOrDefaultAsync(s => s.Id == specializationDTO.Id);
+            if (entity == null)
+            {
+                throw new KeyNotFoundException($"Specialization with ID {specializationDTO.Id} not found.");
+            }
+
+            _mapper.Map(specializationDTO, entity);
+            _context.Specialties.Update(entity);
+            await _context.SaveChangesAsync();
+        }
+
+
     }
 }

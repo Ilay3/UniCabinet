@@ -1,7 +1,14 @@
-﻿@model List<UniCabinet.Core.Models.ViewModel.Specialization.SpecializationVM>
+﻿@model List<UniCabinet.Core.Models.ViewModel.Specialization.SpecializationListVM>
 
 <div class="container mt-5">
     <h2 class="mb-4 text-center">Список специальностей и преподавателей</h2>
+
+    <!-- Кнопка для добавления новой специальности -->
+    <div class="mb-3 text-end">
+        <button class="btn btn-primary" onclick="openModal('/Specialization/AddSpecialization', 'addSpecializationModal')">
+            Добавить специальность
+        </button>
+    </div>
 
     <div class="table-responsive shadow-sm">
         <table class="table table-striped table-hover table-bordered align-middle">
@@ -10,6 +17,7 @@
                     <th scope="col">ID</th>
                     <th scope="col">Название специальности</th>
                     <th scope="col">Преподаватели</th>
+                    <th scope="col">Действия</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,9 +44,18 @@
                                 <span class="text-muted">Преподаватели не назначены</span>
                             }
                         </td>
+                        <td class="text-center">
+                            <!-- Кнопка для редактирования специальности -->
+                            <button class="btn btn-sm btn-warning" onclick="openModal('/Specialization/EditSpecialization', 'editSpecializationModal', @specialization.Id)">
+                                Редактировать
+                            </button>
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
+
+<div id="modalContainer"></div>
+<script src="~/js/loadmodal.js" defer></script>

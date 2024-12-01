@@ -2,12 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using UniCabinet.Application.BackgroundServices;
-using UniCabinet.Application.UseCases;
-using UniCabinet.Application.UseCases.AdminUseCase;
-using UniCabinet.Application.UseCases.DepartmentUseCase;
-using UniCabinet.Application.UseCases.DisciplineUseCase;
-using UniCabinet.Application.UseCases.GroupUseCase;
-using UniCabinet.Application.UseCases.LectureUseCase;
 
 namespace UniCabinet.Infrastructure
 {

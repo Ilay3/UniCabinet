@@ -10,7 +10,7 @@ namespace UniCabinet.Application.UseCases.AdminUseCase
         {
             _specializationRepository = specializationRepository;
         }
-        public async Task<List<SpecializationDTO>> ExecuteAsync()
+        public async Task<List<SpecializationListDTO>> ExecuteAsync()
         {
             var spec = await _specializationRepository.GetDataSpecializationAndTeacher();
             return spec;
