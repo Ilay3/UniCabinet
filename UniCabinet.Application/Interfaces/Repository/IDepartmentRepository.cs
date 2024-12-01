@@ -10,5 +10,8 @@ public interface IDepartmentRepository
     Task<DepartmentDTO> GetDepartmentByUserIdAsync(string userId);
     Task<List<UserDTO>> GetUsersByDepartmentAsync(int departmentId);
     Task<List<DepartmentEntity>> GetDepartmentsWithUsersAsync();
+    Task AddDepartmentAsync(DepartmentEntity department);
+    Task UpdateDepartmentAsync(DepartmentEntity department);
+    Task<DepartmentEntity> GetDepartmentByIdAsync(int departmentId);
 
 }

@@ -223,17 +223,6 @@ public class AdminController : Controller
         return PartialView("_SpecializationAndDepartmentModal", viewModel);
 
     }
-
-
-    [HttpGet]
-    public async Task<IActionResult> Departments(
-    [FromServices] GetDepartmentsWithUsersUseCase getDepartmentsWithUsersUseCase)
-    {
-        var departmentsDTO = await getDepartmentsWithUsersUseCase.ExecuteAsync();
-        var departmentsVM = _mapper.Map<List<DepartmentsWithUsersVM>>(departmentsDTO);
-        return View(departmentsVM);
-    }
-
 }
 
 
