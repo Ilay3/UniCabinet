@@ -79,7 +79,7 @@ namespace UniCabinet.Web.Areas.Identity.Pages.Account.Manage
                                 user.DateBirthday.HasValue;
 
             IsEmailConfirmed = user.EmailConfirmed;
-            IsVerified = await _userManager.IsInRoleAsync(user, "Verified");
+            IsVerified = await _userManager.IsInRoleAsync(user, "Верефицирован");
 
             return Page();
         }
