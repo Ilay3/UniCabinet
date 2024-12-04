@@ -1,5 +1,5 @@
 ﻿using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Core.DTOs.CourseManagement;
+using UniCabinet.Core.DTOs.DisciplineDetailManagment;
 
 namespace UniCabinet.Application.UseCases.DisciplineUseCase;
 

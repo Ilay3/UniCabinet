@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using UniCabinet.Core.DTOs.CourseManagement;
+using UniCabinet.Core.DTOs.DisciplineDetailManagment;
+using UniCabinet.Core.Models.ViewModel.DisciplineDetail;
 using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Application.Profiles
@@ -11,11 +12,15 @@ namespace UniCabinet.Application.Profiles
             CreateMap<DisciplineDetailEntity, DisciplineDetailDTO>()
                 .ForMember(dest => dest.DisciplineName, opt => opt.MapFrom(src => src.Discipline.Name))
                 .ForMember(dest => dest.GroupName, opt => opt.MapFrom(src => src.Group.Name))
-                .ForMember(dest => dest.SemesterNumber, opt => opt.MapFrom(src => src.Semester.Number))
-                .ForMember(dest => dest.TeacherFirstName, opt => opt.MapFrom(src => src.Teacher.FirstName))
-                .ForMember(dest => dest.TeacherLastName, opt => opt.MapFrom(src => src.Teacher.LastName))
-                .ForMember(dest => dest.TeacherPatronymic, opt => opt.MapFrom(src => src.Teacher.Patronymic))
-                .ForMember(dest => dest.CourseNumber, opt => opt.MapFrom(src => src.Course.Number));
+                .ForMember(dest => dest.SemesterName, opt => opt.MapFrom(src => src.Semester.Number))
+                .ForMember(dest => dest.TeacherName, opt => opt.MapFrom(src => $"{src.Teacher.FirstName} {src.Teacher.LastName}"))
+                .ForMember(dest => dest.CourseName, opt => opt.MapFrom(src => src.Course.Number))
+                .ReverseMap();
+
+
+            CreateMap<DisciplineDetailDTO, DisciplineDetailVM>().ReverseMap();
+            CreateMap<DisciplineDetailDTO, DisciplineDetailInfoVM>().ReverseMap();
+            CreateMap<DisciplineDetailFilterDTO, DisciplineDetailFilterVM>().ReverseMap();
         }
     }
 

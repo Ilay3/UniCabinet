@@ -1,5 +1,6 @@
 ﻿using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.DTOs.CourseManagement;
+using UniCabinet.Core.DTOs.DepartmentManagmnet;
 using UniCabinet.Core.DTOs.UserManagement;
 
 namespace UniCabinet.Core.UseCases

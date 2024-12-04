@@ -1,6 +1,6 @@
 ﻿using UniCabinet.Core.Models.ViewModel.User;
 
-namespace UniCabinet.Core.DTOs.DepartmentManagmnet
+namespace UniCabinet.Core.Models.ViewModel.Departmet
 {
     public class DisciplineWithTeachersVM
     {

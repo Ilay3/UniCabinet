@@ -1,4 +1,6 @@
-﻿namespace UniCabinet.Core.DTOs.CourseManagement;
+﻿using UniCabinet.Core.DTOs.CourseManagement;
+
+namespace UniCabinet.Core.DTOs.DepartmentManagmnet;
 
 public class DepartmentWithDisciplinesDTO
 {

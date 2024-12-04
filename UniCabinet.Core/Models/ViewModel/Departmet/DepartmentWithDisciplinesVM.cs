@@ -1,4 +1,4 @@
-﻿namespace UniCabinet.Core.DTOs.DepartmentManagmnet
+﻿namespace UniCabinet.Core.Models.ViewModel.Departmet
 {
     public class DepartmentWithDisciplinesVM
     {

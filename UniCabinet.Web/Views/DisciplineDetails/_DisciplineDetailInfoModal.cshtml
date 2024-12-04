@@ -1,0 +1,27 @@
+﻿@model UniCabinet.Core.Models.ViewModel.DisciplineDetail.DisciplineDetailInfoVM
+
+<div class="modal fade" id="detailInfoModal" tabindex="-1" aria-labelledby="detailInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Подробная информация</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Дисциплина:</strong> @Model.DisciplineName</p>
+                <p><strong>Курс:</strong> @Model.CourseName</p>
+                <p><strong>Группа:</strong> @Model.GroupName</p>
+                <p><strong>Семестр:</strong> @Model.SemesterName</p>
+                <hr />
+                <p><strong>Количество лекций:</strong> @Model.LectureCount</p>
+                <p><strong>Количество практических:</strong> @Model.PracticalCount</p>
+                <p><strong>Количество зачетов:</strong> @Model.SubExamCount</p>
+                <p><strong>Количество экзаменов:</strong> @Model.ExamCount</p>
+                <p><strong>Минимум посещений лекций:</strong> @Model.MinLecturesRequired</p>
+                <p><strong>Минимум посещений практических:</strong> @Model.MinPracticalsRequired</p>
+                <p><strong>Минимум для автомата:</strong> @Model.AutoExamThreshold</p>
+                <p><strong>Минимальный балл для прохождения:</strong> @Model.PassCount</p>
+            </div>
+        </div>
+    </div>
+</div>
