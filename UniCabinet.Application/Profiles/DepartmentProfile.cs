@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using UniCabinet.Core.DTOs.CourseManagement;
 using UniCabinet.Core.DTOs.DepartmentManagmnet;
 using UniCabinet.Core.Models.ViewModel.Department;
 using UniCabinet.Core.Models.ViewModel.Departmet;
@@ -18,6 +19,11 @@ public class DepartmentProfile : Profile
         CreateMap<GetDepartmantAndUserDTO, GetDepartmantAndUserVM>().ReverseMap();
 
         CreateMap<DepartmentDTO, DepartmentAddEditVM>().ReverseMap();
+
+        CreateMap<DepartmentWithDisciplinesDTO, DepartmentWithDisciplinesVM>().ReverseMap();
+
+        CreateMap<DisciplineWithTeachersDTO, DisciplineWithTeachersVM>().ReverseMap();
+
 
 
     }

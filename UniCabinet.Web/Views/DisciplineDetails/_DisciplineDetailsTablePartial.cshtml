@@ -1,0 +1,28 @@
+﻿@model UniCabinet.Core.Models.ViewModel.DisciplineDetail.DisciplineDetailsModalVM
+
+<table class="table table-bordered table-hover">
+    <thead class="table-light">
+        <tr>
+            <th>Курс</th>
+            <th>Группа</th>
+            <th>Семестр</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody id="detailsTableBody">
+        @foreach (var detail in Model.Details)
+        {
+            <tr>
+                <td>@detail.CourseName</td>
+                <td>@detail.GroupName</td>
+                <td>@detail.SemesterName</td>
+                <td>
+                    <button class="btn btn-info"
+                            onclick="openModal('@Url.Action("DetailInfo", "DisciplineDetails", new { detailId = detail.Id })', 'detailInfoModal')">
+                        Подробнее
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -20,3 +20,19 @@ html {
 body {
   margin-bottom: 60px;
 }
+.teacher-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 столбца */
+    gap: 5px; /* Расстояние между строками */
+    max-height: 200px; /* Максимальная высота блока */
+    overflow-y: auto; /* Прокрутка только по вертикали */
+    border: 1px solid #ccc; /* Граница области */
+    padding: 10px;
+    background-color: #f9f9f9; /* Фоновый цвет */
+}
+
+.teacher-item {
+    white-space: nowrap; /* Не переносить текст */
+    overflow: hidden; /* Скрыть текст, если он выходит за пределы */
+    text-overflow: ellipsis; /* Добавить многоточие для длинного текста */
+}
