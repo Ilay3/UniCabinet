@@ -27,8 +27,8 @@ namespace UniCabinet.Application.UseCases
 
                 if (isVerified)
                 {
-                    await AssignRoleAsync(userId, "Verified");
-                    _logger.LogInformation($"Пользователю {userId} присвоена роль 'Verified'");
+                    await AssignRoleAsync(userId, "Верефицирован");
+                    _logger.LogInformation($"Пользователю {userId} присвоена роль 'Верефицирован'");
 
                     if (await _userManager.IsInRoleAsync(user, "Not Verified"))
                     {

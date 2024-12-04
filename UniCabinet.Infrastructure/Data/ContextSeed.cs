@@ -8,7 +8,7 @@ namespace UniCabinet.Infrastructure.Data
         public static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
         {
             // Проверка существования ролей
-            var roles = new[] { "Not Verified", "Verified", "Administrator", "Student", "Teacher" };
+            var roles = new[] { "Not Verified", "Верефицирован", "Администратор", "Студент", "Преподаватель", "Зав. Кафедры" };
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -38,16 +38,16 @@ namespace UniCabinet.Infrastructure.Data
                 var result = await userManager.CreateAsync(adminUser, adminPassword);
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(adminUser, "Administrator");
-                    await userManager.AddToRoleAsync(adminUser, "Verified");
+                    await userManager.AddToRoleAsync(adminUser, "Администратор");
+                    await userManager.AddToRoleAsync(adminUser, "Верефицирован");
                 }
             }
             else
             {
                 var userRoles = await userManager.GetRolesAsync(adminUser);
-                _ = !userRoles.Contains("Administrator") ? await userManager.AddToRoleAsync(adminUser, "Administrator") : null;
+                _ = !userRoles.Contains("Администратор") ? await userManager.AddToRoleAsync(adminUser, "Администратор") : null;
 
-                _ = !userRoles.Contains("Verified") ? await userManager.AddToRoleAsync(adminUser, "Verified") : null;
+                _ = !userRoles.Contains("Верефицирован") ? await userManager.AddToRoleAsync(adminUser, "Верефицирован") : null;
             }
 
         }

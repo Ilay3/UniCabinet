@@ -23,11 +23,11 @@ namespace UniCabinet.Application.UseCases.AdminUseCase
                 return (false, "Некорректные данные.");
             }
 
-            // Проверяем, что пользователь имеет роли "Student" и "Verified"
-            if (!userRoles.Contains("Student") || !userRoles.Contains("Verified"))
+            // Проверяем, что пользователь имеет роли "Студент" и "Verified"
+            if (!userRoles.Contains("Студент") || !userRoles.Contains("Верефицирован"))
             {
                 _logger.LogWarning("Пользователь {UserId} не имеет необходимых ролей для изменения группы.", userId);
-                return (false, "Изменение группы доступно только для пользователей с ролями Student и Verified.");
+                return (false, "Изменение группы доступно только для пользователей с ролями Студент и Верефицирован.");
             }
 
             await _userService.UpdateStudentGroupAsync(userId, groupId.Value);

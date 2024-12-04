@@ -7,11 +7,12 @@ namespace UniCabinet.Application.Interfaces.Repository;
 public interface IDepartmentRepository
 {
     Task<List<DepartmentDTO>> GetAllDepartment();
-    Task<DepartmentDTO> GetDepartmentByUserIdAsync(string userId);
+    Task<DepartmentEntity> GetDepartmentWithDisciplinesAndTeachersAsync(string headUserId);
     Task<List<UserDTO>> GetUsersByDepartmentAsync(int departmentId);
     Task<List<DepartmentEntity>> GetDepartmentsWithUsersAsync();
     Task AddDepartmentAsync(DepartmentEntity department);
     Task UpdateDepartmentAsync(DepartmentEntity department);
     Task<DepartmentEntity> GetDepartmentByIdAsync(int departmentId);
+
 
 }

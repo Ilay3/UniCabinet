@@ -1,4 +1,5 @@
-﻿using UniCabinet.Core.DTOs.CourseManagement;
+﻿using UniCabinet.Core.DTOs.DisciplineDetailManagment;
+using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Application.Interfaces.Repository
 {
@@ -10,6 +11,10 @@ namespace UniCabinet.Application.Interfaces.Repository
         Task<DisciplineDetailDTO> GetDisciplineDetailByIdAsync(int id);
         void UpdateDisciplineDetail(DisciplineDetailDTO disciplineDetailDTO);
         Task<DisciplineDetailDTO> GetDetailByUserAndDisciplineAsync(string userId, int disciplineId);
+
+        Task<List<DisciplineDetailDTO>> GetByDisciplineAndTeacherAsync(int disciplineId, string teacherId);
+        Task<List<DisciplineDetailDTO>> GetByDisciplineTeacherAndFiltersAsync(int disciplineId, string teacherId, int? courseId, int? semesterId, int? groupId);
+        Task<DisciplineDetailDTO> GetByIdAsync(int detailId);
 
     }
 }

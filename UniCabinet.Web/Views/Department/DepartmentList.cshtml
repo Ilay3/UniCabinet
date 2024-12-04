@@ -1,0 +1,42 @@
+﻿@model UniCabinet.Core.Models.ViewModel.Departmet.DepartmentWithDisciplinesVM
+
+@{
+    ViewData["Title"] = "Список Дисциплин Кафедры";
+}
+
+<h1>@Model.DepartmentName</h1>
+
+<div class="accordion" id="disciplinesAccordion">
+    @foreach (var discipline in Model.Disciplines)
+    {
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-@discipline.Id">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@discipline.Id" aria-expanded="false" aria-controls="collapse-@discipline.Id">
+                    @discipline.Name (@discipline.SpecialtyName)
+                </button>
+            </h2>
+            <div id="collapse-@discipline.Id" class="accordion-collapse collapse" aria-labelledby="heading-@discipline.Id" data-bs-parent="#disciplinesAccordion">
+                <div class="accordion-body">
+                    <p>@discipline.Description</p>
+                    <strong>Преподаватели:</strong>
+
+                    <!-- Преподаватели в 3 столбца с прокруткой -->
+                    <div class="teacher-container">
+                        @foreach (var teacher in discipline.Teachers)
+                        {
+                            <div class="teacher-item">
+                                @($"{teacher.FirstName} {teacher.LastName}")
+                                <a class="btn btn-sm btn-link"
+                                   href="@Url.Action("TeacherDetails", "DisciplineDetails", new { disciplineId = discipline.Id, teacherId = teacher.Id })">
+                                    Посмотреть детали
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+

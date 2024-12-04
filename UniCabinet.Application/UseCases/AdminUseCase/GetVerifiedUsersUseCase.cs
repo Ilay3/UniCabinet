@@ -26,16 +26,16 @@ namespace UniCabinet.Application.UseCases.AdminUseCase
 
             if (string.IsNullOrEmpty(role))
             {
-                role = "Student"; // По умолчанию выбираем роль Student
+                role = "Студент"; // По умолчанию выбираем роль Student
             }
 
             // Получаем всех пользователей (DTO)
             var userDTOs = await _userService.GetAllUsersAsync();
 
             // Фильтрация по роли
-            if (role == "Verified")
+            if (role == "Верефицирован")
             {
-                userDTOs = userDTOs.Where(user => user.Roles.Count == 1 && user.Roles.Contains("Verified")).ToList();
+                userDTOs = userDTOs.Where(user => user.Roles.Count == 1 && user.Roles.Contains("Верефицирован")).ToList();
             }
             else
             {

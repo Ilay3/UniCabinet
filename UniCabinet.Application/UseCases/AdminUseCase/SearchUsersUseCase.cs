@@ -32,9 +32,9 @@ namespace UniCabinet.Application.UseCases.AdminUseCase
             // Фильтрация по роли, если необходимо
             if (!string.IsNullOrEmpty(role))
             {
-                if (role == "Verified")
+                if (role == "Верефицирован")
                 {
-                    userDTOs = userDTOs.Where(user => user.Roles.Count == 1 && user.Roles.Contains("Verified")).ToList();
+                    userDTOs = userDTOs.Where(user => user.Roles.Count == 1 && user.Roles.Contains("Верефицирован")).ToList();
                 }
                 else
                 {

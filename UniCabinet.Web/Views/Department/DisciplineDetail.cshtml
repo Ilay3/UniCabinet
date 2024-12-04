@@ -11,7 +11,7 @@
         <label for="teacher">Выберите преподавателя</label>
         <select id="teacher" name="teacherId" class="form-control">
             <option value="">Все преподаватели</option>
-            @foreach (var teacher in ViewData["Teachers"] as List<UniCabinet.Core.Models.ViewModel.User.UserVM>)
+            @foreach (var teacher in ViewData["Преподаватель"] as List<UniCabinet.Core.Models.ViewModel.User.UserVM>)
             {
                 <option value="@teacher.Id">@teacher.FirstName @teacher.LastName</option>
             }

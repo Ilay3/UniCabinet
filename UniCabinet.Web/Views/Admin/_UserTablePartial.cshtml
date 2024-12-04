@@ -20,15 +20,15 @@
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
-                                @if (user.Roles.Contains("Admin"))
+                                @if (user.Roles.Contains("Администратор"))
                                 {
                                     <span class="badge bg-danger me-2">A</span>
                                 }
-                                else if (user.Roles.Contains("Teacher"))
+                                else if (user.Roles.Contains("Преподаватель"))
                                 {
                                     <span class="badge bg-success me-2">T</span>
                                 }
-                                else if (user.Roles.Contains("Student"))
+                                else if (user.Roles.Contains("Студент"))
                                 {
                                     <span class="badge bg-info me-2">S</span>
                                 }
@@ -40,16 +40,16 @@
                         <td>@(string.IsNullOrEmpty(user.GroupName) ? "Не назначена" : user.GroupName)</td>
                         <td>
                             <div class="btn-group" role="group">
-                                @if (user.Roles.Contains("Verified"))
+                                @if (user.Roles.Contains("Верефицирован"))
                                 {
-                                    @if (user.Roles.Contains("Student"))
+                                    @if (user.Roles.Contains("Студент"))
                                     {
                                         <button type="button" class="btn btn-success btn-sm me-1"
                                                 onclick="openModal('@Url.Action("GroupEditModal", "Admin", new { userId = user.Id })', 'groupModal')">
                                             <i class="bi bi-pencil-square"></i> Группа
                                         </button>
                                     }
-                                    else if (user.Roles.Contains("Teacher"))
+                                    else if (user.Roles.Contains("Преподаватель"))
                                     {
                                         <button type="button" class="btn btn-success btn-sm me-1"
                                                 onclick="openModal('@Url.Action("SpecAndDepEditModal", "Admin", new { userId = user.Id })', 'groupModal')">

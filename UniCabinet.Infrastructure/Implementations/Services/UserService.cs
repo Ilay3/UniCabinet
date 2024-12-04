@@ -56,15 +56,15 @@ namespace UniCabinet.Infrastructure.Implementations.Services
                 // Получаем все роли пользователя
                 var currentRoles = await _userManager.GetRolesAsync(user);
 
-                // Удаляем текущие роли, кроме "Verified"
-                var rolesToRemove = currentRoles.Where(r => r != "Verified").ToList();
+                // Удаляем текущие роли, кроме "Верефицирован"
+                var rolesToRemove = currentRoles.Where(r => r != "Верефицирован").ToList();
                 if (rolesToRemove.Count > 0)
                 {
                     await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
                 }
 
-                // Добавляем новую роль, если она не "Verified"
-                if (!string.IsNullOrEmpty(newRole) && newRole != "Verified")
+                // Добавляем новую роль, если она не "Верефицирован"
+                if (!string.IsNullOrEmpty(newRole) && newRole != "Верефицирован")
                 {
                     await _userManager.AddToRoleAsync(user, newRole);
                 }
