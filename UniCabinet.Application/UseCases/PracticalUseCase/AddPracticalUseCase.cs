@@ -24,7 +24,7 @@ namespace UniCabinet.Application.UseCases.PracticalUseCase
         public async Task<bool> ExecuteAsync(PracticalDTO practicalDTO, ModelStateDictionary modelState)
         {
             var existingPracticalsCount = await _practicalRepository.GetPracticalCountByDisciplineDetailIdAsync(practicalDTO.DisciplineDetailId);
-            var disciplineDetail = await _disciplineDetailRepository.GetDisciplineDetailByIdAsync(practicalDTO.DisciplineDetailId);
+            var disciplineDetail = await _disciplineDetailRepository.GetByIdAsync(practicalDTO.DisciplineDetailId);
             int maxPracticals = disciplineDetail.PracticalCount;
 
             if (existingPracticalsCount >= maxPracticals)

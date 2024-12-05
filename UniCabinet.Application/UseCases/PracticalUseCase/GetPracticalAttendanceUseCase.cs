@@ -42,7 +42,7 @@ namespace UniCabinet.Application.UseCases.PracticalUseCase
 
             int disciplineDetailId = practical.DisciplineDetailId;
 
-            var disciplineDetail = await _disciplineDetailRepository.GetDisciplineDetailByIdAsync(disciplineDetailId);
+            var disciplineDetail = await _disciplineDetailRepository.GetByIdAsync(disciplineDetailId);
             if (disciplineDetail == null)
             {
                 return null;

@@ -50,7 +50,7 @@ public class PracticalController : Controller
 
             if (success)
             {
-                return Json(new { success = true, redirectUrl = Url.Action("PracticalsList", new { id = viewModel.DisciplineDetailId }) });
+                return RedirectToAction("PracticalsList", new { id = viewModel.DisciplineDetailId });
             }
         }
 
@@ -78,7 +78,7 @@ public class PracticalController : Controller
             await updatePracticalUseCase.ExecuteAsync(practicalDTO);
             var disciplineDetailId = viewModel.DisciplineDetailId;
 
-            return Json(new { success = true, redirectUrl = Url.Action("PracticalsList", new { id = disciplineDetailId }) });
+            return RedirectToAction("PracticalsList", new { id = viewModel.DisciplineDetailId });
         }
 
         return PartialView("_PracticalEditModal", viewModel);

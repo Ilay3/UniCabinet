@@ -22,7 +22,7 @@ namespace UniCabinet.Application.UseCases.PracticalUseCase
         public async Task<PracticalsListDataDTO> ExecuteAsync(int disciplineDetailId)
         {
             var practicals = await _practicalRepository.GetPracticalListByDisciplineDetailIdAsync(disciplineDetailId);
-            var disciplineDetail = await _disciplineDetailRepository.GetDisciplineDetailByIdAsync(disciplineDetailId);
+            var disciplineDetail = await _disciplineDetailRepository.GetByIdAsync(disciplineDetailId);
             var discipline = await _disciplineRepository.GetDisciplineByIdAsync(disciplineDetail.DisciplineId);
 
             var result = new PracticalsListDataDTO
