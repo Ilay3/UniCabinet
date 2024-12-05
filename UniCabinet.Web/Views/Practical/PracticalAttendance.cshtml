@@ -1,0 +1,38 @@
+﻿@model UniCabinet.Core.Models.ViewModel.Practical.PracticalAttendanceVM
+
+@{
+    ViewBag.Title = "Выставление оценок";
+}
+
+<h2>Выставление оценок по практической работе №@Model.PracticalNumber (@Model.DisciplineName)</h2>
+
+<form asp-action="SaveAttendance" asp-controller="Practical" method="post">
+    <input type="hidden" asp-for="PracticalId" />
+    <input type="hidden" asp-for="DisciplineDetailId" />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Отчество</th>
+                <th>Оценка</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Students.Count; i++)
+            {
+                <tr>
+                    <td>@Model.Students[i].LastName</td>
+                    <td>@Model.Students[i].FirstName</td>
+                    <td>@Model.Students[i].Patronymic</td>
+                    <td>
+                        <input type="hidden" name="Students[@i].StudentId" value="@Model.Students[i].StudentId" />
+                        <input type="number" name="Students[@i].Grade" value="@Model.Students[i].Grade" min="0" max="100" class="form-control" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Сохранить оценки</button>
+    <a href="@Url.Action("PracticalsList", new { id = Model.DisciplineDetailId })" class="btn btn-secondary">Отмена</a>
+</form>

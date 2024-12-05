@@ -1,13 +1,12 @@
-﻿@model UniCabinet.Core.Models.ViewModel.Practical.PracticalEditVM
+﻿@model UniCabinet.Core.Models.ViewModel.Practical.PracticalAddVM
 
-<div class="modal fade" id="practicalEditModal" tabindex="-1" aria-labelledby="practicalEditModalLabel" aria-hidden="true">
+<div class="modal fade" id="practicalAddModal" tabindex="-1" aria-labelledby="practicalAddModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form asp-action="EditPractical" asp-controller="Practical" method="post">
-                <input type="hidden" asp-for="Id" />
+            <form asp-action="AddPractical" asp-controller="Practical" method="post">
                 <input type="hidden" asp-for="DisciplineDetailId" />
                 <div class="modal-header">
-                    <h5 class="modal-title" id="practicalEditModalLabel">Редактировать практическую работу</h5>
+                    <h5 class="modal-title" id="practicalAddModalLabel">Добавить практическую работу</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                 </div>
                 <div class="modal-body">
