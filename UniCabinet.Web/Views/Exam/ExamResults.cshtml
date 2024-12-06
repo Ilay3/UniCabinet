@@ -1,0 +1,48 @@
+﻿@model UniCabinet.Core.Models.ViewModel.Exam.ExamResultsVM
+
+@{
+    ViewBag.Title = "Результаты экзамена";
+}
+
+<h2>Результаты экзамена</h2>
+
+<form asp-action="SaveExamResults" asp-controller="Exam" method="post">
+    <input type="hidden" asp-for="ExamId" />
+    <input type="hidden" asp-for="DisciplineDetailId" />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Отчество</th>
+                <th>Средний балл</th>
+                <th>Итоговая оценка</th>
+                <th>Автоматически?</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Students.Count; i++)
+            {
+                <tr>
+                    <td>@Model.Students[i].LastName</td>
+                    <td>@Model.Students[i].FirstName</td>
+                    <td>@Model.Students[i].Patronymic</td>
+                    <td>
+                        <input asp-for="Students[i].PointAvarage" class="form-control" />
+                        <span asp-validation-for="Students[i].PointAvarage" class="text-danger"></span>
+                    </td>
+                    <td>
+                        <input asp-for="Students[i].FinalPoint" class="form-control" />
+                        <span asp-validation-for="Students[i].FinalPoint" class="text-danger"></span>
+                    </td>
+                    <td>
+                        <input asp-for="Students[i].IsAutomatic" type="checkbox" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a class="btn btn-secondary" href="@Url.Action("ExamList", "Exam", new { disciplineDetailId = Model.DisciplineDetailId })">Отмена</a>
+</form>

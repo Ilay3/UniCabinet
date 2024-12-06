@@ -10,10 +10,8 @@ namespace UniCabinet.Application.Profiles
     {
         public PracticalProfile()
         {
-            // Mapping between PracticalEntity and PracticalDTO
             CreateMap<PracticalEntity, PracticalDTO>().ReverseMap();
 
-            // Mapping between PracticalResultEntity and PracticalResultDTO
             CreateMap<PracticalResultEntity, PracticalResultDTO>()
                 .ForMember(dest => dest.StudentFirstName, opt => opt.MapFrom(src => src.Student.FirstName))
                 .ForMember(dest => dest.StudentLastName, opt => opt.MapFrom(src => src.Student.LastName))
@@ -24,7 +22,6 @@ namespace UniCabinet.Application.Profiles
                 .ForMember(dest => dest.Practical, opt => opt.Ignore())
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
 
-            // Mapping for StudentGradeDTO and PracticalResultEntity
             CreateMap<StudentGradeDTO, PracticalResultEntity>()
                 .ForMember(dest => dest.StudentId, opt => opt.MapFrom(src => src.StudentId))
                 .ForMember(dest => dest.Grade, opt => opt.MapFrom(src => src.Grade))

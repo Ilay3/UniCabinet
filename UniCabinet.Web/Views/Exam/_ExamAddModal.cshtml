@@ -1,0 +1,32 @@
+﻿@model UniCabinet.Core.Models.ViewModel.Exam.ExamAddVM
+
+<div class="modal fade" id="examAddModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Заголовок модального окна -->
+            <div class="modal-header">
+                <h5 class="modal-title">Добавить экзамен</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <!-- Тело модального окна -->
+            <div class="modal-body">
+                <form asp-action="AddExam" asp-controller="Exam" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" asp-for="DisciplineDetailId" />
+
+                    <div class="mb-3">
+                        <label asp-for="Date" class="form-label">Дата экзамена</label>
+                        <input asp-for="Date" class="form-control" type="date" required />
+                        <span asp-validation-for="Date" class="text-danger"></span>
+                    </div>
+                    <!-- Подвал модального окна -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

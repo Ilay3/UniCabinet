@@ -1,84 +1,101 @@
-﻿using UniCabinet.Application.Interfaces.Repository;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.DTOs.ExamManagement;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
 
-namespace UniCabinet.Infrastructure.Implementations.Repository;
-
-public class ExamResultRepositoryImpl : IExamResultRepository
+namespace UniCabinet.Infrastructure.Implementations.Repository
 {
-    private readonly ApplicationDbContext _context;
-    public ExamResultRepositoryImpl(ApplicationDbContext context)
+    public class ExamResultRepositoryImpl : IExamResultRepository
     {
-        _context = context;
-    }
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-    public ExamResultDTO GetExamResultById(int id)
-    {
-        var examResultEntity = _context.ExamResults.Find(id);
-        if (examResultEntity == null) return null;
-
-        return new ExamResultDTO
+        public ExamResultRepositoryImpl(ApplicationDbContext context, IMapper mapper)
         {
-            ExamId = examResultEntity.ExamId,
-            FinalPoint = examResultEntity.FinalPoint,
-            IsAutomatic = examResultEntity.IsAutomatic,
-            PointAvarage = examResultEntity.PointAvarage,
-            StudentId = examResultEntity.StudentId,
-        };
-    }
-
-    public List<ExamResultDTO> GetAllExamResults()
-    {
-        var examResultEntity = _context.ExamResults.ToList();
-
-        return examResultEntity.Select(d => new ExamResultDTO
-        {
-            Id = d.Id,
-            ExamId = d.ExamId,
-            FinalPoint = d.FinalPoint,
-            StudentId = d.StudentId,
-            IsAutomatic = d.IsAutomatic,
-            PointAvarage = d.PointAvarage,
-        }).ToList();
-    }
-
-    public void AddExamResult(ExamResultDTO examResultDTO)
-    {
-        var examResultEntity = new ExamResultEntity
-        {
-            ExamId = examResultDTO.ExamId,
-            StudentId = examResultDTO.StudentId,
-            PointAvarage = examResultDTO.PointAvarage,
-            FinalPoint = examResultDTO.FinalPoint,
-            IsAutomatic = examResultDTO.IsAutomatic,
-        };
-
-        _context.ExamResults.Add(examResultEntity);
-        _context.SaveChanges();
-    }
-
-    public void DeleteExamResult(int id)
-    {
-        var examResultEntity = _context.ExamResults.Find(id);
-        if (examResultEntity != null)
-        {
-            _context.ExamResults.Remove(examResultEntity);
-            _context.SaveChanges();
+            _context = context;
+            _mapper = mapper;
         }
-    }
 
-    public void UpdateExamResult(ExamResultDTO examResultDTO)
-    {
-        var examResultEntity = _context.ExamResults.FirstOrDefault(d => d.Id == examResultDTO.Id);
-        if (examResultEntity == null) return;
+        public async Task<ExamResultDTO> GetExamResultByIdAsync(int id)
+        {
+            var examResultEntity = await _context.ExamResults.FindAsync(id);
+            if (examResultEntity == null) return null;
 
-        examResultEntity.FinalPoint = examResultDTO.FinalPoint;
-        examResultEntity.PointAvarage = examResultDTO.PointAvarage;
-        examResultEntity.IsAutomatic = examResultDTO.IsAutomatic;
-        examResultEntity.ExamId = examResultDTO.ExamId;
-        examResultEntity.StudentId = examResultDTO.StudentId;
+            return _mapper.Map<ExamResultDTO>(examResultEntity);
+        }
 
-        _context.SaveChanges();
+        public async Task<List<ExamResultDTO>> GetAllExamResultsAsync()
+        {
+            var examResults = await _context.ExamResults
+                .Include(er => er.Student)
+                .Include(er => er.Exam)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return _mapper.Map<List<ExamResultDTO>>(examResults);
+        }
+
+        public async Task AddExamResultAsync(ExamResultDTO examResultDTO)
+        {
+            var examResultEntity = _mapper.Map<ExamResultEntity>(examResultDTO);
+
+            await _context.ExamResults.AddAsync(examResultEntity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteExamResultAsync(int id)
+        {
+            var examResultEntity = await _context.ExamResults.FindAsync(id);
+            if (examResultEntity != null)
+            {
+                _context.ExamResults.Remove(examResultEntity);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateExamResultAsync(ExamResultDTO examResultDTO)
+        {
+            var examResultEntity = await _context.ExamResults.FirstOrDefaultAsync(er => er.Id == examResultDTO.Id);
+            if (examResultEntity == null) return;
+
+            _mapper.Map(examResultDTO, examResultEntity);
+            _context.ExamResults.Update(examResultEntity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddOrUpdateExamResultAsync(ExamResultDTO examResultDTO)
+        {
+            var existingResult = await _context.ExamResults
+                .FirstOrDefaultAsync(er => er.ExamId == examResultDTO.ExamId && er.StudentId == examResultDTO.StudentId);
+
+            if (existingResult != null)
+            {
+                _mapper.Map(examResultDTO, existingResult);
+                _context.ExamResults.Update(existingResult);
+            }
+            else
+            {
+                var examResultEntity = _mapper.Map<ExamResultEntity>(examResultDTO);
+                await _context.ExamResults.AddAsync(examResultEntity);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<ExamResultDTO>> GetExamResultsByExamIdAsync(int examId)
+        {
+            var examResults = await _context.ExamResults
+                .Where(er => er.ExamId == examId)
+                .Include(er => er.Student)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return _mapper.Map<List<ExamResultDTO>>(examResults);
+        }
     }
 }

@@ -1,0 +1,27 @@
+﻿@model UniCabinet.Core.Models.ViewModel.Exam.ExamEditVM
+
+<div class="modal fade" id="examEditModal" tabindex="-1" aria-labelledby="examEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="EditExam" asp-controller="Exam" method="post">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="DisciplineDetailId" />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="examEditModalLabel">Редактировать экзамен</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label asp-for="Date" class="form-label">Дата экзамена</label>
+                        <input asp-for="Date" class="form-control" type="date" />
+                        <span asp-validation-for="Date" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

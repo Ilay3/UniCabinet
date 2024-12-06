@@ -1,72 +1,78 @@
-﻿using UniCabinet.Application.Interfaces.Repository;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.DTOs.ExamManagement;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
 
-namespace UniCabinet.Infrastructure.Implementations.Repository;
-
-public class ExamRepository : IExamRepository
+namespace UniCabinet.Infrastructure.Implementations.Repository
 {
-    private readonly ApplicationDbContext _context;
-    public ExamRepository(ApplicationDbContext context)
+    public class ExamRepositoryImpl : IExamRepository
     {
-        _context = context;
-    }
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-    public ExamDTO GetExamById(int id)
-    {
-        var examEntity = _context.Exams.Find(id);
-        if (examEntity == null) return null;
-
-        return new ExamDTO
+        public ExamRepositoryImpl(ApplicationDbContext context, IMapper mapper)
         {
-            Date = examEntity.Date,
-            DisciplineDetailId = examEntity.DisciplineDetailId,
-        };
-    }
-
-    public List<ExamDTO> GetAllExams()
-    {
-        var examEntity = _context.Exams.ToList();
-
-        return examEntity.Select(d => new ExamDTO
-        {
-            Id = d.Id,
-            Date = d.Date,
-            DisciplineDetailId = d.DisciplineDetailId,
-        }).ToList();
-    }
-
-    public void AddExam(ExamDTO examDTO)
-    {
-        var examEntity = new ExamEntity
-        {
-            Date = examDTO.Date,
-            DisciplineDetailId = examDTO.DisciplineDetailId,
-        };
-
-        _context.Exams.Add(examEntity);
-        _context.SaveChanges();
-    }
-
-    public void DeleteExam(int id)
-    {
-        var examEntity = _context.Exams.Find(id);
-        if (examEntity != null)
-        {
-            _context.Exams.Remove(examEntity);
-            _context.SaveChanges();
+            _context = context;
+            _mapper = mapper;
         }
-    }
 
-    public void UpdateExam(ExamDTO examDTO)
-    {
-        var examEntity = _context.Exams.FirstOrDefault(d => d.Id == examDTO.Id);
-        if (examEntity == null) return;
+        public async Task<ExamDTO> GetExamByIdAsync(int id)
+        {
+            var examEntity = await _context.Exams.FindAsync(id);
+            if (examEntity == null) return null;
 
-        examEntity.Date = examDTO.Date;
-        examEntity.DisciplineDetailId = examDTO.DisciplineDetailId;
+            return _mapper.Map<ExamDTO>(examEntity);
+        }
 
-        _context.SaveChanges();
+        public async Task<List<ExamDTO>> GetExamListByDisciplineDetailIdAsync(int disciplineDetailId)
+        {
+            var examList = await _context.Exams
+                .Where(e => e.DisciplineDetailId == disciplineDetailId)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return _mapper.Map<List<ExamDTO>>(examList);
+        }
+
+        public async Task<List<ExamDTO>> GetAllExamsAsync()
+        {
+            var exams = await _context.Exams
+                .AsNoTracking()
+                .ToListAsync();
+
+            return _mapper.Map<List<ExamDTO>>(exams);
+        }
+
+        public async Task AddExamAsync(ExamDTO examDTO)
+        {
+            var examEntity = _mapper.Map<ExamEntity>(examDTO);
+            await _context.Exams.AddAsync(examEntity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteExamAsync(int id)
+        {
+            var examEntity = await _context.Exams.FindAsync(id);
+            if (examEntity != null)
+            {
+                _context.Exams.Remove(examEntity);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateExamAsync(ExamDTO examDTO)
+        {
+            var examEntity = await _context.Exams.FirstOrDefaultAsync(e => e.Id == examDTO.Id);
+            if (examEntity == null) return;
+
+            _mapper.Map(examDTO, examEntity);
+            _context.Exams.Update(examEntity);
+            await _context.SaveChangesAsync();
+        }
     }
 }
