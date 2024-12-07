@@ -4,10 +4,12 @@ namespace UniCabinet.Application.Interfaces.Repository
 {
     public interface IExamRepository
     {
-        void AddExam(ExamDTO examDTO);
-        void DeleteExam(int id);
-        List<ExamDTO> GetAllExams();
-        ExamDTO GetExamById(int id);
-        void UpdateExam(ExamDTO examDTO);
+        Task<ExamDTO> GetExamByIdAsync(int id);
+        Task<List<ExamDTO>> GetExamListByDisciplineDetailIdAsync(int disciplineDetailId);
+        Task<List<ExamDTO>> GetAllExamsAsync();
+        Task AddExamAsync(ExamDTO examDTO);
+        Task DeleteExamAsync(int id);
+        Task UpdateExamAsync(ExamDTO examDTO);
     }
+
 }

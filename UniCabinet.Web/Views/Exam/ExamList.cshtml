@@ -1,0 +1,38 @@
+﻿@model List<UniCabinet.Core.Models.ViewModel.Exam.ExamEditVM>
+
+@{
+    ViewBag.Title = "Список экзаменов по дисциплине";
+    var disciplineDetailId = ViewBag.DisciplineDetailId;
+}
+
+<h2>Список экзаменов</h2>
+
+<button class="btn btn-primary" onclick="openModal('/Exam/ExamAddModal', 'examAddModal', @ViewBag.DisciplineDetailId)">Добавить экзамен</button>
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Дата экзамена</th>
+            <th>Действия</th>
+            <th>Результаты</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var exam in Model)
+        {
+            <tr>
+                <td>@exam.Date.ToShortDateString()</td>
+                <td>
+                    <button class="btn btn-sm btn-warning" onclick="openModal('/Exam/ExamEditModal', 'examEditModal', @exam.Id)">
+                        Редактировать
+                    </button>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-primary" href="@Url.Action("ExamResults", "Exam", new { examId = exam.Id, disciplineDetailId = exam.DisciplineDetailId })">Выставить оценки</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div id="modalContainer"></div>

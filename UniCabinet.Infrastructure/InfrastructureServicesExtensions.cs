@@ -26,7 +26,8 @@ namespace UniCabinet.Infrastructure
             services.AddTransient<ISpecializationRepository, SpecializationRepositoryImpl>();
             services.AddScoped<IPracticalRepository, PracticalRepositoryImpl>();
             services.AddScoped<IPracticalResultRepository, PracticalResultRepositoryImpl>();
-
+            services.AddScoped<IExamRepository, ExamRepositoryImpl>();
+            services.AddScoped<IExamResultRepository, ExamResultRepositoryImpl>();
 
         }
     }
