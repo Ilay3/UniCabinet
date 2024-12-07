@@ -15,6 +15,8 @@ namespace UniCabinet.Application.Profiles
                 .ReverseMap();
             CreateMap<DisciplineDTO, DisciplineEditVM>().ReverseMap();
             CreateMap<DisciplineDTO, DisciplineListVM>().ReverseMap();
+            CreateMap<DisciplineDTO, DisciplineWithSpecialtyVM>();
+
         }
     }
 }

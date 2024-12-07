@@ -6,7 +6,7 @@ namespace UniCabinet.Application.Interfaces.Repository
     public interface ISemesterRepository
     {
         // Существующие методы
-        List<SemesterDTO> GetAllSemesters();
+        Task<List<SemesterDTO>> GetAllSemesters();
         SemesterDTO GetSemesterById(int id);
         Task<SemesterDTO> GetCurrentSemesterAsync(DateTime currentDate);
         SemesterEntity GetSemesterEntityById(int id);

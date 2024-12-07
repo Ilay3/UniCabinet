@@ -8,42 +8,12 @@
         Вернуться назад
     </a>
         <!-- Фильтры -->
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label for="filterCourse" class="form-label">Курс</label>
-                <select id="filterCourse" name="courseId" class="form-select">
-                    <option value="">Все</option>
-                    @foreach (var course in Model.FilterOptions.Courses)
-                    {
-                        <option value="@course.Value">@course.Text</option>
-                    }
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label for="filterGroup" class="form-label">Группа</label>
-                <select id="filterGroup" name="groupId" class="form-select">
-                    <option value="">Все</option>
-                    @foreach (var group in Model.FilterOptions.Groups)
-                    {
-                        <option value="@group.Value">@group.Text</option>
-                    }
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label for="filterSemester" class="form-label">Семестр</label>
-                <select id="filterSemester" name="semesterId" class="form-select">
-                    <option value="">Все</option>
-                    @foreach (var semester in Model.FilterOptions.Semesters)
-                    {
-                        <option value="@semester.Value">@semester.Text</option>
-                    }
-                </select>
-            </div>
-        </div>
+    @await Html.PartialAsync("_DisciplineDetailFilterPartial", Model)
 
         <!-- Скрытые поля -->
         <input type="hidden" id="disciplineId" value="@Model.DisciplineId" />
         <input type="hidden" id="teacherId" value="@Model.TeacherId" />
+    <input type="hidden" id="isTeacherView" value="Model.IsTeacherView" />
 
         <!-- Контейнер для таблицы -->
         <div id="detailsTableContainer">

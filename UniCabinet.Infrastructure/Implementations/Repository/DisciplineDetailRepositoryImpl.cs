@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.DTOs.DisciplineDetailManagment;
+using UniCabinet.Core.DTOs.ExamManagement;
+using UniCabinet.Core.DTOs.SpecializationManagement;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
 
@@ -100,9 +102,48 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             throw new NotImplementedException();
         }
 
-        public void UpdateDisciplineDetail(DisciplineDetailDTO disciplineDetailDTO)
+
+        public async Task UpdateAsync(DisciplineDetailDTO dto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var entity = await _context.DisciplineDetails.FirstOrDefaultAsync(d => d.Id == dto.Id);
+                if (entity == null)
+                    throw new InvalidOperationException("DisciplineDetail not found");
+
+                entity.CourseId = dto.CourseId;
+                entity.GroupId = dto.GroupId;
+                entity.SemesterId = dto.SemesterId;
+                entity.LectureCount = dto.LectureCount;
+                entity.PracticalCount = dto.PracticalCount;
+                entity.SubExamCount = dto.SubExamCount;
+                entity.ExamCount = dto.ExamCount;
+                entity.MinLecturesRequired = dto.MinLecturesRequired;
+                entity.MinPracticalsRequired = dto.MinPracticalsRequired;
+                entity.AutoExamThreshold = dto.AutoExamThreshold;
+                entity.PassCount = dto.PassCount;
+
+                await _context.SaveChangesAsync();
+            }
+            catch (ObjectDisposedException ex)
+            {
+                Console.WriteLine("DbContext has been disposed.");
+                throw new InvalidOperationException("DbContext was disposed earlier than expected. Check dependency injection configuration.", ex);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task AddAsync(DisciplineDetailDTO disciplineDetailDTO)
+        {
+
+           
+            var entity = _mapper.Map<DisciplineDetailEntity>(disciplineDetailDTO);
+            await _context.DisciplineDetails.AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
     }
 }

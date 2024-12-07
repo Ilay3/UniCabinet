@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using UniCabinet.Application.Interfaces;
 using UniCabinet.Application.Interfaces.Repository;
+using UniCabinet.Core.DTOs.CourseManagement;
 using UniCabinet.Core.DTOs.SpecializationManagement;
+using UniCabinet.Core.Models.ViewModel.User;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
 
@@ -72,6 +74,40 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             await _context.SaveChangesAsync();
         }
 
+        public async Task<UserSpecialtiesAndDisciplinesDTO> GetSpecializationByTeacherId(string teachid)
+        {
+            // Получаем пользователя
+            var user = await _context.Set<UserEntity>()
+                .Include(u => u.DepartmentEntity)
+                .FirstOrDefaultAsync(u => u.Id == teachid);
+
+            if (user == null)
+            {
+                throw new KeyNotFoundException("Пользователь не найден.");
+            }
+
+            var userDepartmentId = user.DepartmentId;
+
+            // Получаем специальности
+            var specialties = await _context.Set<SpecialtyEntity>()
+                .Where(s => s.Teachers.Any(t => t.DepartmentId == userDepartmentId))
+                .ToListAsync();
+
+            // Извлекаем Id специальностей
+            var specialtyIds = specialties.Select(s => s.Id).ToList();
+
+            // Получаем дисциплины
+            var disciplines = await _context.Set<DisciplineEntity>()
+                .Where(d => specialtyIds.Contains(d.SpecialtyId ?? 0) && d.DepartmentId == userDepartmentId)
+                .ToListAsync();
+
+            // Маппинг данных
+            return new UserSpecialtiesAndDisciplinesDTO
+            {
+                Specialties = _mapper.Map<List<SpecializationDTO>>(specialties),
+                Disciplines = _mapper.Map<List<DisciplineDTO>>(disciplines)
+            };
+        }
 
     }
 }

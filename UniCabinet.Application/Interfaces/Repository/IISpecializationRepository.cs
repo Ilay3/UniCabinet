@@ -9,6 +9,7 @@ namespace UniCabinet.Application.Interfaces.Repository
         Task<SpecializationDTO> GetSpecializationById(int id);
         Task AddSpecialization(SpecializationAddDTO specializationDTO);
         Task UpdateSpecialization(SpecializationEditDTO specializationDTO);
+        Task<UserSpecialtiesAndDisciplinesDTO> GetSpecializationByTeacherId(string teachid);
     }
 
 }

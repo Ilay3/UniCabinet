@@ -91,5 +91,15 @@ namespace UniCabinet.Web.Controllers
                 return PartialView("_EditSpecializationModal", model);
             }
         }
+
+        public async Task<IActionResult> GetDataSpecTeacher([FromServices] GetDataSpecTeacherUseCase getDataSpecTeacherUseCase)
+       {
+            var teachId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            var result = await getDataSpecTeacherUseCase.ExecuteAsync(teachId);
+            var viewModel = _mapper.Map<UserSpecialtiesAndDisciplinesVM> (result);
+
+            return View("SpecListTeacher", viewModel);
+        }
     }
 }

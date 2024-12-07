@@ -21,6 +21,14 @@
                             onclick="openModal('@Url.Action("DetailInfo", "DisciplineDetails", new { detailId = detail.Id })', 'detailInfoModal')">
                         Подробнее
                     </button>
+                    @if (Model.IsTeacherView)
+                    {
+                        <button class="btn btn-info"
+                            onclick="openModal('@Url.Action("EditDisciplineDetailModal", "DisciplineDetails", new { detailId = detail.Id })', 'editDisciplineDetailModal')">
+                            Редактировать
+                        </button>
+                    }
+
                 </td>
             </tr>
         }

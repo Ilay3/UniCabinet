@@ -1,0 +1,94 @@
+﻿@model UniCabinet.Core.Models.ViewModel.DisciplineDetail.DisciplineDetailAddVM
+
+<div class="modal fade" id="addDisciplineDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDisciplineDetailLabel">Добавить детали дисциплины</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" asp-action="AddDisciplineDetail">
+                <div class="modal-body">
+                    <input type="hidden" asp-for="DisciplineId" />
+
+                    <div class="form-group">
+                        <label for="courseId">Курс</label>
+                        <select asp-for="CourseId" class="form-control" required>
+                            <option value="">Выберите курс</option>
+                            @foreach (var course in Model.Courses)
+                            {
+                                <option value="@course.Value">@course.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="groupId">Группа</label>
+                        <select asp-for="GroupId" class="form-control" required>
+                            <option value="">Выберите группу</option>
+                            @foreach (var group in Model.Groups)
+                            {
+                                <option value="@group.Value">@group.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="semesterId">Семестр</label>
+                        <select asp-for="SemesterId" class="form-control" required>
+                            <option value="">Выберите семестр</option>
+                            @foreach (var semester in Model.Semesters)
+                            {
+                                <option value="@semester.Value">@semester.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="lectureCount">Количество лекций</label>
+                        <input type="number" asp-for="LectureCount" class="form-control" min="0" required />
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="practicalCount">Количество практических</label>
+                        <input type="number" asp-for="PracticalCount" class="form-control" min="0" required />
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="subExamCount">Количество зачетов</label>
+                        <input type="number" asp-for="SubExamCount" class="form-control" min="0" required />
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="examCount">Количество экзаменов</label>
+                        <input type="number" asp-for="ExamCount" class="form-control" min="0" required />
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="minLecturesRequired">Минимум лекций для прохождения</label>
+                        <input type="number" asp-for="MinLecturesRequired" class="form-control" min="0" required />
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="minPracticalsRequired">Минимум практических для прохождения</label>
+                        <input type="number" asp-for="MinPracticalsRequired" class="form-control" min="0" required />
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="autoExamThreshold">Минимум для автомата</label>
+                        <input type="number" asp-for="AutoExamThreshold" class="form-control" min="0" required />
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="passCount">Минимальный балл для прохождения</label>
+                        <input type="number" asp-for="PassCount" class="form-control" min="0" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

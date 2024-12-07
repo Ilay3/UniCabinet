@@ -27,7 +27,7 @@
                             <div class="teacher-item">
                                 @($"{teacher.FirstName} {teacher.LastName}")
                                 <a class="btn btn-sm btn-link"
-                                   href="@Url.Action("TeacherDetails", "DisciplineDetails", new { disciplineId = discipline.Id, teacherId = teacher.Id })">
+                                   href="@Url.Action("TeacherDetailsWithUserId", "DisciplineDetails", new { disciplineId = discipline.Id, teacherId = teacher.Id })">
                                     Посмотреть детали
                                 </a>
                             </div>

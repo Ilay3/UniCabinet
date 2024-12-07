@@ -18,9 +18,9 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
 
         }
 
-        public List<SemesterDTO> GetAllSemesters()
+        public async Task<List<SemesterDTO>> GetAllSemesters()
         {
-            var semesterEntities = _context.Semesters.ToList();
+            var semesterEntities = await _context.Semesters.ToListAsync();
 
             return semesterEntities.Select(d => new SemesterDTO
             {
