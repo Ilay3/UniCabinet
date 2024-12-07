@@ -7,6 +7,7 @@ using UniCabinet.Infrastructure.Data;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
+using UniCabinet.Core.DTOs.UserManagement;
 
 namespace UniCabinet.Infrastructure.Implementations.Repository
 {
@@ -89,13 +90,39 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
 
         public async Task<List<ExamResultDTO>> GetExamResultsByExamIdAsync(int examId)
         {
-            var examResults = await _context.ExamResults
-                .Where(er => er.ExamId == examId)
-                .Include(er => er.Student)
-                .AsNoTracking()
+            // Получаем экзамен по ID
+            var exam = await _context.Exams
+                .Where(e => e.Id == examId)
+                .Include(e => e.DisciplineDetails) 
+                .FirstOrDefaultAsync();
+
+            if (exam == null)
+            {
+                throw new InvalidOperationException($"Exam with ID {examId} not found.");
+            }
+
+            var disciplineDetail = exam.DisciplineDetails;
+
+            // Получаем список студентов из группы
+            var students = await _context.Users
+                .Where(u => u.GroupId == disciplineDetail.GroupId)
                 .ToListAsync();
 
-            return _mapper.Map<List<ExamResultDTO>>(examResults);
+
+            var examResults = students.Select(student => new ExamResultDTO
+            {
+                StudentId = student.Id,
+                ExamId = examId,
+                StudentFirstName = student.FirstName,
+                StudentLastName = student.LastName,
+                StudentPatronymic = student.Patronymic,
+                PointAvarage = 0, 
+                FinalPoint = 0,
+                IsAutomatic = false
+            }).ToList();
+
+            return examResults;
         }
+
     }
 }

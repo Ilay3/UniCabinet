@@ -85,12 +85,12 @@ public class LectureController : Controller
     }
 
     [HttpGet]
-    public IActionResult LectureAttendance(
+    public async Task<IActionResult> LectureAttendance(
         int lectureId,
         [FromServices] GetLectureAttendanceUseCase getLectureAttendanceUseCase)
     {
-        var result = getLectureAttendanceUseCase.ExecuteAsync(lectureId);
-        var attendanceVM = _mapper.Map< LectureAttendanceVM>(result);
+        var result = await getLectureAttendanceUseCase.ExecuteAsync(lectureId);
+        var attendanceVM = _mapper.Map<LectureAttendanceVM>(result);
         if (attendanceVM == null)
         {
             return NotFound();

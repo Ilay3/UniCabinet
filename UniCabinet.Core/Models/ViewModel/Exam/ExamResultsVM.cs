@@ -10,7 +10,7 @@ namespace UniCabinet.Core.Models.ViewModel.Exam
     {
         public int ExamId { get; set; }
         public int DisciplineDetailId { get; set; }
-        public List<ExamResultItemVM> Students { get; set; } = new List<ExamResultItemVM>();
+        public List<ExamResultItemVM> Students { get; set; }
     }
 
 }

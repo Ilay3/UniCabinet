@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UniCabinet.Application.Interfaces;
 using UniCabinet.Core.DTOs.UserManagement;
+using UniCabinet.Core.Models.ViewModel.DisciplineDetail;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
 
@@ -159,18 +160,8 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
         public async Task<List<UserDTO>> GetStudentsByGroupIdAsync(int groupId)
         {
             var students = await _context.Users
-                .Where(u => u.GroupId == groupId)
-                .Join(_context.UserRoles,
-                      user => user.Id,
-                      userRole => userRole.UserId,
-                      (user, userRole) => new { user, userRole })
-                .Join(_context.Roles,
-                      ur => ur.userRole.RoleId,
-                      role => role.Id,
-                      (ur, role) => new { ur.user, role.Name })
-                .Where(u => u.Name == "Student")
-                .Select(u => u.user)
-                .ToListAsync();
+             .Where(u => u.GroupId == groupId)
+             .ToListAsync();
 
             return students.Select(u => new UserDTO
             {

@@ -39,7 +39,7 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
 
             int disciplineDetailId = lecture.DisciplineDetailId;
 
-            var disciplineDetail = await _disciplineDetailRepository.GetDisciplineDetailByIdAsync(disciplineDetailId);
+            var disciplineDetail = await _disciplineDetailRepository.GetByIdAsync(disciplineDetailId);
             if (disciplineDetail == null)
             {
                 return null;
