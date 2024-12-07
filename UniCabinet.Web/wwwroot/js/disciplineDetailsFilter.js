@@ -11,12 +11,18 @@
         var groupId = $('#filterGroup').val();
         var semesterId = $('#filterSemester').val();
 
+        // Определяем URL в зависимости от IsTeacherView
+        var isTeacherView = $('#isTeacherView').val() === 'true';
+        var url = isTeacherView
+            ? '/DisciplineDetails/TeacherDetails'
+            : '/DisciplineDetails/TeacherDetailsWithUserId';
+
         // Отображение индикатора загрузки
         showLoadingIndicator();
 
         // AJAX-запрос
         $.ajax({
-            url: '/DisciplineDetails/TeacherDetails',
+            url: url,
             type: 'GET',
             data: {
                 disciplineId: disciplineId,
@@ -38,12 +44,10 @@
     }
 
     function showLoadingIndicator() {
-        // Можно добавить спиннер или затенение
         $('#detailsTableContainer').append('<div class="loading">Загрузка...</div>');
     }
 
     function hideLoadingIndicator() {
-        // Удаляем индикатор загрузки
         $('#detailsTableContainer .loading').remove();
     }
 });

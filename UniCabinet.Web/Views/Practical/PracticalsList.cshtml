@@ -1,0 +1,41 @@
+﻿@model List<UniCabinet.Core.Models.ViewModel.Practical.PracticalListVM>
+@{
+    ViewBag.Title = "Список практических работ";
+}
+
+@{
+    var existingPracticalsCount = Model.Count;
+    var maxPracticals = ViewBag.MaxPracticals;
+}
+
+<h2>Список практических работ по дисциплине @ViewBag.Discipline</h2>
+
+<button class="btn btn-primary" @(existingPracticalsCount >= maxPracticals ? "disabled" : "") onclick="openModal('/Practical/PracticalAddModal', 'practicalAddModal', @ViewBag.DisciplineDetailId)">Добавить практическую работу</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Номер практической работы</th>
+            <th>Дата</th>
+            <th>Действия</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var practical in Model)
+        {
+            <tr>
+                <td>@practical.PracticalNumber</td>
+                <td>@practical.Date.ToShortDateString()</td>
+                <td>
+                    <button class="btn btn-sm btn-warning" onclick="openModal('/Practical/PracticalEditModal', 'practicalEditModal', @practical.Id)">Редактировать</button>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-primary" href="@Url.Action("PracticalAttendance", "Practical", new { practicalId = practical.Id })">Выставить оценки</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div id="modalContainer"></div>

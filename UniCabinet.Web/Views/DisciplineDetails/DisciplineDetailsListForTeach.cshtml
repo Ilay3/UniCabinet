@@ -1,0 +1,34 @@
+﻿@model UniCabinet.Core.Models.ViewModel.DisciplineDetail.DisciplineDetailsModalVM
+
+
+<div class="container mt-4">
+    <h1 class="mb-4">Детали дисциплины</h1>
+    <a class="btn btn-sm btn-link"
+       href="@Url.Action("GetDataSpecTeacher", "Specialization")">
+        Вернуться назад
+    </a>
+    @if (Model.IsTeacherView)
+    {
+        <button type="button" class="btn btn-primary" 
+                onclick="openModal('@Url.Action("AddDisciplineDetailModal", "DisciplineDetails", new { disciplineId = Model.DisciplineId })', 'addDisciplineDetailModal')">
+            
+            Добавить детали дисциплин
+        </button>
+    }
+    <!-- Фильтры -->
+    @await Html.PartialAsync("_DisciplineDetailFilterPartial", Model)
+
+    <!-- Скрытые поля -->
+    <input type="hidden" id="disciplineId" value="@Model.DisciplineId" />
+    <input type="hidden" id="isTeacherView" value="Model.IsTeacherView" />
+
+    <!-- Контейнер для таблицы -->
+    <div id="detailsTableContainer">
+        @await Html.PartialAsync("_DisciplineDetailsTablePartial", Model)
+    </div>
+    <div id="modalContainer"></div>
+
+</div>
+
+<script src="~/js/disciplineDetailsFilter.js" defer></script>
+<script src="~/js/load-modal.js"></script>

@@ -1,13 +1,14 @@
 ﻿using UniCabinet.Core.DTOs.PracticalManagement;
 
-namespace UniCabinet.Application.Interfaces.Repository
+namespace UniCabinet.Application.Interfaces.Repository;
+
+public interface IPracticalRepository
 {
-    public interface IPracticalRepository
-    {
-        void AddPractical(PracticalDTO practicalDTO);
-        void DeletePractical(int id);
-        List<PracticalDTO> GetAllPracticals();
-        PracticalDTO GetPracticalById(int id);
-        void UpdatePractical(PracticalDTO practicalDTO);
-    }
+    Task<PracticalDTO> GetPracticalByIdAsync(int id);
+    Task<List<PracticalDTO>> GetPracticalListByDisciplineDetailIdAsync(int id);
+    Task<List<PracticalDTO>> GetAllPracticalsAsync();
+    Task AddPracticalAsync(PracticalDTO practicalDTO);
+    Task DeletePracticalAsync(int id);
+    Task UpdatePracticalAsync(PracticalDTO practicalDTO);
+    Task<int> GetPracticalCountByDisciplineDetailIdAsync(int disciplineDetailId);
 }

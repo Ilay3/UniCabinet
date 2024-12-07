@@ -40,5 +40,8 @@ public class SpecializationProfile : Profile
         CreateMap<SpecializationAddVM, SpecializationAddDTO>().ReverseMap();
 
         CreateMap<SpecializationEditVM, SpecializationEditDTO>().ReverseMap();
+
+        CreateMap<UserSpecialtiesAndDisciplinesDTO, UserSpecialtiesAndDisciplinesVM>()
+            .ReverseMap();
     }
 }

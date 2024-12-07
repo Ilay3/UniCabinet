@@ -1,12 +1,11 @@
-﻿using UniCabinet.Core.DTOs.PracticalManagement;
+﻿using System;
 
 namespace UniCabinet.Core.Models.ViewModel.Practical
 {
     public class PracticalListVM
     {
-        public int DisciplineDetailId { get; set; }
-        public int CurrentPracticalCount { get; set; }
-        public int MaxPracticalCount { get; set; }
-        public List<PracticalDTO> Practicals { get; set; }
+        public int Id { get; set; }
+        public int PracticalNumber { get; set; }
+        public DateTime Date { get; set; }
     }
 }
