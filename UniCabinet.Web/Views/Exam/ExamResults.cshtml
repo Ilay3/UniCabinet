@@ -4,13 +4,19 @@
     ViewBag.Title = "Результаты экзамена";
 }
 
-<h2>Результаты экзамена</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary">Результаты экзамена</h2>
+    <a class="btn btn-secondary" href="@Url.Action("ExamList", "Exam", new { disciplineDetailId = Model.DisciplineDetailId })">
+        <i class="bi bi-arrow-left"></i> Назад
+    </a>
+</div>
 
-<form asp-action="SaveExamResults" asp-controller="Exam" method="post">
+<form asp-action="SaveExamResults" asp-controller="Exam" method="post" class="mb-4">
     <input type="hidden" asp-for="ExamId" />
     <input type="hidden" asp-for="DisciplineDetailId" />
-    <table class="table">
-        <thead>
+
+    <table class="table table-striped table-hover">
+        <thead class="table-light">
             <tr>
                 <th>Фамилия</th>
                 <th>Имя</th>
@@ -28,21 +34,29 @@
                     <td>@Model.Students[i].FirstName</td>
                     <td>@Model.Students[i].Patronymic</td>
                     <td>
-                        <input asp-for="Students[i].PointAvarage" class="form-control" />
+                        <input asp-for="Students[i].PointAvarage" class="form-control form-control-sm" />
                         <span asp-validation-for="Students[i].PointAvarage" class="text-danger"></span>
                     </td>
                     <td>
-                        <input asp-for="Students[i].FinalPoint" class="form-control" />
+                        <input asp-for="Students[i].FinalPoint" class="form-control form-control-sm" />
                         <span asp-validation-for="Students[i].FinalPoint" class="text-danger"></span>
                     </td>
-                    <td>
-                        <input asp-for="Students[i].IsAutomatic" type="checkbox" />
+                    <td class="text-center">
+                        <div class="form-check">
+                            <input asp-for="Students[i].IsAutomatic" type="checkbox" class="form-check-input" />
+                        </div>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <button type="submit" class="btn btn-primary">Сохранить</button>
-    <a class="btn btn-secondary" href="@Url.Action("ExamList", "Exam", new { disciplineDetailId = Model.DisciplineDetailId })">Отмена</a>
+    <div class="d-flex justify-content-end gap-3">
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save"></i> Сохранить
+        </button>
+        <a class="btn btn-secondary" href="@Url.Action("ExamList", "Exam", new { disciplineDetailId = Model.DisciplineDetailId })">
+            <i class="bi bi-x-circle"></i> Отмена
+        </a>
+    </div>
 </form>

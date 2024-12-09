@@ -5,30 +5,35 @@
     var disciplineDetailId = ViewBag.DisciplineDetailId;
 }
 
-<h2>Список экзаменов</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary">Список экзаменов</h2>
+    <button class="btn btn-primary btn-sm" onclick="openModal('/Exam/ExamAddModal', 'examAddModal', @disciplineDetailId)">
+        <i class="bi bi-plus-circle"></i> Добавить экзамен
+    </button>
+</div>
 
-<button class="btn btn-primary" onclick="openModal('/Exam/ExamAddModal', 'examAddModal', @ViewBag.DisciplineDetailId)">Добавить экзамен</button>
-
-<table class="table mt-3">
-    <thead>
+<table class="table table-striped table-hover">
+    <thead class="table-light">
         <tr>
             <th>Дата экзамена</th>
-            <th>Действия</th>
-            <th>Результаты</th>
+            <th class="text-center">Действия</th>
+            <th class="text-center">Результаты</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var exam in Model)
         {
             <tr>
-                <td>@exam.Date.ToShortDateString()</td>
-                <td>
+                <td class="fw-bold">@exam.Date.ToShortDateString()</td>
+                <td class="text-center">
                     <button class="btn btn-sm btn-warning" onclick="openModal('/Exam/ExamEditModal', 'examEditModal', @exam.Id)">
-                        Редактировать
+                        <i class="bi bi-pencil-square"></i> Редактировать
                     </button>
                 </td>
-                <td>
-                    <a class="btn btn-sm btn-primary" href="@Url.Action("ExamResults", "Exam", new { examId = exam.Id, disciplineDetailId = exam.DisciplineDetailId })">Выставить оценки</a>
+                <td class="text-center">
+                    <a class="btn btn-sm btn-primary" href="@Url.Action("ExamResults", "Exam", new { examId = exam.Id, disciplineDetailId = exam.DisciplineDetailId })">
+                        <i class="bi bi-bar-chart-line"></i> Оценки
+                    </a>
                 </td>
             </tr>
         }

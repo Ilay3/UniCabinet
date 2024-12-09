@@ -1,45 +1,54 @@
 ﻿@model List<UniCabinet.Core.Models.ViewModel.Departmet.DepartmentsWithUsersVM>
 
-<button type="button" class="btn btn-primary btn-sm me-1"
-        onclick="openModal('@Url.Action("AddDepartmentModal", "Department")', 'addDepartmentModal')">
-    <i class="bi bi-plus-square"></i> Добавить кафедру
-</button>
+<div class="container mt-4">
+    <!-- Кнопка добавления кафедры -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-primary">Список кафедр</h2>
+        <button type="button" class="btn btn-primary btn-sm"
+                onclick="openModal('@Url.Action("AddDepartmentModal", "Department")', 'addDepartmentModal')">
+            <i class="bi bi-plus-square"></i> Добавить кафедру
+        </button>
+    </div>
 
+    <div id="departments" class="accordion" id="departmentsAccordion">
+        @foreach (var department in Model)
+        {
+            <div class="accordion-item mb-3 shadow-sm">
+                <!-- Заголовок кафедры -->
+                <h2 class="accordion-header" id="heading-@department.Id">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@department.Id"
+                            aria-expanded="false" aria-controls="collapse-@department.Id">
+                        <span class="me-2"><i class="bi bi-building"></i></span> @department.DepartmentName
+                    </button>
+                </h2>
 
-<div id="departments">
-    @foreach (var department in Model)
-    {
-        <div class="department">
-            <h3>
-                <a data-toggle="collapse" href="#department-@department.Id" role="button" aria-expanded="false" aria-controls="department-@department.Id">
-                    @department.DepartmentName
-                </a>
-            </h3>
-            <button type="button" class="btn btn-warning btn-sm me-1"
-                    onclick="openModal('@Url.Action("EditDepartmentModal", "Department", new { departmentId = department.Id })', 'editDepartmentModal')">
-                <i class="bi bi-pencil-square"></i> Редактировать
-            </button>
-            <div class="collapse" id="department-@department.Id">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Имя пользователя</th>
-                            <th>Роли</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var user in department.Users)
-                        {
-                            <tr>
-                                <td>@user.FirstName @user.LastName</td>
-                                <td>@string.Join(", ", user.Roles)</td>
-                            </tr>
+                <!-- Содержимое кафедры -->
+                <div id="collapse-@department.Id" class="accordion-collapse collapse" aria-labelledby="heading-@department.Id" data-bs-parent="#departmentsAccordion">
+                    <div class="accordion-body">
+                        <!-- Кнопка редактирования кафедры -->
+                        <div class="d-flex justify-content-end mb-3">
+                            <button type="button" class="btn btn-warning btn-sm"
+                                    onclick="openModal('@Url.Action("EditDepartmentModal", "Department", new { departmentId = department.Id })', 'editDepartmentModal')">
+                                <i class="bi bi-pencil-square"></i> Редактировать
+                            </button>
+                        </div>
 
-                        }
-                    </tbody>
-                </table>
+                        <!-- Таблица пользователей кафедры (минималистичная) -->
+                        <ul class="list-group list-group-flush">
+                            @foreach (var user in department.Users)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold">@user.FirstName @user.LastName</span>
+                                    <small class="text-muted">@string.Join(", ", user.Roles)</small>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>
+
+<!-- Модальный контейнер -->
 <div id="modalContainer"></div>

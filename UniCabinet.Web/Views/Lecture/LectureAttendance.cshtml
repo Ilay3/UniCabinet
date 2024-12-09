@@ -1,18 +1,21 @@
 ﻿@model UniCabinet.Core.Models.ViewModel.Lecture.LectureAttendanceVM
 
-<h2>Отметка посещаемости для лекции №@Model.LectureNumber по дисциплине "@Model.DisciplineName"</h2>
-
+<div class="mb-4">
+    <h2 class="text-primary">Отметка посещаемости для лекции №@Model.LectureNumber</h2>
+    <p class="text-muted">Дисциплина: <strong>@Model.DisciplineName</strong></p>
+</div>
 
 <form asp-action="SaveAttendance" method="post">
     <input type="hidden" asp-for="LectureId" />
     <input type="hidden" asp-for="DisciplineDetailId" />
-    <table class="table">
-        <thead>
+
+    <table class="table table-striped table-hover">
+        <thead class="table-light">
             <tr>
                 <th>Имя</th>
                 <th>Фамилия</th>
                 <th>Отчество</th>
-                <th>Посещаемость</th>
+                <th class="text-center">Посещаемость</th>
             </tr>
         </thead>
         <tbody>
@@ -22,9 +25,9 @@
                     <td>@Model.Students[i].FirstName</td>
                     <td>@Model.Students[i].LastName</td>
                     <td>@Model.Students[i].Patronymic</td>
-                    <td>
+                    <td class="text-center">
                         <input type="hidden" asp-for="Students[@i].StudentId" />
-                        <div class="form-check form-switch">
+                        <div class="form-check form-switch d-inline-flex justify-content-center">
                             <input class="form-check-input" type="checkbox" asp-for="Students[@i].IsPresent" id="student_@Model.Students[i].StudentId" />
                             <label class="form-check-label" for="student_@Model.Students[i].StudentId"></label>
                         </div>
@@ -33,5 +36,10 @@
             }
         </tbody>
     </table>
-    <button type="submit" class="btn btn-success">Сохранить посещаемость</button>
+
+    <div class="d-flex justify-content-end mt-3">
+        <button type="submit" class="btn btn-success">
+            <i class="bi bi-check-circle"></i> Сохранить посещаемость
+        </button>
+    </div>
 </form>

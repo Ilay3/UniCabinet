@@ -27,7 +27,7 @@ namespace UniCabinet.Application.UseCases.AdminUseCase
                 return null;
             }
 
-            var roles = new List<string> { "Студент", "Преподаватель", "Администратор", "Верефицирован" };
+            var roles = new List<string> { "Студент", "Преподаватель", "Зав. Кафедры", "Администратор", "Верефицирован" };
 
             var dto = new UserRolesDTO
             {

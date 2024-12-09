@@ -4,30 +4,36 @@
     ViewData["Title"] = "Детали дисциплины";
 }
 
-<h1>Детали дисциплины</h1>
+<h1 class="mb-4 text-primary">Детали дисциплины</h1>
 
-<form method="get" id="teacherFilterForm">
-    <div class="form-group">
-        <label for="teacher">Выберите преподавателя</label>
-        <select id="teacher" name="teacherId" class="form-control">
-            <option value="">Все преподаватели</option>
-            @foreach (var teacher in ViewData["Преподаватель"] as List<UniCabinet.Core.Models.ViewModel.User.UserVM>)
-            {
-                <option value="@teacher.Id">@teacher.FirstName @teacher.LastName</option>
-            }
-        </select>
+<form method="get" id="teacherFilterForm" class="mb-4">
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="teacher" class="form-label">Преподаватель:</label>
+        </div>
+        <div class="col-auto">
+            <select id="teacher" name="teacherId" class="form-select">
+                <option value="">Все преподаватели</option>
+                @foreach (var teacher in ViewData["Преподаватель"] as List<UniCabinet.Core.Models.ViewModel.User.UserVM>)
+                {
+                    <option value="@teacher.Id">@teacher.FirstName @teacher.LastName</option>
+                }
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Фильтровать</button>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Фильтровать</button>
 </form>
 
-<table class="table">
-    <thead>
+<table class="table table-hover table-bordered">
+    <thead class="table-light">
         <tr>
             <th>Группа</th>
             <th>Курс</th>
             <th>Семестр</th>
-            <th>Количество лекций</th>
-            <th>Количество практических</th>
+            <th>Лекции</th>
+            <th>Практические</th>
             <th>Экзамен</th>
         </tr>
     </thead>

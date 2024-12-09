@@ -36,3 +36,25 @@ body {
     overflow: hidden; /* Скрыть текст, если он выходит за пределы */
     text-overflow: ellipsis; /* Добавить многоточие для длинного текста */
 }
+
+.teacher-containers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.teacher-item {
+    width: calc(33.333% - 15px); /* Три столбца */
+    min-width: 200px; /* Минимальная ширина элемента */
+    max-width: 300px; /* Максимальная ширина элемента */
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+    .teacher-item a {
+        text-decoration: none;
+    }
+
+    .teacher-item:hover {
+        background-color: #f1f1f1;
+    }
