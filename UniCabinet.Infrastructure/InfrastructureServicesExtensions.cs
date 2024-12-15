@@ -28,6 +28,7 @@ namespace UniCabinet.Infrastructure
             services.AddScoped<IPracticalResultRepository, PracticalResultRepositoryImpl>();
             services.AddScoped<IExamRepository, ExamRepositoryImpl>();
             services.AddScoped<IExamResultRepository, ExamResultRepositoryImpl>();
+            services.AddScoped<IStudentProgressRepository, StudentProgressRepository>();
 
         }
     }

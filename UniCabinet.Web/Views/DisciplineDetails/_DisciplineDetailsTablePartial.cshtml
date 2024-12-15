@@ -27,6 +27,9 @@
                             onclick="openModal('@Url.Action("EditDisciplineDetailModal", "DisciplineDetails", new { detailId = detail.Id })', 'editDisciplineDetailModal')">
                             Редактировать
                         </button>
+                        <a class="btn btn-sm btn-primary" href="@Url.Action("PracticalsList", "Practical", new { detailId = detail.Id })">
+                            <i class="bi bi-person-check"></i> Практические
+                        </a>
                     }
 
                 </td>

@@ -20,8 +20,7 @@ namespace UniCabinet.Application.UseCases.PracticalUseCase
                 {
                     PracticalId = practicalAttendanceDTO.PracticalId,
                     StudentId = student.StudentId,
-                    Grade = student.Grade ?? 0,
-                    Point = 0 // вычисления!!
+                    Grade = student.Grade ?? 0
                 };
 
                 await _practicalResultRepository.AddOrUpdatePracticalResultAsync(practicalResultDTO);

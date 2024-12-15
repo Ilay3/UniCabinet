@@ -3,7 +3,7 @@ using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.DTOs.CourseManagement;
 using UniCabinet.Core.DTOs.UserManagement;
 
-namespace UniCabinet.Application.UseCases
+namespace UniCabinet.Application.UseCases.BackgroundServices
 {
     public class UpdateCoursesUseCase
     {

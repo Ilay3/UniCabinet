@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace UniCabinet.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class DB : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -374,7 +374,8 @@ namespace UniCabinet.Infrastructure.Migrations
                     DisciplineDetailId = table.Column<int>(type: "int", nullable: false),
                     Number = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PointsCount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsProcessed = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -395,7 +396,8 @@ namespace UniCabinet.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DisciplineDetailId = table.Column<int>(type: "int", nullable: false),
                     PracticalNumber = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsProcessed = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -504,8 +506,7 @@ namespace UniCabinet.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     PracticalId = table.Column<int>(type: "int", nullable: false),
-                    Grade = table.Column<int>(type: "int", nullable: false),
-                    Point = table.Column<int>(type: "int", nullable: false)
+                    Grade = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

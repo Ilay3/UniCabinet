@@ -6,7 +6,6 @@
         public string StudentId { get; set; }
         public int PracticalId { get; set; }
         public int Grade { get; set; }
-        public int Point { get; set; }
 
 
         public string StudentFirstName { get; set; }

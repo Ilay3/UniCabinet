@@ -93,31 +93,71 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddOrUpdateLectureVisitAsync(LectureVisitDTO lectureVisitDTO)
+        public async Task AddOrUpdateLectureVisitsAsync(List<LectureVisitDTO> lectureVisitDTOs)
         {
-            var existingVisit = await _context.LectureVisits
-                .FirstOrDefaultAsync(lv => lv.LectureId == lectureVisitDTO.LectureId && lv.StudentId == lectureVisitDTO.StudentId);
+            try
+            {
+                if (lectureVisitDTOs == null || !lectureVisitDTOs.Any())
+                    return;
 
-            if (existingVisit != null)
-            {
-                existingVisit.IsVisit = lectureVisitDTO.IsVisit;
-                existingVisit.PointsCount = lectureVisitDTO.PointsCount;
-                _context.LectureVisits.Update(existingVisit);
-            }
-            else
-            {
-                var lectureVisitEntity = new LectureVisitEntity
+                // Получаем все существующие записи, которые совпадают по LectureId и StudentId
+                var lectureIds = lectureVisitDTOs.Select(dto => dto.LectureId).Distinct();
+                var studentIds = lectureVisitDTOs.Select(dto => dto.StudentId).Distinct();
+
+                var existingVisits = await _context.LectureVisits
+                    .Where(lv => lectureIds.Contains(lv.LectureId))
+                    .Where(lv => studentIds.Contains(lv.StudentId))
+                    .ToListAsync();
+
+
+                // Разделяем DTO на те, которые нужно обновить и на те, которые нужно добавить
+                var visitsToUpdate = new List<LectureVisitEntity>();
+                var visitsToAdd = new List<LectureVisitEntity>();
+
+                foreach (var dto in lectureVisitDTOs)
                 {
-                    LectureId = lectureVisitDTO.LectureId,
-                    StudentId = lectureVisitDTO.StudentId,
-                    IsVisit = lectureVisitDTO.IsVisit,
-                    PointsCount = lectureVisitDTO.PointsCount
-                };
-                await _context.LectureVisits.AddAsync(lectureVisitEntity);
-            }
+                    var existingVisit = existingVisits.FirstOrDefault(lv => lv.LectureId == dto.LectureId && lv.StudentId == dto.StudentId);
+                    if (existingVisit != null)
+                    {
+                        existingVisit.IsVisit = dto.IsVisit;
+                        existingVisit.PointsCount = dto.PointsCount;
+                        visitsToUpdate.Add(existingVisit);
+                    }
+                    else
+                    {
+                        var newVisit = new LectureVisitEntity
+                        {
+                            LectureId = dto.LectureId,
+                            StudentId = dto.StudentId,
+                            IsVisit = dto.IsVisit,
+                            PointsCount = dto.PointsCount
+                        };
+                        visitsToAdd.Add(newVisit);
+                    }
+                }
 
-            await _context.SaveChangesAsync();
+                if (visitsToUpdate.Any())
+                {
+                    _context.LectureVisits.UpdateRange(visitsToUpdate);
+                }
+
+                if (visitsToAdd.Any())
+                {
+                    await _context.LectureVisits.AddRangeAsync(visitsToAdd);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Логирование исключения (опционально)
+                // _logger.LogError(ex, "Ошибка при добавлении или обновлении посещений лекции.");
+                throw; // Повторное выбрасывание исключения без сброса стека вызовов
+            }
         }
+
+        
+
 
         public async Task<List<LectureVisitDTO>> GetLectureVisitsByLectureIdAsync(int lectureId)
         {

@@ -14,12 +14,12 @@ public class PracticalController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> PracticalsListAsync(int id, [FromServices] GetPracticalsListDataUseCase practicalsListUseCase)
+    public async Task<IActionResult> PracticalsListAsync(int detailId, [FromServices] GetPracticalsListDataUseCase practicalsListUseCase)
     {
-        var result = await practicalsListUseCase.ExecuteAsync(id);
+        var result = await practicalsListUseCase.ExecuteAsync(detailId);
 
         ViewBag.Discipline = result.DisciplineName;
-        ViewBag.DisciplineDetailId = id;
+        ViewBag.DisciplineDetailId = detailId;
         ViewBag.MaxPracticals = result.MaxPracticals;
 
         var practicalListVM = _mapper.Map<List<PracticalListVM>>(result.PracticalDTO);

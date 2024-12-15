@@ -25,8 +25,9 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
 
         public async Task<bool> ExecuteAsync(LectureDTO lectureDTO, ModelStateDictionary modelState)
         {
+            lectureDTO.IsProcessed = false;
             var existingLecturesCount = await _lectureRepository.GetLectureCountByDisciplineDetailIdAsync(lectureDTO.DisciplineDetailId);
-            var disciplineDetail = await _disciplineDetailRepository.GetDisciplineDetailByIdAsync(lectureDTO.DisciplineDetailId);
+            var disciplineDetail = await _disciplineDetailRepository.GetByIdAsync(lectureDTO.DisciplineDetailId);
             int maxLectures = disciplineDetail.LectureCount;
 
             if (existingLecturesCount >= maxLectures)

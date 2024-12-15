@@ -1,4 +1,8 @@
-﻿using UniCabinet.Application.Interfaces.Repository;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.Timeouts;
+using Microsoft.EntityFrameworkCore;
+using System;
+using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.DTOs.StudentManagement;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
@@ -8,9 +12,11 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
     public class StudentProgressRepository : IStudentProgressRepository
     {
         private readonly ApplicationDbContext _context;
-        public StudentProgressRepository(ApplicationDbContext context)
+        private readonly IMapper _mapper;
+        public StudentProgressRepository(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public StudentProgressDTO GetStudentProfressById(int id)
@@ -88,6 +94,25 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             studentProgressEntity.TotalPoints = studentProgressDTO.TotalPoints;
 
             _context.SaveChanges();
+        }
+
+        public async Task<StudentProgressDTO> GetStudentProgressAsync(string studentId, int disciplineDetailId)
+        {
+            var progress = await _context.StudentProgresses
+                .FirstOrDefaultAsync(sp => sp.StudentId == studentId && sp.DisciplineDetailId == disciplineDetailId);
+
+            return _mapper.Map<StudentProgressDTO>(progress);
+        }
+
+        public async Task AddStudentProgressAsync(StudentProgressDTO studentProgress)
+        {
+           var progressDTO =  _mapper.Map<StudentProgressEntity>(studentProgress);
+            await _context.StudentProgresses.AddAsync(progressDTO);
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

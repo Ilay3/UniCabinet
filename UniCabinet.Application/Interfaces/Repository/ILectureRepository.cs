@@ -1,4 +1,5 @@
 ﻿using UniCabinet.Core.DTOs.LectureManagement;
+using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Application.Interfaces.Repository
 {
@@ -11,6 +12,8 @@ namespace UniCabinet.Application.Interfaces.Repository
         Task<LectureDTO> GetLectureByIdAsync(int id);
         Task UpdateLectureAsync(LectureDTO lectureDTO);
         Task<int> GetLectureCountByDisciplineDetailIdAsync(int disciplineDetailId);
+        Task<List<LectureEntity>> GetUnprocessedLecturesForDateAsync(DateTime date);
+        Task SaveChangesAsync();
     }
 
 }
