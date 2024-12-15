@@ -16,5 +16,7 @@
         public decimal PointsCount { get; set; }
 
         public DateTime Date { get; set; }
+        public bool IsProcessed { get; set; }
+
     }
 }

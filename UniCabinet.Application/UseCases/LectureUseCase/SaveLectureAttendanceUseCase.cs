@@ -8,38 +8,29 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
     public class SaveLectureAttendanceUseCase
     {
         private readonly ILectureVisitRepository _lectureVisitRepository;
-        private readonly ILectureRepository _lectureRepository;
+
 
         public SaveLectureAttendanceUseCase(
-            ILectureVisitRepository lectureVisitRepository,
-            ILectureRepository lectureRepository)
+            ILectureVisitRepository lectureVisitRepository)
         {
             _lectureVisitRepository = lectureVisitRepository;
-            _lectureRepository = lectureRepository;
         }
 
         public async Task ExecuteAsync(LectureAttendanceDTO lectureAttendanceDTO)
         {
-            decimal points = await CalculatePointsForLectureAsync(lectureAttendanceDTO.LectureId);
-
-            foreach (var studentAttendance in lectureAttendanceDTO.Students)
+            var lectureVisitDTOs = lectureAttendanceDTO.Students.Select(studentAttendance => new LectureVisitDTO
             {
-                var lectureVisitDTO = new LectureVisitDTO
-                {
-                    LectureId = lectureAttendanceDTO.LectureId,
-                    StudentId = studentAttendance.StudentId,
-                    IsVisit = studentAttendance.IsPresent,
-                    PointsCount = studentAttendance.IsPresent ? points : 0
-                };
+                LectureId = lectureAttendanceDTO.LectureId,
+                StudentId = studentAttendance.StudentId,
+                IsVisit = studentAttendance.IsPresent,
+                PointsCount = studentAttendance.IsPresent ? 5 : 0
+            }).ToList();
 
-                await _lectureVisitRepository.AddOrUpdateLectureVisitAsync(lectureVisitDTO);
-            }
+            await _lectureVisitRepository.AddOrUpdateLectureVisitsAsync(lectureVisitDTOs);
         }
 
-        private async Task<decimal> CalculatePointsForLectureAsync(int lectureId)
-        {
-            var lecture = await _lectureRepository.GetLectureByIdAsync(lectureId);
-            return lecture.PointsCount;
-        }
+
+
+
     }
 }

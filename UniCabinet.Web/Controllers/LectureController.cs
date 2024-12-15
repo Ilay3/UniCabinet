@@ -42,6 +42,7 @@ public class LectureController : Controller
         LectureAddVM viewModal,
         [FromServices] AddLectureUseCase addLectureUseCase)
     {
+        viewModal.PointsCount = 5;
         if (ModelState.IsValid)
         {
             var lectureDTO = _mapper.Map<LectureDTO>(viewModal);
@@ -50,7 +51,7 @@ public class LectureController : Controller
 
             if (success)
             {
-                return Json(new { success = true, redirectUrl = Url.Action("LecturesList", new { id = viewModal.DisciplineDetailId }) });
+                return RedirectToAction("LecturesList", new { id = viewModal.DisciplineDetailId });
             }
         }
 
@@ -78,7 +79,7 @@ public class LectureController : Controller
            await updateLectureUseCase.ExecuteAsync(lectureDTO);
             var disciplineDId = viewModal.DisciplineDetailId;
 
-            return Json(new { success = true, redirectUrl = Url.Action("LecturesList", new { id = disciplineDId }) });
+            return RedirectToAction("LecturesList", new { id = disciplineDId });
         }
 
         return PartialView("_LectureEditModal", viewModal);
@@ -99,12 +100,12 @@ public class LectureController : Controller
     }
 
     [HttpPost]
-    public IActionResult SaveAttendance(
+    public async Task<IActionResult> SaveAttendanceAsync(
         LectureAttendanceVM viewModal,
         [FromServices] SaveLectureAttendanceUseCase saveLectureAttendanceUseCase)
     {
         var lectureAttendanceDTO = _mapper.Map< LectureAttendanceDTO >(viewModal);
-        saveLectureAttendanceUseCase.ExecuteAsync(lectureAttendanceDTO);
+        await saveLectureAttendanceUseCase.ExecuteAsync(lectureAttendanceDTO);
         return RedirectToAction("LecturesList", new { id = viewModal.DisciplineDetailId });
     }
 }

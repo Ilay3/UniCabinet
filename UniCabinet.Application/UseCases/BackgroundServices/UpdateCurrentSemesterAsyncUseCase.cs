@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using UniCabinet.Application.Interfaces.Repository;
 
-namespace UniCabinet.Application.UseCases
+namespace UniCabinet.Application.UseCases.BackgroundServices
 {
     public class UpdateCurrentSemesterAsyncUseCase
     {

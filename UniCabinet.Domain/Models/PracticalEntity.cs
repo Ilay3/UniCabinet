@@ -16,6 +16,8 @@ public class PracticalEntity
     /// Дата проведения
     /// </summary>
     public DateTime Date { get; set; }
+    public bool IsProcessed { get; set; }
+
 
     // Навигационные свойства
     public ICollection<PracticalResultEntity> PracticalResults { get; set; }

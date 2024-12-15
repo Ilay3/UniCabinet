@@ -26,7 +26,6 @@ namespace UniCabinet.Application.Profiles
                 .ForMember(dest => dest.StudentId, opt => opt.MapFrom(src => src.StudentId))
                 .ForMember(dest => dest.Grade, opt => opt.MapFrom(src => src.Grade))
                 .ForMember(dest => dest.PracticalId, opt => opt.Ignore())
-                .ForMember(dest => dest.Point, opt => opt.Ignore())
                 .ForMember(dest => dest.Student, opt => opt.Ignore())
                 .ForMember(dest => dest.Practical, opt => opt.Ignore())
                 .ForMember(dest => dest.Id, opt => opt.Ignore());

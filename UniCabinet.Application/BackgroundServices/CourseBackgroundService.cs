@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using UniCabinet.Application.UseCases;
+using UniCabinet.Application.UseCases.BackgroundServices;
 
 namespace UniCabinet.Application.BackgroundServices
 {

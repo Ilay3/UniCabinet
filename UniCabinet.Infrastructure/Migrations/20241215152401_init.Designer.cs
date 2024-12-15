@@ -12,8 +12,8 @@ using UniCabinet.Infrastructure.Data;
 namespace UniCabinet.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241201143514_Rename_Roles")]
-    partial class Rename_Roles
+    [Migration("20241215152401_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -392,6 +392,9 @@ namespace UniCabinet.Infrastructure.Migrations
                     b.Property<int>("DisciplineDetailId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsProcessed")
+                        .HasColumnType("bit");
+
                     b.Property<decimal>("Number")
                         .HasColumnType("decimal(18, 2)");
 
@@ -448,6 +451,9 @@ namespace UniCabinet.Infrastructure.Migrations
                     b.Property<int>("DisciplineDetailId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsProcessed")
+                        .HasColumnType("bit");
+
                     b.Property<int>("PracticalNumber")
                         .HasColumnType("int");
 
@@ -467,9 +473,6 @@ namespace UniCabinet.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Grade")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Point")
                         .HasColumnType("int");
 
                     b.Property<int>("PracticalId")
