@@ -31,7 +31,9 @@ public class AdminController : Controller
         var studentGroupVM = _mapper.Map<StudentGroupVM>(studentGroupDTO);
 
         ViewBag.SelectedRole = role;
-        ViewBag.Roles = new List<string> { "Студент", "Преподаватель", "Администратор", "Верефицирован" }
+
+        ViewBag.Roles = new List<string> { "Студент", "Преподаватель", "Зав. Кафедры", "Администратор", "Верефицирован" }
+
             .Select(r => new SelectListItem
             {
                 Value = r,

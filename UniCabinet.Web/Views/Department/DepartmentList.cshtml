@@ -4,32 +4,35 @@
     ViewData["Title"] = "Список Дисциплин Кафедры";
 }
 
-<h1>@Model.DepartmentName</h1>
+<h1 class="text-primary mb-4">@Model.DepartmentName</h1>
 
 <div class="accordion" id="disciplinesAccordion">
     @foreach (var discipline in Model.Disciplines)
     {
-        <div class="accordion-item">
+        <div class="accordion-item shadow-sm mb-3">
             <h2 class="accordion-header" id="heading-@discipline.Id">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@discipline.Id" aria-expanded="false" aria-controls="collapse-@discipline.Id">
-                    @discipline.Name (@discipline.SpecialtyName)
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@discipline.Id"
+                        aria-expanded="false" aria-controls="collapse-@discipline.Id">
+                    <span class="me-2"><i class="bi bi-book"></i></span> @discipline.Name (@discipline.SpecialtyName)
                 </button>
             </h2>
+
             <div id="collapse-@discipline.Id" class="accordion-collapse collapse" aria-labelledby="heading-@discipline.Id" data-bs-parent="#disciplinesAccordion">
                 <div class="accordion-body">
-                    <p>@discipline.Description</p>
-                    <strong>Преподаватели:</strong>
+                    <p class="mb-4">@discipline.Description</p>
 
-                    <!-- Преподаватели в 3 столбца с прокруткой -->
-                    <div class="teacher-container">
+                    <h5 class="text-muted">Преподаватели:</h5>
+                    <div class="teacher-containers d-flex flex-wrap gap-3">
                         @foreach (var teacher in discipline.Teachers)
                         {
-                            <div class="teacher-item">
-                                @($"{teacher.FirstName} {teacher.LastName}")
-                                <a class="btn btn-sm btn-link"
-                                   href="@Url.Action("TeacherDetailsWithUserId", "DisciplineDetails", new { disciplineId = discipline.Id, teacherId = teacher.Id })">
-                                    Посмотреть детали
-                                </a>
+                            <div class="teacher-item border rounded p-3 shadow-sm text-center">
+                                <strong>@($"{teacher.FirstName} {teacher.LastName}")</strong>
+                                <div class="mt-2">
+                                    <a class="btn btn-outline-primary btn-sm"
+                                       href="@Url.Action("TeacherDetailsWithUserId", "DisciplineDetails", new { disciplineId = discipline.Id, teacherId = teacher.Id })">
+                                        Посмотреть детали
+                                    </a>
+                                </div>
                             </div>
                         }
                     </div>
@@ -38,5 +41,3 @@
         </div>
     }
 </div>
-
-

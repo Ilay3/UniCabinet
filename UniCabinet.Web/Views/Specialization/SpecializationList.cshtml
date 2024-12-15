@@ -6,12 +6,12 @@
     <!-- Кнопка для добавления новой специальности -->
     <div class="mb-3 text-end">
         <button class="btn btn-primary" onclick="openModal('/Specialization/AddSpecialization', 'addSpecializationModal')">
-            Добавить специальность
+            <i class="bi bi-plus-circle"></i> Добавить специальность
         </button>
     </div>
 
-    <div class="table-responsive shadow-sm">
-        <table class="table table-striped table-hover table-bordered align-middle">
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-striped align-middle">
             <thead class="table-primary text-center">
                 <tr>
                     <th scope="col">ID</th>
@@ -41,13 +41,13 @@
                             }
                             else
                             {
-                                <span class="text-muted">Преподаватели не назначены</span>
+                                <span class="text-muted"><i class="bi bi-person-dash"></i> Преподаватели не назначены</span>
                             }
                         </td>
                         <td class="text-center">
                             <!-- Кнопка для редактирования специальности -->
                             <button class="btn btn-sm btn-warning" onclick="openModal('/Specialization/EditSpecialization', 'editSpecializationModal', @specialization.Id)">
-                                Редактировать
+                                <i class="bi bi-pencil-square"></i> Редактировать
                             </button>
                         </td>
                     </tr>

@@ -26,10 +26,9 @@ namespace UniCabinet.Application.UseCases.AdminUseCase
 
             if (string.IsNullOrEmpty(role))
             {
-                role = "Студент"; // По умолчанию выбираем роль Student
+                role = "Студент";
             }
 
-            // Получаем всех пользователей (DTO)
             var userDTOs = await _userService.GetAllUsersAsync();
 
             // Фильтрация по роли

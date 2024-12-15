@@ -11,57 +11,110 @@
     <link rel="stylesheet" href="~/css/modal.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/css/loading.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
 
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">UniCabinet.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar"
+                        aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Group" asp-action="GroupsList">Group</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Discipline" asp-action="DisciplinesList">Дисциплины</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Department" asp-action="DepartmentList">Кафедра</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="DisciplineDetail" asp-action="DisciplineDetailsList">Детали дисциплин</a>
-                        </li>
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav mr-auto">
+                        @if (User.IsInRole("Администратор"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Admin" asp-action="Index">Панель Администратора</a>
+                            </li>
 
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="adminMenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Администрирование
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="adminMenu">
+                                    <a class="dropdown-item" asp-controller="Admin" asp-action="VerifiedUsers">Список пользователей</a>
+                                    <a class="dropdown-item" asp-controller="Department" asp-action="DepartmentsAdminList">Список кафедр университета</a>
+                                    <a class="dropdown-item" asp-controller="Specialization" asp-action="GetDataSpecialization">Список специальностей преподавателей</a>
+                                    <a class="dropdown-item" asp-controller="Group" asp-action="GroupsList">Список групп</a>
+                                </div>
+                            </li>
+                        }
+
+                        <!-- Пункты меню для Зав. Кафедры -->
+                        @if (User.IsInRole("Зав. Кафедры"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="HeadOfDepartment" asp-action="Index">Панель Заведующей</a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="headOfDepMenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Зав.кафедрой
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="headOfDepMenu">
+                                    <a class="dropdown-item" asp-controller="Department" asp-action="DepartmentList">Просмотр кафедры</a>
+                                    <a class="dropdown-item text-danger" href="#">Успеваемость групп</a>
+                                </div>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Преподаватель"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Teacher" asp-action="Index">Панель Преподавателя</a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="teacherMenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Преподаватель
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="teacherMenu">
+                                    <a class="dropdown-item" asp-controller="Specialization" asp-action="GetDataSpecTeacher">Список дисциплин</a>
+                                    <a class="dropdown-item text-danger" href="#">Дисциплины преподавателя</a>
+                                    <a class="dropdown-item text-danger" href="#">Успеваемость групп</a>
+                                </div>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Студент"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-danger" href="#">Моя Успеваемость</a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="studentMenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Студент
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="studentMenu">
+                                    <a class="dropdown-item text-danger" href="#">Экзамены</a> 
+                                    <a class="dropdown-item text-danger" href="#">Дисциплины</a>
+                                </div>
+                            </li>
+                        }
                     </ul>
+
                     <ul class="navbar-nav">
                         @if (User?.Identity?.IsAuthenticated == true)
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Hello, @User.Identity.Name!
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    @User.Identity.Name!
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    <li>
-                                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a>
-                                    </li>
-                                    <li>
-                                        <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" method="post" class="d-inline">
-                                            <button type="submit" class="dropdown-item">Logout</button>
-                                        </form>
-                                    </li>
-                                </ul>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a>
+                                    <div class="dropdown-divider"></div>
+                                    <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" method="post" class="d-inline">
+                                        <button type="submit" class="dropdown-item">Logout</button>
+                                    </form>
+                                </div>
                             </li>
                         }
                         else
@@ -78,6 +131,7 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -90,7 +144,7 @@
         </div>
     </footer>
 
-    <!-- Индикатор загрузки -->
+
     <div id="loadingIndicator" style="display: none;">
         <p>Загрузка...</p>
         <div class="spinner-border text-primary" role="status">

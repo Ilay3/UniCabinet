@@ -50,6 +50,8 @@ namespace UniCabinet.Infrastructure.Data
                 _ = !userRoles.Contains("Верефицирован") ? await userManager.AddToRoleAsync(adminUser, "Верефицирован") : null;
             }
 
+
+
         }
     }
 }
