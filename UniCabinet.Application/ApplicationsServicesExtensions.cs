@@ -11,6 +11,7 @@ namespace UniCabinet.Infrastructure
         {
             services.AddHostedService<SemesterBackgroundService>();
             services.AddHostedService<CourseBackgroundService>();
+            services.AddHostedService<LectureProgressUpdateService>();
 
             var useCaseTypes = Assembly.GetExecutingAssembly()
         .GetTypes()

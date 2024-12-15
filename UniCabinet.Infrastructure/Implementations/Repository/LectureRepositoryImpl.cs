@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.DTOs.LectureManagement;
 using UniCabinet.Domain.Entities;
@@ -9,10 +10,12 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
     public class LectureRepositoryImpl : ILectureRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public LectureRepositoryImpl(ApplicationDbContext context)
+        public LectureRepositoryImpl(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<LectureDTO> GetLectureByIdAsync(int id)
@@ -101,6 +104,20 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
         public async Task<int> GetLectureCountByDisciplineDetailIdAsync(int disciplineDetailId)
         {
             return await _context.Lectures.CountAsync(l => l.DisciplineDetailId == disciplineDetailId);
+        }
+        public async Task<List<LectureEntity>> GetUnprocessedLecturesForDateAsync(DateTime date)
+        {
+            return await _context.Lectures
+                .Where(l => l.Date.Date == date.Date && !l.IsProcessed)
+                .Include(l => l.LectureVisits)
+                .Include(d=>d.DisciplineDetails)
+                .ToListAsync();
+
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -15,5 +15,7 @@
         /// Дата проведения
         /// </summary>
         public DateTime Date { get; set; }
+        public bool IsProcessed { get; set; }
+
     }
 }

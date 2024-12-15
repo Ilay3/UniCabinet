@@ -75,5 +75,19 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
         {
             return await _context.Practicals.CountAsync(p => p.DisciplineDetailId == disciplineDetailId);
         }
+        public async Task<List<PracticalEntity>> GetUnprocessedPracticalsForDateAsync(DateTime date)
+        {
+            return await _context.Practicals
+                .Where(p => p.Date.Date == date.Date && !p.IsProcessed)
+                .Include(p => p.PracticalResults)
+                .Include(d=>d.DisciplineDetails)
+                .ToListAsync();
+           // return _mapper.Map<List<PracticalDTO>>(pract);
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }

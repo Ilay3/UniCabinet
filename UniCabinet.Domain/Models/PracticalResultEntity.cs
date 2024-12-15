@@ -15,8 +15,5 @@ public class PracticalResultEntity
     /// </summary>
     public int Grade { get; set; }
 
-    /// <summary>
-    /// Баллы
-    /// </summary>
-    public int Point { get; set; }
+
 }

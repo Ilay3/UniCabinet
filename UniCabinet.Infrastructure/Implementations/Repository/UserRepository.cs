@@ -31,7 +31,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             {
                 var roles = await _userManager.GetRolesAsync(user);
 
-                if (roles.Contains("Student"))
+                if (roles.Contains("Студент"))
                 {
                     // Загрузить информацию о группе студента
                     var group = await _context.Groups.FirstOrDefaultAsync(g => g.Users.Any(s => s.Id == user.Id));
