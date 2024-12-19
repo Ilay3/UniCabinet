@@ -13,8 +13,8 @@ namespace UniCabinet.Core.Models.ViewModel.Exam
         public string LastName { get; set; }
         public string Patronymic { get; set; }
 
-        public decimal PointAvarage { get; set; }
-        public decimal FinalPoint { get; set; }
+        public decimal GradeAvarage { get; set; }
+        public decimal FinalGrade { get; set; }
         public bool IsAutomatic { get; set; }
     }
 

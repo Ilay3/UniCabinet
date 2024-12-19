@@ -109,7 +109,19 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
            var progressDTO =  _mapper.Map<StudentProgressEntity>(studentProgress);
             await _context.StudentProgresses.AddAsync(progressDTO);
         }
+        public async Task UpdateFinalGradeAsync(string studentId, decimal finalGrade)
+        {
+            var student = await _context.StudentProgresses.FirstOrDefaultAsync(s => s.StudentId == studentId);
+            if (student == null)
+            {
+                throw new Exception($"Студент с ID {studentId} не найден.");
+            }
+            student.FinalGrade = (int)finalGrade;
 
+            student.NeedsRetake = finalGrade <= 2;
+
+            await SaveChangesAsync();
+        }
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();

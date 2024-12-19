@@ -6,8 +6,8 @@
         public string StudentId { get; set; }
         public int ExamId { get; set; }
 
-        public decimal PointAvarage { get; set; }
-        public decimal FinalPoint { get; set; }
+        public decimal GradeAvarage { get; set; }
+        public decimal FinalGrade { get; set; }
         public bool IsAutomatic { get; set; }
 
         

@@ -93,7 +93,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             // Получаем экзамен по ID
             var exam = await _context.Exams
                 .Where(e => e.Id == examId)
-                .Include(e => e.DisciplineDetails) 
+                .Include(e => e.DisciplineDetails)
                 .FirstOrDefaultAsync();
 
             if (exam == null)
@@ -108,21 +108,33 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
                 .Where(u => u.GroupId == disciplineDetail.GroupId)
                 .ToListAsync();
 
+            // Получаем прогресс студентов по дисциплине
+            var studentProgresses = await _context.StudentProgresses
+                .Where(sp => sp.DisciplineDetailId == disciplineDetail.Id)
+                .ToListAsync();
 
-            var examResults = students.Select(student => new ExamResultDTO
+            // Сопоставляем студентов с их прогрессом и формируем результат
+            var examResults = students.Select(student =>
             {
-                StudentId = student.Id,
-                ExamId = examId,
-                StudentFirstName = student.FirstName,
-                StudentLastName = student.LastName,
-                StudentPatronymic = student.Patronymic,
-                PointAvarage = 0, 
-                FinalPoint = 0,
-                IsAutomatic = false
+                var progress = studentProgresses
+                    .FirstOrDefault(sp => sp.StudentId == student.Id);
+
+                return new ExamResultDTO
+                {
+                    StudentId = student.Id,
+                    ExamId = examId,
+                    StudentFirstName = student.FirstName,
+                    StudentLastName = student.LastName,
+                    StudentPatronymic = student.Patronymic,
+                    GradeAvarage = progress?.FinalGrade ?? 0,                         // Средний балл из прогресса
+                    FinalGrade =  0,                           // Итоговая оценка из прогресса
+                    IsAutomatic =  false   
+                };
             }).ToList();
 
-            return examResults;
+            return examResults; 
         }
+
 
     }
 }

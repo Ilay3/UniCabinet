@@ -11,7 +11,7 @@ namespace UniCabinet.Application.UseCases.ExamUseCase
     {
         private readonly IExamResultRepository _examResultRepository;
         private readonly IExamRepository _examRepository;
-
+        private readonly IStudentProgressRepository _studentProgressRepository;
         public SaveExamResultsUseCase(IExamResultRepository examResultRepository, IExamRepository examRepository)
         {
             _examResultRepository = examResultRepository;
@@ -38,7 +38,9 @@ namespace UniCabinet.Application.UseCases.ExamUseCase
             foreach (var result in examResults)
             {
                 await _examResultRepository.AddOrUpdateExamResultAsync(result);
+                await _studentProgressRepository.UpdateFinalGradeAsync(result.StudentId, result.FinalGrade);
             }
+
 
             return true;
         }

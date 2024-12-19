@@ -36,7 +36,7 @@ public class LectureProgressUpdateService : BackgroundService
                 _logger.LogError(ex, "An error occurred while updating student progress.");
             }
 
-            await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+            await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
         }
     }
 

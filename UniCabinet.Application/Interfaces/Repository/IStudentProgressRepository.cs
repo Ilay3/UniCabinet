@@ -12,6 +12,7 @@ namespace UniCabinet.Application.Interfaces.Repository
         void UpdateStudentProgress(StudentProgressDTO studentProgressDTO);
         Task<StudentProgressDTO> GetStudentProgressAsync(string studentId, int disciplineDetailId);
         Task AddStudentProgressAsync(StudentProgressDTO studentProgress);
+        Task UpdateFinalGradeAsync(string studentId, decimal finalGrade);
         Task SaveChangesAsync();
     }
 }

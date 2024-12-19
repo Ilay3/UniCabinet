@@ -13,12 +13,12 @@ public class ExamResultEntity
     /// <summary>
     /// Средняя оценка по баллам
     /// </summary>
-    public decimal PointAvarage { get; set; }
+    public decimal GradeAvarage { get; set; }
 
     /// <summary>
     /// Окончательная оценка
     /// </summary>
-    public decimal FinalPoint { get; set; }
+    public decimal FinalGrade { get; set; }
     
     /// <summary>
     /// Согласен ли препод с оценкой

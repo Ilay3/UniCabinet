@@ -10,10 +10,10 @@ namespace UniCabinet.Infrastructure.Data.EntityConfigurations
         {
             builder.HasKey(e => e.Id);
 
-            builder.Property(e => e.FinalPoint)
+            builder.Property(e => e.FinalGrade)
                 .HasColumnType("decimal(18, 2)");
 
-            builder.Property(e => e.PointAvarage)
+            builder.Property(e => e.GradeAvarage)
                 .HasColumnType("decimal(18, 2)");
 
             builder.HasOne(e => e.Student)

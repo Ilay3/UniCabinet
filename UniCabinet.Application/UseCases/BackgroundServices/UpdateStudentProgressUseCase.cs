@@ -167,7 +167,7 @@ public class UpdateStudentProgressUseCase
                 TotalLecturePoints = 0,
                 TotalPracticalPoints = points,
                 TotalPoints = points,
-                FinalGrade = 0,
+                FinalGrade = CalculateFinalGrade(points),
                 NeedsRetake = false
             };
 
@@ -177,10 +177,14 @@ public class UpdateStudentProgressUseCase
         {
             studentProgress.TotalPracticalPoints += points;
             studentProgress.TotalPoints += points;
+
+            // Пересчёт итоговой оценки
+            studentProgress.FinalGrade = CalculateFinalGrade(studentProgress.TotalPoints);
         }
 
         await _studentProgressRepository.SaveChangesAsync();
     }
+
 
     private int CalculateLecturePoints(int attendedLectures, int totalLecturesPlanned, int maxLecturePoints)
     {
@@ -197,15 +201,12 @@ public class UpdateStudentProgressUseCase
             {
                 StudentId = studentId,
                 DisciplineDetailId = disciplineDetailId,
-                TotalLecturePoints = 0,
+                TotalLecturePoints = points,
                 TotalPracticalPoints = 0,
-                TotalPoints = 0,
-                FinalGrade = 0,
+                TotalPoints = points,
+                FinalGrade = CalculateFinalGrade(points),
                 NeedsRetake = false
             };
-
-            studentProgress.TotalLecturePoints += points;
-            studentProgress.TotalPoints += points;
 
             await _studentProgressRepository.AddStudentProgressAsync(studentProgress);
         }
@@ -213,8 +214,20 @@ public class UpdateStudentProgressUseCase
         {
             studentProgress.TotalLecturePoints += points;
             studentProgress.TotalPoints += points;
+
+            // Пересчёт итоговой оценки
+            studentProgress.FinalGrade = CalculateFinalGrade(studentProgress.TotalPoints);
         }
 
         await _studentProgressRepository.SaveChangesAsync();
+    }
+
+
+    private int CalculateFinalGrade(int totalPoints)
+    {
+        if (totalPoints >= 17) return 5;  // Отлично
+        if (totalPoints >= 14) return 4;  // Хорошо
+        if (totalPoints >= 11) return 3;  // Удовлетворительно
+        return 2;                        // Неудовлетворительно
     }
 }
