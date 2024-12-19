@@ -6,8 +6,7 @@
         /// <summary>
         /// Номер лекции
         /// </summary>
-        public int Number { get; set; }
-        public decimal PointsCount { get; set; }
+        public string Name{ get; set; }
         public DateTime Date { get; set; }
     }
 }

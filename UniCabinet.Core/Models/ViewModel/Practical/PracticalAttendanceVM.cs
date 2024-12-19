@@ -6,7 +6,7 @@ namespace UniCabinet.Core.Models.ViewModel.Practical
     {
         public int PracticalId { get; set; }
         public int DisciplineDetailId { get; set; }
-        public int PracticalNumber { get; set; }
+        public string PracticalName { get; set; }
         public string DisciplineName { get; set; }
         public List<StudentGradeVM> Students { get; set; }
     }

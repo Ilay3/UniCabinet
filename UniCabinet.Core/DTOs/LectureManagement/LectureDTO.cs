@@ -9,11 +9,8 @@
         /// <summary>
         /// Номер лекции
         /// </summary>
-        public int Number { get; set; }
-        /// <summary>
-        /// Количество баллов за лекцию
-        /// </summary>
-        public decimal PointsCount { get; set; }
+        public string Name { get; set; }
+
 
         public DateTime Date { get; set; }
         public bool IsProcessed { get; set; }

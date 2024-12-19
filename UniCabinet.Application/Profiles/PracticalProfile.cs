@@ -16,7 +16,7 @@ namespace UniCabinet.Application.Profiles
                 .ForMember(dest => dest.StudentFirstName, opt => opt.MapFrom(src => src.Student.FirstName))
                 .ForMember(dest => dest.StudentLastName, opt => opt.MapFrom(src => src.Student.LastName))
                 .ForMember(dest => dest.StudentPatronymic, opt => opt.MapFrom(src => src.Student.Patronymic))
-                .ForMember(dest => dest.PracticalNumber, opt => opt.MapFrom(src => src.Practical.PracticalNumber))
+                .ForMember(dest => dest.PracticalNumber, opt => opt.MapFrom(src => src.Practical.PracticalName))
                 .ReverseMap()
                 .ForMember(dest => dest.Student, opt => opt.Ignore())
                 .ForMember(dest => dest.Practical, opt => opt.Ignore())

@@ -9,8 +9,8 @@ namespace UniCabinet.Core.Models.ViewModel.Practical
         public int DisciplineDetailId { get; set; }
 
         [Required]
-        [Display(Name = "Номер практической работы")]
-        public int PracticalNumber { get; set; }
+        [Display(Name = "Название практической работы")]
+        public string PracticalName { get; set; }
 
         [Required]
         [Display(Name = "Дата проведения")]

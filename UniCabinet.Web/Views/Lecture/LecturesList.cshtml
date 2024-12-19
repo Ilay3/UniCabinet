@@ -28,9 +28,8 @@
         @foreach (var lecture in Model)
         {
             <tr>
-                <td>@lecture.Number</td>
+                <td>@lecture.Name</td>
                 <td>@lecture.Date.ToShortDateString()</td>
-                <td>@lecture.PointsCount</td>
                 <td>
                     <button class="btn btn-sm btn-warning" onclick="openModal('/Lecture/LectureEditModal', 'lectureEditModal', @lecture.Id)">
                         <i class="bi bi-pencil-square"></i> Редактировать

@@ -60,7 +60,7 @@ namespace UniCabinet.Application.UseCases.LectureUseCase
             {
                 LectureId = lectureId,
                 DisciplineDetailId = disciplineDetailId,
-                LectureNumber = lecture.Number,
+                LectureName = lecture.Name,
                 DisciplineName = disciplineName,
                 Students = students.Select(s => new StudentAttendanceDTO
                 {

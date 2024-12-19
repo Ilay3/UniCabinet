@@ -33,7 +33,7 @@
         @foreach (var practical in Model)
         {
             <tr>
-                <td>@practical.PracticalNumber</td>
+                <td>@practical.PracticalName</td>
                 <td>@practical.Date.ToShortDateString()</td>
                 <td class="text-center">
                     <button class="btn btn-sm btn-warning" onclick="openModal('/Practical/PracticalEditModal', 'practicalEditModal', @practical.Id)">

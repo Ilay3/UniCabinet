@@ -42,7 +42,6 @@ public class LectureController : Controller
         LectureAddVM viewModal,
         [FromServices] AddLectureUseCase addLectureUseCase)
     {
-        viewModal.PointsCount = 5;
         if (ModelState.IsValid)
         {
             var lectureDTO = _mapper.Map<LectureDTO>(viewModal);

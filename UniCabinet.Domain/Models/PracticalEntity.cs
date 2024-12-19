@@ -10,7 +10,7 @@ public class PracticalEntity
     /// <summary>
     /// Номер практической
     /// </summary>
-    public int PracticalNumber { get; set; }
+    public string PracticalName { get; set; }
 
     /// <summary>
     /// Дата проведения

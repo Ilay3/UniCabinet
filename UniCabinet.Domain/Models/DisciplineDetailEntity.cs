@@ -32,35 +32,6 @@ public class DisciplineDetailEntity
     /// </summary>
     public int PracticalCount { get; set; }
 
-    /// <summary>
-    /// Количество зачетов
-    /// </summary>
-    public int SubExamCount { get; set; }
-
-    /// <summary>
-    /// Количество экзаменов
-    /// </summary>
-    public int ExamCount { get; set; }
-
-    /// <summary>
-    /// Минимум посещений лекций
-    /// </summary>
-    public int MinLecturesRequired { get; set; }
-
-    /// <summary>
-    /// Минимум посещений практических
-    /// </summary>
-    public int MinPracticalsRequired { get; set; }
-
-    /// <summary>
-    /// Минимум для автомата
-    /// </summary>
-    public int AutoExamThreshold { get; set; }
-
-    /// <summary>
-    /// Минимальный балл для прохождения
-    /// </summary>
-    public int PassCount { get; set; }
 
     // Навигационные свойства
 

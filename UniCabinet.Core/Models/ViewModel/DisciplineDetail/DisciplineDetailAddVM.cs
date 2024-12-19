@@ -10,12 +10,6 @@ public class DisciplineDetailAddVM
     public int SemesterId { get; set; }
     public int LectureCount { get; set; }
     public int PracticalCount { get; set; }
-    public int SubExamCount { get; set; }
-    public int ExamCount { get; set; }
-    public int MinLecturesRequired { get; set; }
-    public int MinPracticalsRequired { get; set; }
-    public int AutoExamThreshold { get; set; }
-    public int PassCount { get; set; }
 
     public List<SelectListItemVM>? Courses { get; set; }
     public List<SelectListItemVM>? Groups { get; set; }

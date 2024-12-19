@@ -28,8 +28,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
                 Id = lectureEntity.Id,
                 Date = lectureEntity.Date,
                 DisciplineDetailId = lectureEntity.DisciplineDetailId,
-                Number = lectureEntity.Number,
-                PointsCount = lectureEntity.PointsCount
+                Name = lectureEntity.Name,
             };
         }
 
@@ -44,8 +43,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
                 Id = l.Id,
                 Date = l.Date,
                 DisciplineDetailId = l.DisciplineDetailId,
-                Number = l.Number,
-                PointsCount = l.PointsCount,
+                Name = l.Name,
             }).ToList();
         }
 
@@ -58,8 +56,8 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
                 Id = d.Id,
                 Date = d.Date,
                 DisciplineDetailId = d.DisciplineDetailId,
-                Number = d.Number,
-                PointsCount = d.PointsCount
+                Name = d.Name,
+
             }).ToList();
         }
 
@@ -69,8 +67,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             {
                 Date = lectureDTO.Date,
                 DisciplineDetailId = lectureDTO.DisciplineDetailId,
-                Number = lectureDTO.Number,
-                PointsCount = lectureDTO.PointsCount
+                Name = lectureDTO.Name,
             };
 
             await _context.Lectures.AddAsync(lectureEntity);
@@ -92,10 +89,9 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             var lectureEntity = await _context.Lectures.FirstOrDefaultAsync(d => d.Id == lectureDTO.Id);
             if (lectureEntity == null) return;
 
-            lectureEntity.Number = lectureDTO.Number;
+            lectureEntity.Name = lectureDTO.Name;
             lectureEntity.DisciplineDetailId = lectureDTO.DisciplineDetailId;
             lectureEntity.Date = lectureDTO.Date;
-            lectureEntity.PointsCount = lectureDTO.PointsCount;
 
             _context.Lectures.Update(lectureEntity);
             await _context.SaveChangesAsync();

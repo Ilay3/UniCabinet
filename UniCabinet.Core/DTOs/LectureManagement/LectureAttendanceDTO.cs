@@ -6,7 +6,7 @@ namespace UniCabinet.Core.DTOs.LectureManagement
     {
         public int LectureId { get; set; }
 
-        public int LectureNumber { get; set; }
+        public string LectureName { get; set; }
         public int DisciplineDetailId { get; set; }
         public string DisciplineName { get; set; }
 

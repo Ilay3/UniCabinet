@@ -46,7 +46,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
                 Id = d.Id,
                 IsVisit = d.IsVisit,
                 LectureId = d.LectureId,
-                LectureNumber = d.Lecture.Number,
+                LectureName = d.Lecture.Name,
                 StudentId = d.StudentId,
                 SudentFirstName = d.Student.FirstName,
                 StudentLastName = d.Student.LastName,

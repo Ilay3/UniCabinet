@@ -116,12 +116,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
                 entity.SemesterId = dto.SemesterId;
                 entity.LectureCount = dto.LectureCount;
                 entity.PracticalCount = dto.PracticalCount;
-                entity.SubExamCount = dto.SubExamCount;
-                entity.ExamCount = dto.ExamCount;
-                entity.MinLecturesRequired = dto.MinLecturesRequired;
-                entity.MinPracticalsRequired = dto.MinPracticalsRequired;
-                entity.AutoExamThreshold = dto.AutoExamThreshold;
-                entity.PassCount = dto.PassCount;
+
 
                 await _context.SaveChangesAsync();
             }

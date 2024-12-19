@@ -62,7 +62,7 @@ namespace UniCabinet.Application.UseCases.PracticalUseCase
             {
                 PracticalId = practicalId,
                 DisciplineDetailId = disciplineDetailId,
-                PracticalNumber = practical.PracticalNumber,
+                PracticalName = practical.PracticalName,
                 DisciplineName = disciplineName,
                 Students = studentUsers.Select(s => new StudentGradeDTO
                 {
