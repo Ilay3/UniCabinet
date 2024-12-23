@@ -86,7 +86,7 @@
                         @if (User.IsInRole("Студент"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-danger" href="#">Моя Успеваемость</a>
+                                <a class="nav-link text-dark"  asp-controller="StudentProgress" asp-action="ProgressList">Моя Успеваемость</a>
                             </li>
 
                             <li class="nav-item dropdown">

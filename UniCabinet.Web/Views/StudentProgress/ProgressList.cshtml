@@ -1,0 +1,42 @@
+﻿@model List<UniCabinet.Core.Models.ViewModel.Student.StudentProgressVM>
+
+@{
+    ViewData["Title"] = "Прогресс студента";
+}
+
+<h2>Прогресс студента</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Дисциплина</th>
+            <th>Лекционные баллы</th>
+            <th>Практические баллы</th>
+            <th>Общие баллы</th>
+            <th>Итоговая оценка</th>
+            <th>Необходимость пересдачи</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var progress in Model)
+        {
+            <tr>
+                <td>@progress.DisciplineName</td>         
+                <td>@progress.TotalLecturePoints</td>
+                <td>@progress.TotalPracticalPoints</td>
+                <td>@progress.TotalPoints</td>
+                <td>@progress.FinalGrade</td>
+                <td>
+                    @if (progress.NeedsRetake)
+                    {
+                        <span class="text-danger">Да</span>
+                    }
+                    else
+                    {
+                        <span class="text-success">Нет</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

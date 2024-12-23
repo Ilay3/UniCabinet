@@ -3,37 +3,39 @@ using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using UniCabinet.Application.Interfaces.Repository;
-using UniCabinet.Core.DTOs.StudentManagement;
+using UniCabinet.Core.DTOs.StudentProgressManagment;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
 
 namespace UniCabinet.Infrastructure.Implementations.Repository
 {
-    public class StudentProgressRepository : IStudentProgressRepository
+    public class StudentProgressRepositoryImpl : IStudentProgressRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        public StudentProgressRepository(ApplicationDbContext context, IMapper mapper)
+        public StudentProgressRepositoryImpl(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public StudentProgressDTO GetStudentProfressById(int id)
+        public async Task<List<StudentProgressDTO>> GetStudentProgressById(string studentId)
         {
-            var studentProgressEntity = _context.StudentProgresses.Find(id);
-            if (studentProgressEntity == null) return null;
-
-            return new StudentProgressDTO
-            {
-                DisciplineDetailId = studentProgressEntity.DisciplineDetailId,
-                StudentId = studentProgressEntity.StudentId,
-                FinalGrade = studentProgressEntity.FinalGrade,
-                NeedsRetake = studentProgressEntity.NeedsRetake,
-                TotalLecturePoints = studentProgressEntity.TotalLecturePoints,
-                TotalPoints = studentProgressEntity.TotalPoints,
-                TotalPracticalPoints = studentProgressEntity.TotalPracticalPoints,
-            };
+            return await _context.Set<StudentProgressEntity>()
+                        .Where(sp => sp.StudentId == studentId)
+                        .Select(sp => new StudentProgressDTO
+                        {
+                            Id = sp.Id,
+                            StudentId = sp.StudentId,
+                            DisciplineDetailId = sp.DisciplineDetailId,
+                            DisciplineName = sp.DisciplineDetails.Discipline.Name,
+                            TotalLecturePoints = sp.TotalLecturePoints,
+                            TotalPracticalPoints = sp.TotalPracticalPoints,
+                            TotalPoints = sp.TotalPoints,
+                            FinalGrade = sp.FinalGrade,
+                            NeedsRetake = sp.NeedsRetake
+                        })
+                        .ToListAsync();
         }
 
         public List<StudentProgressDTO> GetAllStudentProgress()
@@ -126,5 +128,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
         {
             await _context.SaveChangesAsync();
         }
+
+      
     }
 }

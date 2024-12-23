@@ -1,4 +1,4 @@
-﻿using UniCabinet.Core.DTOs.StudentManagement;
+﻿using UniCabinet.Core.DTOs.StudentProgressManagment;
 using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Application.Interfaces.Repository
@@ -8,7 +8,7 @@ namespace UniCabinet.Application.Interfaces.Repository
         void AddStudentProgress(StudentProgressDTO studentProgressDTO);
         void DeleteStudentProgress(int id);
         List<StudentProgressDTO> GetAllStudentProgress();
-        StudentProgressDTO GetStudentProfressById(int id);
+         Task<List<StudentProgressDTO>> GetStudentProgressById(string studentId);
         void UpdateStudentProgress(StudentProgressDTO studentProgressDTO);
         Task<StudentProgressDTO> GetStudentProgressAsync(string studentId, int disciplineDetailId);
         Task AddStudentProgressAsync(StudentProgressDTO studentProgress);

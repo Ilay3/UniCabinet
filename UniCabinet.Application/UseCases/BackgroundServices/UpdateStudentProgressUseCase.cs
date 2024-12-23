@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.DTOs.StudentManagement;
+using UniCabinet.Core.DTOs.StudentProgressManagment;
 using UniCabinet.Domain.Entities;
 
 public class UpdateStudentProgressUseCase
