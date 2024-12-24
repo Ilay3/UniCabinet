@@ -78,7 +78,7 @@
                                 <div class="dropdown-menu" aria-labelledby="teacherMenu">
                                     <a class="dropdown-item" asp-controller="Specialization" asp-action="GetDataSpecTeacher">Список дисциплин</a>
                                     <a class="dropdown-item text-danger" href="#">Дисциплины преподавателя</a>
-                                    <a class="dropdown-item text-danger" href="#">Успеваемость групп</a>
+                                    <a class="dropdown-item text-danger" href="@Url.Action("Dashboard", "GroupProgress")">Успеваемость групп</a>
                                 </div>
                             </li>
                         }

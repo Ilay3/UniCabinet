@@ -1,0 +1,154 @@
+﻿@{
+    var group = (UniCabinet.Core.Models.ViewModel.Common.GroupBaseVM)Model.GroupInfo;
+    var students = (List<UniCabinet.Core.Models.ViewModel.Student.StudentProgressVM>)Model.StudentProgress;
+
+    var averageLecturePoints = students.Average(s => s.TotalLecturePoints);
+    var averagePracticalPoints = students.Average(s => s.TotalPracticalPoints);
+    var averageTotalPoints = students.Average(s => s.TotalPoints);
+
+    var gradeDistribution = students.GroupBy(s => s.FinalGrade)
+                                     .Select(g => new { Grade = g.Key, Count = g.Count() })
+                                     .OrderByDescending(g => g.Grade)
+                                     .ToList();
+}
+
+<h2 class="text-center mb-4 text-primary">Дашборд группы @group.Name</h2>
+
+<div class="row mb-5">
+    <div class="col-md-6">
+        <h4 class="text-info">Общая информация</h4>
+        <p><strong>Тип группы:</strong> @group.TypeGroup</p>
+        <p><strong>Курс:</strong> @group.CourseId</p>
+        <p><strong>Семестр:</strong> @group.SemesterId</p>
+    </div>
+    <div class="col-md-6">
+        <h4 class="text-info">Средние баллы</h4>
+        <p><strong>Лекции:</strong> @averageLecturePoints:F2</p>
+        <p><strong>Практики:</strong> @averagePracticalPoints:F2</p>
+        <p><strong>Общий балл:</strong> @averageTotalPoints:F2</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h4 class="text-info">Распределение оценок</h4>
+        <canvas id="gradeChart" width="400" height="400"></canvas>
+    </div>
+    <div class="col-md-6">
+        <h4 class="text-info">Гистограмма успеваемости</h4>
+        <canvas id="progressChart" width="400" height="400"></canvas>
+    </div>
+</div>
+
+<div class="mt-5">
+    <h4 class="text-info">Список студентов</h4>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>ФИО</th>
+                <th>Лекции</th>
+                <th>Практики</th>
+                <th>Итог</th>
+                <th>Оценка</th>
+                <th>Пересдача</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in students)
+            {
+                <tr>
+                    <td>@student.StudentId</td>
+                    <td>@student.TotalLecturePoints</td>
+                    <td>@student.TotalPracticalPoints</td>
+                    <td>@student.TotalPoints</td>
+                    <td>@student.FinalGrade</td>
+                    <td>
+                        @if (student.NeedsRetake)
+                        {
+                            <span class="text-danger">Да</span>
+                        }
+                        else
+                        {
+                            <span class="text-success">Нет</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const gradeData = {
+            labels: @Html.Raw(Json.Serialize(gradeDistribution.Select(g => g.Grade))),
+            datasets: [{
+                data: @Html.Raw(Json.Serialize(gradeDistribution.Select(g => g.Count))),
+                backgroundColor: ['#4caf50', '#ffeb3b', '#f44336', '#2196f3', '#ff9800'],
+                borderColor: ['#388e3c', '#fbc02d', '#d32f2f', '#1976d2', '#f57c00'],
+                borderWidth: 2
+            }]
+        };
+
+        const progressData = {
+            labels: @Html.Raw(Json.Serialize(students.Select(s => s.StudentId))),
+            datasets: [{
+                label: 'Общий балл',
+                data: @Html.Raw(Json.Serialize(students.Select(s => s.TotalPoints))),
+                backgroundColor: '#2196f3',
+                borderColor: '#1976d2',
+                borderWidth: 2
+            }]
+        };
+
+        new Chart(document.getElementById('gradeChart'), {
+            type: 'pie',
+            data: gradeData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw + ' студентов';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('progressChart'), {
+            type: 'bar',
+            data: progressData,
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            maxRotation: 90,
+                            minRotation: 45
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return tooltipItem.dataset.label + ': ' + tooltipItem.raw;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}
