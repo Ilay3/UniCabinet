@@ -58,3 +58,8 @@ body {
     .teacher-item:hover {
         background-color: #f1f1f1;
     }
+
+
+#paginationNav {
+    margin-bottom: 70px; /* Увеличиваем отступ под пагинацией */
+}
