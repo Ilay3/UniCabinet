@@ -1,0 +1,33 @@
+﻿@model List<UniCabinet.Core.Models.ViewModel.Student.StudentProgressVM>
+
+@{
+    ViewData["Title"] = "Детальный прогресс студента";
+}
+
+<h2>Детальный прогресс студента</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Дисциплина</th>
+            <th>Лекционные баллы</th>
+            <th>Практические баллы</th>
+            <th>Всего баллов</th>
+            <th>Итоговая оценка</th>
+            <th>Требуется пересдача</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DisciplineName</td>
+                <td>@item.TotalLecturePoints</td>
+                <td>@item.TotalPracticalPoints</td>
+                <td>@item.TotalPoints</td>
+                <td>@item.FinalGrade</td>
+                <td>@(item.NeedsRetake ? "Да" : "Нет")</td>
+            </tr>
+        }
+    </tbody>
+</table>

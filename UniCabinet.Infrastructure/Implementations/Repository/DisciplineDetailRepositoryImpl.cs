@@ -97,10 +97,14 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             return _mapper.Map<DisciplineDetailDTO> (details);
 
         }
-        public Task<DisciplineDetailDTO> GetDisciplineDetailByIdAsync(int id)
+        public async Task<List<DisciplineDetailEntity>> GetByDisciplineIdAsync(int disciplineId)
         {
-            throw new NotImplementedException();
+            return await _context.DisciplineDetails
+                .Where(dd => dd.DisciplineId == disciplineId)
+                .Include(dd => dd.Group)
+                .ToListAsync();
         }
+
 
 
         public async Task UpdateAsync(DisciplineDetailDTO dto)
@@ -140,5 +144,14 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             await _context.DisciplineDetails.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
+        public async Task<DisciplineDetailDTO> GetByGroupAndDisciplineAsync(int groupId, int disciplineId)
+        {
+            var details =  await _context.DisciplineDetails
+                .FirstOrDefaultAsync(dd => dd.GroupId == groupId && dd.DisciplineId == disciplineId);
+            return _mapper.Map<DisciplineDetailDTO>(details);
+
+        }
+
+       
     }
 }

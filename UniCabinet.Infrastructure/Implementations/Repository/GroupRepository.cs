@@ -37,6 +37,23 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
                 TypeGroup = groupEntity.TypeGroup,
             };
         }
+        public async Task<List<GroupDTO>> GetGroupsByIdsAsync(List<int> groupIds)
+        {
+            var groupEntity = await _context.Groups
+                .Where(g => groupIds.Contains(g.Id))
+                .ToListAsync();
+
+            // Маппим в DTO, если нужно
+            return groupEntity.Select(g => new GroupDTO
+            {
+                Id = g.Id,
+                Name = g.Name,
+                CourseId = g.CourseId,
+                SemesterId = g.SemesterId,
+                TypeGroup = g.TypeGroup,
+            }).ToList();
+
+        }
 
         public async Task<List<GroupDTO>> GetAllGroupsAsync()
         {

@@ -5,6 +5,8 @@ namespace UniCabinet.Application.Interfaces.Repository
 {
     public interface IGroupRepository
     {
+        Task<List<GroupDTO>> GetGroupsByIdsAsync(List<int> groupIds);
+
         Task<GroupDTO> GetGroupByIdAsync(int id);
         Task<List<GroupDTO>> GetAllGroupsAsync();
         Task AddGroupAsync(GroupDTO groupDTO);

@@ -19,7 +19,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             _mapper = mapper;
         }
 
-        public async Task<List<StudentProgressDTO>> GetStudentProgressById(string studentId)
+        public async Task<List<StudentProgressDTO>> GetAllStudentProgressById(string studentId)
         {
             return await _context.Set<StudentProgressEntity>()
                         .Where(sp => sp.StudentId == studentId)

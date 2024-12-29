@@ -12,6 +12,8 @@ namespace UniCabinet.Application.Interfaces.Repository
         Task<DisciplineDTO> GetDisciplineByIdAsync(int id);
         Task UpdateDisciplineAsync(DisciplineDTO disciplineDTO);
         Task<List<DisciplineDTO>> GetDisciplinesBySpecialtyIdAsync(int? specialtyId);
+        Task<List<DisciplineDTO>> GetDisciplinesByTeacherIdAsync(string teacherId);
+
 
     }
 }

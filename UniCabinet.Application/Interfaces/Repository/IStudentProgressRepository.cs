@@ -8,7 +8,7 @@ namespace UniCabinet.Application.Interfaces.Repository
         void AddStudentProgress(StudentProgressDTO studentProgressDTO);
         void DeleteStudentProgress(int id);
         List<StudentProgressDTO> GetAllStudentProgress();
-         Task<List<StudentProgressDTO>> GetStudentProgressById(string studentId);
+         Task<List<StudentProgressDTO>> GetAllStudentProgressById(string studentId);
         void UpdateStudentProgress(StudentProgressDTO studentProgressDTO);
         Task<StudentProgressDTO> GetStudentProgressAsync(string studentId, int disciplineDetailId);
         Task AddStudentProgressAsync(StudentProgressDTO studentProgress);

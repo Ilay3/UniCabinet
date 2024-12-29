@@ -68,7 +68,7 @@
                         @if (User.IsInRole("Преподаватель"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Teacher" asp-action="Index">Панель Преподавателя</a>
+                                <a class="nav-link text-dark" asp-controller="Teacher" asp-action="Dashboard">Панель Преподавателя</a>
                             </li>
 
                             <li class="nav-item dropdown">
@@ -77,7 +77,8 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="teacherMenu">
                                     <a class="dropdown-item" asp-controller="Specialization" asp-action="GetDataSpecTeacher">Список дисциплин</a>
-                                    <a class="dropdown-item text-danger" href="#">Дисциплины преподавателя</a>
+                                    <a class="dropdown-item" asp-controller="Discipline" asp-action="DisciplinesList">Дисциплины преподавателя</a>
+
                                     <a class="dropdown-item text-danger" href="@Url.Action("Dashboard", "GroupProgress")">Успеваемость групп</a>
                                 </div>
                             </li>

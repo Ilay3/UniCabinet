@@ -1,0 +1,55 @@
+﻿@model List<UniCabinet.Core.Models.ViewModel.Discipline.DisciplineListVM>
+
+@{
+    ViewData["Title"] = "Teacher Dashboard";
+}
+
+<h2>Список дисциплин</h2>
+
+<!-- Предположим, что каждая дисциплина выводится в виде строки таблицы или карточки. -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название дисциплины</th>
+            <th>Описание</th>
+            <th>Действие</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var discipline in Model)
+        {
+            <tr>
+                <td>@discipline.Name</td>
+                <td>@discipline.Description</td>
+                <td>
+                    <!-- При клике на кнопку/ссылку можем вызывать AJAX для подгрузки групп
+                         или переходить на отдельный экшен -->
+                    <!-- Пример AJAX: вызываем JS-функцию, которая дергает /Teacher/GetGroupsForDiscipline?disciplineId=... -->
+
+                    <button class="btn btn-primary"
+                            onclick="loadGroups(@discipline.Id)">
+                        Показать группы
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Контейнер, куда будем подгружать partial/groups -->
+<div id="groupsContainer"></div>
+
+@section Scripts {
+    <script>
+              function loadGroups(disciplineId) {
+            $.ajax({
+                url: '/Teacher/GetGroupsForDiscipline',
+                data: { disciplineId: disciplineId },
+                success: function (html) {
+                    $('#groupsContainer').html(html);
+                }
+            });
+        }
+
+    </script>
+}

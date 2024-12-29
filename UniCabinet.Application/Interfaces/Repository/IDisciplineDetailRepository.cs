@@ -7,7 +7,7 @@ namespace UniCabinet.Application.Interfaces.Repository
     {
 
         List<DisciplineDetailDTO> GetAllDisciplineDetails();
-        Task<DisciplineDetailDTO> GetDisciplineDetailByIdAsync(int id);
+        Task<List<DisciplineDetailEntity>> GetByDisciplineIdAsync(int disciplineId);
         Task<DisciplineDetailDTO> GetDetailByUserAndDisciplineAsync(string userId, int disciplineId);
 
         Task<List<DisciplineDetailDTO>> GetByDisciplineAndTeacherAsync(int disciplineId, string teacherId);
@@ -15,5 +15,6 @@ namespace UniCabinet.Application.Interfaces.Repository
         Task<DisciplineDetailDTO> GetByIdAsync(int detailId);
         Task UpdateAsync(DisciplineDetailDTO dto);
         Task AddAsync(DisciplineDetailDTO disciplineDetailDTO);
+        Task<DisciplineDetailDTO> GetByGroupAndDisciplineAsync(int groupId, int disciplineId);
     }
 }

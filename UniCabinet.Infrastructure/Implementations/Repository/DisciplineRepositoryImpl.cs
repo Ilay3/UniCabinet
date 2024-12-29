@@ -93,5 +93,17 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
                     })
                     .ToListAsync();
         }
+        public async Task<List<DisciplineDTO>> GetDisciplinesByTeacherIdAsync(string teacherId)
+        {
+            return await _context.DisciplineDetails
+                .Where(dd => dd.TeacherId == teacherId)
+                .Select(dd => new DisciplineDTO
+                {
+                    Id = dd.Discipline.Id,
+                    Name = dd.Discipline.Name,
+                    Description = dd.Discipline.Description
+                })
+                .ToListAsync();
+        }
     }
 }
