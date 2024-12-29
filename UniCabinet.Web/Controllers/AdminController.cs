@@ -20,27 +20,31 @@ public class AdminController : Controller
     }
 
     public async Task<IActionResult> VerifiedUsers(
-     [FromServices] GetVerifiedUsersUseCase getVerifiedUsersUseCase,
-     string role,
-     string query = null,
-     int pageNumber = 1,
-     int pageSize = 10)
+        [FromServices] GetVerifiedUsersUseCase getVerifiedUsersUseCase,
+        string role,
+        string query = null,
+        int pageNumber = 1,
+        int pageSize = 10)
     {
-        var studentGroupDTO = await getVerifiedUsersUseCase.Execute(role, query, pageNumber, pageSize);
+        if (string.IsNullOrWhiteSpace(role))
+            role = "Студент";
 
+        var studentGroupDTO = await getVerifiedUsersUseCase.Execute(role, query, pageNumber, pageSize);
         var studentGroupVM = _mapper.Map<StudentGroupVM>(studentGroupDTO);
 
         ViewBag.SelectedRole = role;
 
+        // Формируем список SelectListItem так, 
+        // чтобы Current role имела Selected = true
         ViewBag.Roles = new List<string> { "Студент", "Преподаватель", "Зав. Кафедры", "Администратор", "Верефицирован" }
-
             .Select(r => new SelectListItem
             {
                 Value = r,
                 Text = r,
-                Selected = r == role
+                Selected = (r == role)
             })
             .ToList();
+
 
         if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
         {

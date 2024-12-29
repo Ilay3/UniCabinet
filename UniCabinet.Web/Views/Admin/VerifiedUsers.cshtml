@@ -10,7 +10,9 @@
         <select class="form-control" id="roleFilter" name="role" data-selected-role="@ViewBag.SelectedRole">
             @foreach (var role in (IEnumerable<SelectListItem>)ViewBag.Roles)
             {
-                <option value="@role.Value" selected>@role.Text</option>
+                <option value="@role.Value" selected="@(role.Selected)">
+                    @role.Text
+                </option>
             }
         </select>
     </div>
