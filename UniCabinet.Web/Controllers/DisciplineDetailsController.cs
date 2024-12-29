@@ -161,6 +161,7 @@ namespace UniCabinet.Api.Controllers
 
             var dto = _mapper.Map<DisciplineDetailDTO>(viewModel);
             dto.TeacherId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            dto.CreatedDate = DateTime.Now;
             await addUseCase.ExecuteAsync(dto);
             return RedirectToAction("TeacherDetails", "DisciplineDetails", new { disciplineId = viewModel.DisciplineId });
         }

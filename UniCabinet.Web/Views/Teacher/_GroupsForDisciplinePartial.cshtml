@@ -1,16 +1,24 @@
 ﻿@model List<UniCabinet.Core.Models.ViewModel.Group.GroupListVM>
 
 <h3>Группы по дисциплине</h3>
-<ul>
-    @foreach (var group in Model)
-    {
-        <li>
-            <a asp-controller="Teacher"
-               asp-action="GroupStudentsProgress"
-               asp-route-groupId="@group.Id"
-               asp-route-disciplineId="@ViewBag.DisciplineId">
-                @group.Name
-            </a>
-        </li>
-    }
-</ul>
+
+@if (!Model.Any())
+{
+    <p>Группы не найдены для выбранного года.</p>
+}
+else
+{
+    <ul>
+        @foreach (var group in Model)
+        {
+            <li>
+                <a asp-controller="Teacher"
+                   asp-action="GroupStudentsProgress"
+                   asp-route-groupId="@group.Id"
+                   asp-route-disciplineId="@ViewBag.DisciplineId">
+                    @group.Name
+                </a>
+            </li>
+        }
+    </ul>
+}

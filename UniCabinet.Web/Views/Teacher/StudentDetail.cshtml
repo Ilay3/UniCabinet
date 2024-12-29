@@ -6,28 +6,62 @@
 
 <h2>Детальный прогресс студента</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Дисциплина</th>
-            <th>Лекционные баллы</th>
-            <th>Практические баллы</th>
-            <th>Всего баллов</th>
-            <th>Итоговая оценка</th>
-            <th>Требуется пересдача</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.DisciplineName</td>
-                <td>@item.TotalLecturePoints</td>
-                <td>@item.TotalPracticalPoints</td>
-                <td>@item.TotalPoints</td>
-                <td>@item.FinalGrade</td>
-                <td>@(item.NeedsRetake ? "Да" : "Нет")</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="list-group">
+    @foreach (var progress in Model)
+    {
+        var maxLecturePoints = 5;
+        var maxPracticalPoints = 15;
+        var maxTotalPoints = maxLecturePoints + maxPracticalPoints;
+
+        var lectureProgress = (int)((progress.TotalLecturePoints / (double)maxLecturePoints) * 100);
+        var practicalProgress = (int)((progress.TotalPracticalPoints / (double)maxPracticalPoints) * 100);
+        var totalProgress = (int)((progress.TotalPoints / (double)maxTotalPoints) * 100);
+
+        var lectureColor = lectureProgress > 80 ? "bg-success" : lectureProgress > 50 ? "bg-warning" : "bg-danger";
+        var practicalColor = practicalProgress > 80 ? "bg-success" : practicalProgress > 50 ? "bg-warning" : "bg-danger";
+        var totalColor = totalProgress > 80 ? "bg-success" : totalProgress > 50 ? "bg-warning" : "bg-danger";
+
+        var finalGradeClass = progress.FinalGrade >= 3 ? "text-success" : "text-danger";
+
+        <div class="list-group-item mb-4 p-3 shadow-sm">
+            <h5 class="mb-3">@progress.DisciplineName</h5>
+
+            <div class="mb-3">
+                <strong>Лекционные баллы</strong>
+                <div class="progress">
+                    <div class="progress-bar @lectureColor" role="progressbar" style="width: @lectureProgress%" aria-valuenow="@lectureProgress" aria-valuemin="0" aria-valuemax="100">@progress.TotalLecturePoints</div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <strong>Практические баллы</strong>
+                <div class="progress">
+                    <div class="progress-bar @practicalColor" role="progressbar" style="width: @practicalProgress%" aria-valuenow="@practicalProgress" aria-valuemin="0" aria-valuemax="100">@progress.TotalPracticalPoints</div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <strong>Общие баллы</strong>
+                <div class="progress">
+                    <div class="progress-bar @totalColor" role="progressbar" style="width: @totalProgress%" aria-valuenow="@totalProgress" aria-valuemin="0" aria-valuemax="100">@progress.TotalPoints</div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <strong>Итоговая оценка:</strong> <span class="@finalGradeClass">@progress.FinalGrade</span>
+            </div>
+
+            <div class="mb-3">
+                <strong>Необходимость пересдачи:</strong>
+                @if (progress.NeedsRetake)
+                {
+                    <span class="text-danger">Да</span>
+                }
+                else
+                {
+                    <span class="text-success">Нет</span>
+                }
+            </div>
+        </div>
+    }
+</div>

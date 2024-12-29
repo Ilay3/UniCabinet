@@ -28,6 +28,8 @@
         public int LectureCount { get; set; }
 
         public int PracticalCount { get; set; }
+        public DateTime CreatedDate { get; set; }
+
 
     }
 }

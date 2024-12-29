@@ -10,5 +10,6 @@
         public int LectureCount { get; set; }
         public int PracticalCount { get; set; }
 
+
     }
 }

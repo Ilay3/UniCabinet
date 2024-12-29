@@ -6,6 +6,16 @@
 
 <h2>Список дисциплин</h2>
 
+<div class="form-group">
+    <label for="yearFilter">Фильтр по году:</label>
+    <select id="yearFilter" class="form-control" onchange="filterByYear()">
+        <option value="">Все годы</option>
+        @for (var year = DateTime.Now.Year; year >= DateTime.Now.Year - 10; year--)
+        {
+            <option value="@year">@year</option>
+        }
+    </select>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -33,17 +43,35 @@
 
 <div id="groupsContainer"></div>
 
+
 @section Scripts {
     <script>
-              function loadGroups(disciplineId) {
+        var currentDisciplineId = null;
+
+        function loadGroups(disciplineId) {
+            currentDisciplineId = disciplineId;
+            var selectedYear = $('#yearFilter').val();
             $.ajax({
                 url: '/Teacher/GetGroupsForDiscipline',
-                data: { disciplineId: disciplineId },
+                data: {
+                    disciplineId: disciplineId,
+                    filetDate: selectedYear ? selectedYear + '-01-01' : null
+                },
                 success: function (html) {
                     $('#groupsContainer').html(html);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Ошибка при загрузке групп:', error);
                 }
             });
         }
 
+        function filterByYear() {
+            if (currentDisciplineId !== null) {
+                loadGroups(currentDisciplineId);
+            } else {
+                $('#groupsContainer').html('<p>Выберите дисциплину, чтобы увидеть группы.</p>');
+            }
+        }
     </script>
 }

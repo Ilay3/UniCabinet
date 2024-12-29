@@ -11,13 +11,15 @@ namespace UniCabinet.Application.UseCases.TeacherUseCase
             _disciplineDetailRepository = disciplineDetailRepository;
             _groupRepository = groupRepository;
         }
-        public async Task<List<GroupDTO>> ExecuteAsync(int disciplineId)
+        public async Task<List<GroupDTO>> ExecuteAsync(int disciplineId, DateTime? filetDate)
         {
             try
             {
+                filetDate ??= DateTime.Now;
 
                 var disciplineDetails = await _disciplineDetailRepository.GetByDisciplineIdAsync(disciplineId);
                 var groupIds = disciplineDetails
+                    .Where(date => date.CreatedDate.Year == filetDate.Value.Year)
                     .Select(dd => dd.GroupId)
                     .Distinct()
                     .ToList();
