@@ -4,10 +4,6 @@ using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.DTOs.ExamManagement;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Collections.Generic;
-using UniCabinet.Core.DTOs.UserManagement;
 
 namespace UniCabinet.Infrastructure.Implementations.Repository
 {
@@ -22,52 +18,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             _mapper = mapper;
         }
 
-        public async Task<ExamResultDTO> GetExamResultByIdAsync(int id)
-        {
-            var examResultEntity = await _context.ExamResults.FindAsync(id);
-            if (examResultEntity == null) return null;
 
-            return _mapper.Map<ExamResultDTO>(examResultEntity);
-        }
-
-        public async Task<List<ExamResultDTO>> GetAllExamResultsAsync()
-        {
-            var examResults = await _context.ExamResults
-                .Include(er => er.Student)
-                .Include(er => er.Exam)
-                .AsNoTracking()
-                .ToListAsync();
-
-            return _mapper.Map<List<ExamResultDTO>>(examResults);
-        }
-
-        public async Task AddExamResultAsync(ExamResultDTO examResultDTO)
-        {
-            var examResultEntity = _mapper.Map<ExamResultEntity>(examResultDTO);
-
-            await _context.ExamResults.AddAsync(examResultEntity);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteExamResultAsync(int id)
-        {
-            var examResultEntity = await _context.ExamResults.FindAsync(id);
-            if (examResultEntity != null)
-            {
-                _context.ExamResults.Remove(examResultEntity);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task UpdateExamResultAsync(ExamResultDTO examResultDTO)
-        {
-            var examResultEntity = await _context.ExamResults.FirstOrDefaultAsync(er => er.Id == examResultDTO.Id);
-            if (examResultEntity == null) return;
-
-            _mapper.Map(examResultDTO, examResultEntity);
-            _context.ExamResults.Update(examResultEntity);
-            await _context.SaveChangesAsync();
-        }
 
         public async Task AddOrUpdateExamResultAsync(ExamResultDTO examResultDTO)
         {
@@ -90,11 +41,10 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
 
         public async Task<List<ExamResultDTO>> GetExamResultsByExamIdAsync(int examId)
         {
-            // Получаем экзамен по ID
             var exam = await _context.Exams
-                .Where(e => e.Id == examId)
-                .Include(e => e.DisciplineDetails)
-                .FirstOrDefaultAsync();
+    .Where(e => e.Id == examId)
+    .Include(e => e.DisciplineDetails)
+    .FirstOrDefaultAsync();
 
             if (exam == null)
             {
@@ -103,17 +53,14 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
 
             var disciplineDetail = exam.DisciplineDetails;
 
-            // Получаем список студентов из группы
             var students = await _context.Users
-                .Where(u => u.GroupId == disciplineDetail.GroupId)
-                .ToListAsync();
+    .Where(u => u.GroupId == disciplineDetail.GroupId)
+    .ToListAsync();
 
-            // Получаем прогресс студентов по дисциплине
             var studentProgresses = await _context.StudentProgresses
-                .Where(sp => sp.DisciplineDetailId == disciplineDetail.Id)
-                .ToListAsync();
+    .Where(sp => sp.DisciplineDetailId == disciplineDetail.Id)
+    .ToListAsync();
 
-            // Сопоставляем студентов с их прогрессом и формируем результат
             var examResults = students.Select(student =>
             {
                 var progress = studentProgresses
@@ -126,13 +73,13 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
                     StudentFirstName = student.FirstName,
                     StudentLastName = student.LastName,
                     StudentPatronymic = student.Patronymic,
-                    GradeAvarage = progress?.FinalGrade ?? 0,                         // Средний балл из прогресса
-                    FinalGrade =  0,                           // Итоговая оценка из прогресса
-                    IsAutomatic =  false   
+                    GradeAvarage = progress?.FinalGrade ?? 0,
+                    FinalGrade = 0,
+                    IsAutomatic = false
                 };
             }).ToList();
 
-            return examResults; 
+            return examResults;
         }
 
 

@@ -38,65 +38,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
                         .ToListAsync();
         }
 
-        public List<StudentProgressDTO> GetAllStudentProgress()
-        {
-            var studentProgressEntity = _context.StudentProgresses.ToList();
-
-            return studentProgressEntity.Select(d => new StudentProgressDTO
-            {
-                Id = d.Id,
-                StudentId = d.StudentId,
-                DisciplineDetailId = d.DisciplineDetailId,
-                FinalGrade = d.FinalGrade,
-                NeedsRetake = d.NeedsRetake,
-                TotalLecturePoints = d.TotalLecturePoints,
-                TotalPoints = d.TotalPoints,
-                TotalPracticalPoints = d.TotalPracticalPoints,
-            }).ToList();
-        }
-
-        public void AddStudentProgress(StudentProgressDTO studentProgressDTO)
-        {
-            var studentProgressEntity = new StudentProgressEntity
-            {
-                StudentId = studentProgressDTO.StudentId,
-                DisciplineDetailId = studentProgressDTO.DisciplineDetailId,
-                FinalGrade = studentProgressDTO.FinalGrade,
-                NeedsRetake = studentProgressDTO.NeedsRetake,
-                TotalLecturePoints = studentProgressDTO.TotalLecturePoints,
-                TotalPracticalPoints = studentProgressDTO.TotalPracticalPoints,
-                TotalPoints = studentProgressDTO.TotalPoints,
-            };
-
-            _context.StudentProgresses.Add(studentProgressEntity);
-            _context.SaveChanges();
-        }
-
-        public void DeleteStudentProgress(int id)
-        {
-            var studentProgressEntity = _context.StudentProgresses.Find(id);
-            if (studentProgressEntity != null)
-            {
-                _context.StudentProgresses.Remove(studentProgressEntity);
-                _context.SaveChanges();
-            }
-        }
-
-        public void UpdateStudentProgress(StudentProgressDTO studentProgressDTO)
-        {
-            var studentProgressEntity = _context.StudentProgresses.FirstOrDefault(d => d.Id == studentProgressDTO.Id);
-            if (studentProgressEntity == null) return;
-
-            studentProgressEntity.TotalLecturePoints = studentProgressDTO.TotalLecturePoints;
-            studentProgressEntity.NeedsRetake = studentProgressDTO.NeedsRetake;
-            studentProgressEntity.FinalGrade = studentProgressDTO.FinalGrade;
-            studentProgressEntity.TotalPracticalPoints = studentProgressDTO.TotalPracticalPoints;
-            studentProgressEntity.DisciplineDetailId = studentProgressDTO.DisciplineDetailId;
-            studentProgressEntity.StudentId = studentProgressDTO.StudentId;
-            studentProgressEntity.TotalPoints = studentProgressDTO.TotalPoints;
-
-            _context.SaveChanges();
-        }
+    
 
         public async Task<StudentProgressDTO> GetStudentProgressAsync(string studentId, int disciplineDetailId)
         {

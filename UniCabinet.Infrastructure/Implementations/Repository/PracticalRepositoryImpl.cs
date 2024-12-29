@@ -35,12 +35,6 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             return _mapper.Map<List<PracticalDTO>>(practicalListEntity);
         }
 
-        public async Task<List<PracticalDTO>> GetAllPracticalsAsync()
-        {
-            var practicalEntities = await _context.Practicals.ToListAsync();
-
-            return _mapper.Map<List<PracticalDTO>>(practicalEntities);
-        }
 
         public async Task AddPracticalAsync(PracticalDTO practicalDTO)
         {
@@ -50,15 +44,6 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeletePracticalAsync(int id)
-        {
-            var practicalEntity = await _context.Practicals.FindAsync(id);
-            if (practicalEntity != null)
-            {
-                _context.Practicals.Remove(practicalEntity);
-                await _context.SaveChangesAsync();
-            }
-        }
 
         public async Task UpdatePracticalAsync(PracticalDTO practicalDTO)
         {
