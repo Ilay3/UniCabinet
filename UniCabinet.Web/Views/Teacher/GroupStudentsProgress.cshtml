@@ -1,0 +1,50 @@
+﻿@model List<UniCabinet.Core.Models.ViewModel.Teacher.StudentGroupProgressVM>
+
+@{
+    ViewData["Title"] = "Прогресс студентов по группе";
+}
+
+<h2>Список студентов и их общий прогресс</h2>
+<div class="row mb-5">
+    <div class="col-md-6">
+        <h4 class="text-info">Общая информация</h4>
+        <p><strong>Тип группы:</strong> тест</p>
+        <p><strong>Курс:</strong> тест</p>
+        <p><strong>Семестр:</strong>тест</p>
+    </div>
+    <div class="col-md-6">
+        <h4 class="text-info">Средние баллы</h4>
+        <p><strong>Лекции:</strong> 5</p>
+        <p><strong>Практики:</strong> 4</p>
+        <p><strong>Общий балл:</strong> 20</p>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Студент</th>
+            <th>Общие баллы</th>
+            <th>Детали</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.FullName</td>
+                <td>@item.TotalPoints</td>
+                <td>
+
+                    <a class="btn btn-link"
+                       asp-controller="Teacher"
+                       asp-action="StudentDetail"
+                       asp-route-studentId="@item.StudentId"
+                       asp-route-disciplineId="@ViewBag.DisciplineId"
+                       asp-route-groupId="@ViewBag.GroupId">
+                        Открыть подробности
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

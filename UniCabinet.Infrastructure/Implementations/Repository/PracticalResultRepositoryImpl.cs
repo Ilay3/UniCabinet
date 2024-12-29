@@ -18,53 +18,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             _mapper = mapper;
         }
 
-        public async Task<PracticalResultDTO> GetPracticalResultByIdAsync(int id)
-        {
-            var practicalResultEntity = await _context.PracticalResults.FindAsync(id);
-            if (practicalResultEntity == null) return null;
 
-            return _mapper.Map<PracticalResultDTO>(practicalResultEntity);
-        }
-
-        public async Task<List<PracticalResultDTO>> GetAllPracticalResultsAsync()
-        {
-            var practicalResultEntities = await _context.PracticalResults
-                .Include(pr => pr.Practical)
-                .Include(pr => pr.Student)
-                .AsNoTracking()
-                .ToListAsync();
-
-            return _mapper.Map<List<PracticalResultDTO>>(practicalResultEntities);
-        }
-
-        public async Task AddPracticalResultAsync(PracticalResultDTO practicalResultDTO)
-        {
-            var practicalResultEntity = _mapper.Map<PracticalResultEntity>(practicalResultDTO);
-
-            await _context.PracticalResults.AddAsync(practicalResultEntity);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeletePracticalResultAsync(int id)
-        {
-            var practicalResultEntity = await _context.PracticalResults.FindAsync(id);
-            if (practicalResultEntity != null)
-            {
-                _context.PracticalResults.Remove(practicalResultEntity);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task UpdatePracticalResultAsync(PracticalResultDTO practicalResultDTO)
-        {
-            var practicalResultEntity = await _context.PracticalResults.FirstOrDefaultAsync(pr => pr.Id == practicalResultDTO.Id);
-            if (practicalResultEntity == null) return;
-
-            _mapper.Map(practicalResultDTO, practicalResultEntity);
-
-            _context.PracticalResults.Update(practicalResultEntity);
-            await _context.SaveChangesAsync();
-        }
 
         public async Task AddOrUpdatePracticalResultAsync(PracticalResultDTO practicalResultDTO)
         {

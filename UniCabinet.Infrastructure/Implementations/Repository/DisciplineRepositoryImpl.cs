@@ -23,25 +23,9 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             var disciplineEntity = await _context.Disciplines.FindAsync(id);
             if (disciplineEntity == null) return null;
 
-            return new DisciplineDTO
-            {
-                Id = disciplineEntity.Id,
-                Name = disciplineEntity.Name,
-                Description = disciplineEntity.Description,
-            };
+            return _mapper.Map<DisciplineDTO>(disciplineEntity);
         }
 
-        public async Task<List<DisciplineDTO>> GetAllDisciplinesAsync()
-        {
-            var disciplineEntities = await _context.Disciplines.ToListAsync();
-
-            return disciplineEntities.Select(d => new DisciplineDTO
-            {
-                Id = d.Id,
-                Name = d.Name,
-                Description = d.Description,
-            }).ToList();
-        }
 
         public async Task AddDisciplineAsync(DisciplineDTO disciplineDTO)
         {
@@ -53,16 +37,6 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
 
             await _context.Disciplines.AddAsync(disciplineEntity);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteDisciplineAsync(int id)
-        {
-            var disciplineEntity = await _context.Disciplines.FindAsync(id);
-            if (disciplineEntity != null)
-            {
-                _context.Disciplines.Remove(disciplineEntity);
-                await _context.SaveChangesAsync();
-            }
         }
 
         public async Task UpdateDisciplineAsync(DisciplineDTO disciplineDTO)
@@ -92,6 +66,18 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
                         SpecialtyName = d.Specialty.Name
                     })
                     .ToListAsync();
+        }
+        public async Task<List<DisciplineDTO>> GetDisciplinesByTeacherIdAsync(string teacherId)
+        {
+            return await _context.DisciplineDetails
+                .Where(dd => dd.TeacherId == teacherId)
+                .Select(dd => new DisciplineDTO
+                {
+                    Id = dd.Discipline.Id,
+                    Name = dd.Discipline.Name,
+                    Description = dd.Discipline.Description
+                })
+                .ToListAsync();
         }
     }
 }

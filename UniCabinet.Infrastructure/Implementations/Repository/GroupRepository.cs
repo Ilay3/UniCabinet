@@ -2,13 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using UniCabinet.Application.Interfaces.Repository;
+using UniCabinet.Core.DTOs.CourseManagement;
+using UniCabinet.Core.DTOs.UserManagement;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using UniCabinet.Core.DTOs.UserManagement;
-using UniCabinet.Core.DTOs.CourseManagement;
 
 namespace UniCabinet.Infrastructure.Implementations.Repository
 {
@@ -37,6 +34,22 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
                 TypeGroup = groupEntity.TypeGroup,
             };
         }
+        public async Task<List<GroupDTO>> GetGroupsByIdsAsync(List<int> groupIds)
+        {
+            var groupEntity = await _context.Groups
+                .Where(g => groupIds.Contains(g.Id))
+                .ToListAsync();
+
+            return groupEntity.Select(g => new GroupDTO
+            {
+                Id = g.Id,
+                Name = g.Name,
+                CourseId = g.CourseId,
+                SemesterId = g.SemesterId,
+                TypeGroup = g.TypeGroup,
+            }).ToList();
+
+        }
 
         public async Task<List<GroupDTO>> GetAllGroupsAsync()
         {
@@ -64,17 +77,6 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
 
             await _context.Groups.AddAsync(groupEntity);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteGroupAsync(int id)
-        {
-            var groupEntity = await _context.Groups.FindAsync(id);
-
-            if (groupEntity != null)
-            {
-                _context.Groups.Remove(groupEntity);
-                await _context.SaveChangesAsync();
-            }
         }
 
         public async Task UpdateGroupAsync(GroupDTO groupDTO)
@@ -130,7 +132,6 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             {
                 Id = u.Id,
                 GroupId = u.GroupId,
-                // Другие свойства, если необходимо
             }).ToList();
         }
 

@@ -1,0 +1,49 @@
+﻿@model UniCabinet.Core.Models.ViewModel.Departmet.DepartmentWithDisciplinesVM
+
+@{
+    ViewData["Title"] = "Teacher Dashboard";
+}
+
+<h2>Список дисциплин</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название дисциплины</th>
+            <th>Описание</th>
+            <th>Действие</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var discipline in Model.Disciplines)
+        {
+            <tr>
+                <td>@discipline.Name</td>
+                <td>@discipline.Description</td>
+                <td>
+                    <button class="btn btn-primary"
+                            onclick="loadGroups(@discipline.Id)">
+                        Показать группы
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div id="groupsContainer"></div>
+
+@section Scripts {
+    <script>
+              function loadGroups(disciplineId) {
+            $.ajax({
+                url: '/Teacher/GetGroupsForDiscipline',
+                data: { disciplineId: disciplineId },
+                success: function (html) {
+                    $('#groupsContainer').html(html);
+                }
+            });
+        }
+
+    </script>
+}

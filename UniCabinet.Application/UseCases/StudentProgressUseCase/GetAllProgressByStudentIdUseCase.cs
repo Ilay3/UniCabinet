@@ -15,7 +15,7 @@ namespace UniCabinet.Application.UseCases.StudentProgressUseCase
 
         public async Task<List<StudentProgressDTO>> ExecuteAsync(string studentId)
         {
-            return await _studentProgressRepository.GetStudentProgressById(studentId);
+            return await _studentProgressRepository.GetAllStudentProgressById(studentId);
         }
     }
 }

@@ -94,29 +94,5 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             };
         }
 
-        public SemesterEntity GetSemesterEntityById(int id)
-        {
-            return _context.Semesters.Find(id);
-        }
-
-        public void Add(SemesterEntity semester)
-        {
-            _context.Semesters.Add(semester);
-        }
-
-        public void Update(SemesterEntity semester)
-        {
-            _context.Semesters.Update(semester);
-        }
-
-        public void Remove(SemesterEntity semester)
-        {
-            _context.Semesters.Remove(semester);
-        }
-
-        public void SaveChanges()
-        {
-            _context.SaveChanges();
-        }
     }
 }
