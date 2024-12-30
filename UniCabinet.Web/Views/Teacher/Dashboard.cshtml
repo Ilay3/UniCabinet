@@ -8,7 +8,7 @@
 
 <div class="form-group">
     <label for="yearFilter">Фильтр по году:</label>
-    <select id="yearFilter" class="form-control" onchange="filterByYear()">
+    <select id="yearFilter" class="form-control">
         <option value="">Все годы</option>
         @for (var year = DateTime.Now.Year; year >= DateTime.Now.Year - 10; year--)
         {
@@ -32,8 +32,9 @@
                 <td>@discipline.Name</td>
                 <td>@discipline.Description</td>
                 <td>
-                    <button class="btn btn-primary"
-                            onclick="loadGroups(@discipline.Id)">
+                    <button type="button"
+                            class="btn btn-primary btn-sm"
+                            onclick="showGroups(@discipline.Id)">
                         Показать группы
                     </button>
                 </td>
@@ -42,36 +43,19 @@
     </tbody>
 </table>
 
-<div id="groupsContainer"></div>
+<div id="modalContainer"></div>
 
 @section Scripts {
     <script>
-        var currentDisciplineId = null;
 
-        function loadGroups(disciplineId) {
-            currentDisciplineId = disciplineId;
-            var selectedYear = $('#yearFilter').val();
-            $.ajax({
-                url: '/Teacher/GetGroupsForDiscipline',
-                data: {
-                    disciplineId: disciplineId,
-                    filetDate: selectedYear ? selectedYear + '-01-01' : null
-                },
-                success: function (html) {
-                    $('#groupsContainer').html(html);
-                },
-                error: function (xhr, status, error) {
-                    console.error('Ошибка при загрузке групп:', error);
-                }
-            });
-        }
+        function showGroups(disciplineId) {
+            var selectedYear = document.getElementById("yearFilter").value;
 
-        function filterByYear() {
-            if (currentDisciplineId !== null) {
-                loadGroups(currentDisciplineId);
-            } else {
-                $('#groupsContainer').html('<p>Выберите дисциплину, чтобы увидеть группы.</p>');
-            }
+            var fileDate = selectedYear ? selectedYear + '-01-01' : '';
+
+            var modalUrl = `/Teacher/GetGroupsForDisciplineModal?disciplineId=${disciplineId}&filetDate=${encodeURIComponent(fileDate)}`;
+
+            openModal(modalUrl, 'groupsModal');
         }
     </script>
 }

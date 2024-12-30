@@ -28,15 +28,16 @@ public class TeacherController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetGroupsForDiscipline(int disciplineId,DateTime? filetDate,
-   [FromServices] GetGroupsForDisciplineUseCase getGroupsForDisciplineUseCase)
+    public async Task<IActionResult> GetGroupsForDisciplineModal(int disciplineId, DateTime? filetDate,
+        [FromServices] GetGroupsForDisciplineUseCase getGroupsForDisciplineUseCase)
     {
-
         var groups = await getGroupsForDisciplineUseCase.ExecuteAsync(disciplineId, filetDate);
         var groupVMs = _mapper.Map<List<GroupListVM>>(groups);
         ViewBag.DisciplineId = disciplineId;
-        return PartialView("_GroupsForDisciplinePartial", groupVMs);
+        ViewBag.FilteredDate = filetDate;
+        return PartialView("_GroupsForDisciplineModal", groupVMs);
     }
+
 
     [HttpGet]
     public async Task<IActionResult> GroupStudentsProgress(

@@ -1,0 +1,37 @@
+﻿@model List<UniCabinet.Core.Models.ViewModel.Group.GroupListVM>
+
+<div class="modal fade" id="groupsModal" tabindex="-1" role="dialog" aria-labelledby="groupsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Группы по дисциплине</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                @if (!Model.Any())
+                {
+                    <p>Группы не найдены для выбранного фильтра.</p>
+                }
+                else
+                {
+                    <ul class="list-group">
+                        @foreach (var group in Model)
+                        {
+                            <li class="list-group-item">
+                                <a asp-controller="Teacher"
+                                   asp-action="GroupStudentsProgress"
+                                   asp-route-groupId="@group.Id"
+                                   asp-route-disciplineId="@ViewBag.DisciplineId">
+                                    @group.Name
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
