@@ -39,13 +39,16 @@ public class TeacherController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GroupStudentsProgress([FromServices] GroupStudentsProgressUseCase groupStudentsProgressUseCase, int groupId, int disciplineId)
+    public async Task<IActionResult> GroupStudentsProgress(
+        [FromServices] GroupStudentsProgressUseCase groupStudentsProgressUseCase,
+        int groupId,
+        int disciplineId)
     {
         var result = await groupStudentsProgressUseCase.ExecuteAsync(groupId, disciplineId);
-        ViewBag.DisciplineId = disciplineId;
-        ViewBag.GroupId = groupId;
-        return View(_mapper.Map<List<StudentGroupProgressVM>>(result));
+
+        return View(_mapper.Map<GroupStudentsProgressPageVM>(result));
     }
+
 
     [HttpGet]
     public async Task<IActionResult> StudentDetail([FromServices] StudentDetailUseCase studentDetailUseCase,

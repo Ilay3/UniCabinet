@@ -10,6 +10,8 @@ namespace UniCabinet.Application.Profiles
         public TeacherProfile()
         {
             CreateMap<StudentGroupProgressDTO, StudentGroupProgressVM>().ReverseMap();
+            CreateMap<GroupStudentsProgressPageDTO, GroupStudentsProgressPageVM>().ReverseMap();
+
         }
     }
 }
