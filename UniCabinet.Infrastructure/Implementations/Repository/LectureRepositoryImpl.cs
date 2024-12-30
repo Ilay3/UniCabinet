@@ -23,13 +23,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             var lectureEntity = await _context.Lectures.FindAsync(id);
             if (lectureEntity == null) return null;
 
-            return new LectureDTO
-            {
-                Id = lectureEntity.Id,
-                Date = lectureEntity.Date,
-                DisciplineDetailId = lectureEntity.DisciplineDetailId,
-                Name = lectureEntity.Name,
-            };
+            return _mapper.Map<LectureDTO>(lectureEntity);
         }
 
         public async Task<List<LectureDTO>> GetLectureListByDisciplineDetailIdAsync(int id)
@@ -38,28 +32,10 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
                 .Where(l => l.DisciplineDetailId == id)
                 .ToListAsync();
 
-            return lectureListEntity.Select(l => new LectureDTO
-            {
-                Id = l.Id,
-                Date = l.Date,
-                DisciplineDetailId = l.DisciplineDetailId,
-                Name = l.Name,
-            }).ToList();
+            return _mapper.Map<List<LectureDTO>>(lectureListEntity);
+
         }
 
-        public async Task<List<LectureDTO>> GetAllLecturesAsync()
-        {
-            var lectureEntity = await _context.Lectures.ToListAsync();
-
-            return lectureEntity.Select(d => new LectureDTO
-            {
-                Id = d.Id,
-                Date = d.Date,
-                DisciplineDetailId = d.DisciplineDetailId,
-                Name = d.Name,
-
-            }).ToList();
-        }
 
         public async Task AddLectureAsync(LectureDTO lectureDTO)
         {
@@ -74,15 +50,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteLectureAsync(int id)
-        {
-            var lectureEntity = await _context.Lectures.FindAsync(id);
-            if (lectureEntity != null)
-            {
-                _context.Lectures.Remove(lectureEntity);
-                await _context.SaveChangesAsync();
-            }
-        }
+
 
         public async Task UpdateLectureAsync(LectureDTO lectureDTO)
         {

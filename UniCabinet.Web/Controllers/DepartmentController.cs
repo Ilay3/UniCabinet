@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using UniCabinet.Application.UseCases.DepartmentUseCase;
+using UniCabinet.Application.UseCases.DisciplineUseCase;
 using UniCabinet.Core.DTOs.DepartmentManagmnet;
 using UniCabinet.Core.Models.ViewModel.Department;
 using UniCabinet.Core.Models.ViewModel.Departmet;
+using UniCabinet.Core.Models.ViewModel.Discipline;
 using UniCabinet.Core.UseCases;
 
 namespace UniCabinet.Web.Controllers
@@ -16,14 +18,19 @@ namespace UniCabinet.Web.Controllers
         {
             _mapper = mapper;
         }
+
         [HttpGet]
         public async Task<IActionResult> DepartmentListAsync([FromServices] GetDepartmentDisciplinesUseCase getDisciplinesByHeadUseCase)
         {
-            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            var result = await getDisciplinesByHeadUseCase.ExecuteAsync(userId);
-            var getDepartmantAndUserVMVMs = _mapper.Map<DepartmentWithDisciplinesVM>(result);
+            var viewModel = await GetDepartmentDisciplinesAsync(getDisciplinesByHeadUseCase);
+            return View(viewModel);
+        }
 
-            return View(getDepartmantAndUserVMVMs);
+        [HttpGet]
+        public async Task<IActionResult> Dashboard([FromServices] GetDepartmentDisciplinesUseCase getDisciplinesByHeadUseCase)
+        {
+            var viewModel = await GetDepartmentDisciplinesAsync(getDisciplinesByHeadUseCase);
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -33,6 +40,12 @@ namespace UniCabinet.Web.Controllers
             var departmentsDTO = await getDepartmentsWithUsersUseCase.ExecuteAsync();
             var departmentsVM = _mapper.Map<List<DepartmentsWithUsersVM>>(departmentsDTO);
             return View(departmentsVM);
+        }
+        private async Task<DepartmentWithDisciplinesVM> GetDepartmentDisciplinesAsync(GetDepartmentDisciplinesUseCase getDisciplinesByHeadUseCase)
+        {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var result = await getDisciplinesByHeadUseCase.ExecuteAsync(userId);
+            return _mapper.Map<DepartmentWithDisciplinesVM>(result);
         }
 
         [HttpGet]
@@ -90,6 +103,6 @@ namespace UniCabinet.Web.Controllers
             }
         }
 
-
+       
     }
 }

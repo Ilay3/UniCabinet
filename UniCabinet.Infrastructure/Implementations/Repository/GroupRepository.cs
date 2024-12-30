@@ -1,14 +1,12 @@
-﻿using EFCore.BulkExtensions;
+﻿using AutoMapper;
+using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using UniCabinet.Application.Interfaces.Repository;
+using UniCabinet.Core.DTOs.CourseManagement;
+using UniCabinet.Core.DTOs.UserManagement;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using UniCabinet.Core.DTOs.UserManagement;
-using UniCabinet.Core.DTOs.CourseManagement;
 
 namespace UniCabinet.Infrastructure.Implementations.Repository
 {
@@ -16,11 +14,12 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<GroupRepository> _logger;
-
-        public GroupRepository(ApplicationDbContext context, ILogger<GroupRepository> logger)
+        private readonly IMapper _mapper;
+        public GroupRepository(ApplicationDbContext context, ILogger<GroupRepository> logger, IMapper mapper)
         {
             _context = context;
             _logger = logger;
+            _mapper = mapper;
         }
 
         public async Task<GroupDTO> GetGroupByIdAsync(int id)
@@ -28,28 +27,24 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             var groupEntity = await _context.Groups.FindAsync(id);
             if (groupEntity == null) return null;
 
-            return new GroupDTO
-            {
-                Id = groupEntity.Id,
-                Name = groupEntity.Name,
-                CourseId = groupEntity.CourseId,
-                SemesterId = groupEntity.SemesterId,
-                TypeGroup = groupEntity.TypeGroup,
-            };
+            return _mapper.Map<GroupDTO>(groupEntity);
+        }
+        public async Task<List<GroupDTO>> GetGroupsByIdsAsync(List<int> groupIds)
+        {
+            var groupEntity = await _context.Groups
+                .Where(g => groupIds.Contains(g.Id))
+                .ToListAsync();
+
+            return _mapper.Map<List<GroupDTO>>(groupEntity);
+
         }
 
         public async Task<List<GroupDTO>> GetAllGroupsAsync()
         {
             var groupEntities = await _context.Groups.ToListAsync();
 
-            return groupEntities.Select(d => new GroupDTO
-            {
-                Id = d.Id,
-                Name = d.Name,
-                CourseId = d.CourseId,
-                SemesterId = d.SemesterId,
-                TypeGroup = d.TypeGroup,
-            }).ToList();
+            return _mapper.Map<List<GroupDTO>>(groupEntities);
+
         }
 
         public async Task AddGroupAsync(GroupDTO groupDTO)
@@ -64,17 +59,6 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
 
             await _context.Groups.AddAsync(groupEntity);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteGroupAsync(int id)
-        {
-            var groupEntity = await _context.Groups.FindAsync(id);
-
-            if (groupEntity != null)
-            {
-                _context.Groups.Remove(groupEntity);
-                await _context.SaveChangesAsync();
-            }
         }
 
         public async Task UpdateGroupAsync(GroupDTO groupDTO)
@@ -130,7 +114,6 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             {
                 Id = u.Id,
                 GroupId = u.GroupId,
-                // Другие свойства, если необходимо
             }).ToList();
         }
 

@@ -4,41 +4,32 @@
     @for (int i = 0; i < Model.Specialties.Count; i++)
     {
         var specialty = Model.Specialties[i];
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="heading-@i">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@i" aria-expanded="false" aria-controls="collapse-@i">
-                    <i class="bi bi-bookmark-star me-2 text-primary"></i> @specialty.Name
-                </button>
-            </h2>
-            <div id="collapse-@i" class="accordion-collapse collapse" aria-labelledby="heading-@i" data-bs-parent="#specialtiesAccordion">
-                <div class="accordion-body">
-                    <h5><i class="bi bi-journal-text me-2 text-secondary"></i>Дисциплины</h5>
-                    @if (Model.Disciplines != null && Model.Disciplines.Any(d => d.SpecialtyId == specialty.Id))
-                    {
-                        <ul class="list-group">
-                            @foreach (var discipline in Model.Disciplines.Where(d => d.SpecialtyId == specialty.Id))
-                            {
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <strong>@discipline.Name</strong>
-                                            <p class="text-muted mb-1">@discipline.Description</p>
-                                        </div>
-                                        <a class="btn btn-sm btn-outline-primary"
-                                           href="@Url.Action("TeacherDetails", "DisciplineDetails", new { disciplineId = discipline.Id })">
-                                            <i class="bi bi-eye"></i> Просмотреть
-                                        </a>
+            <div class="accordion-body">
+                <h5><i class="bi bi-journal-text me-2 text-secondary"></i>Дисциплины</h5>
+                @if (Model.Disciplines != null && Model.Disciplines.Any(d => d.SpecialtyId == specialty.Id))
+                {
+                    <ul class="list-group">
+                        @foreach (var discipline in Model.Disciplines.Where(d => d.SpecialtyId == specialty.Id))
+                        {
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>@discipline.Name</strong>
+                                        <p class="text-muted mb-1">@discipline.Description</p>
                                     </div>
-                                </li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <p class="text-muted">Дисциплины отсутствуют для данной специальности.</p>
-                    }
-                </div>
+                                    <a class="btn btn-sm btn-outline-primary"
+                                        href="@Url.Action("TeacherDetails", "DisciplineDetails", new { disciplineId = discipline.Id })">
+                                        <i class="bi bi-eye"></i> Просмотреть
+                                    </a>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted">Дисциплины отсутствуют для данной специальности.</p>
+                }
             </div>
-        </div>
     }
 </div>

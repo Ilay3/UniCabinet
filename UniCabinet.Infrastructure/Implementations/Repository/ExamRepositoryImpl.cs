@@ -4,9 +4,6 @@ using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.DTOs.ExamManagement;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace UniCabinet.Infrastructure.Implementations.Repository
 {
@@ -39,14 +36,6 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             return _mapper.Map<List<ExamDTO>>(examList);
         }
 
-        public async Task<List<ExamDTO>> GetAllExamsAsync()
-        {
-            var exams = await _context.Exams
-                .AsNoTracking()
-                .ToListAsync();
-
-            return _mapper.Map<List<ExamDTO>>(exams);
-        }
 
         public async Task AddExamAsync(ExamDTO examDTO)
         {
@@ -55,15 +44,6 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteExamAsync(int id)
-        {
-            var examEntity = await _context.Exams.FindAsync(id);
-            if (examEntity != null)
-            {
-                _context.Exams.Remove(examEntity);
-                await _context.SaveChangesAsync();
-            }
-        }
 
         public async Task UpdateExamAsync(ExamDTO examDTO)
         {

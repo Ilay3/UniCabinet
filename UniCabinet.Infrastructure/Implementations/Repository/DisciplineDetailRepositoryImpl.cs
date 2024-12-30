@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.DTOs.DisciplineDetailManagment;
-using UniCabinet.Core.DTOs.ExamManagement;
-using UniCabinet.Core.DTOs.SpecializationManagement;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
 
@@ -20,20 +18,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             _mapper = mapper;
         }
 
-        public void AddDisciplineDetail(DisciplineDetailDTO disciplineDetailDTO)
-        {
-            throw new NotImplementedException();
-        }
 
-        public void DeleteDisciplineDetail(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<DisciplineDetailDTO> GetAllDisciplineDetails()
-        {
-            throw new NotImplementedException();
-        }
         public async Task<List<DisciplineDetailDTO>> GetByDisciplineTeacherAndFiltersAsync(int disciplineId, string teacherId, int? courseId, int? semesterId, int? groupId)
         {
             var query = _context.DisciplineDetails
@@ -75,17 +60,7 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
             return _mapper.Map<DisciplineDetailDTO>(disciplineDetailEntity);
 
         }
-        public async Task<List<DisciplineDetailDTO>> GetByDisciplineAndTeacherAsync(int disciplineId, string teacherId)
-        {
-            var details =  await _context.DisciplineDetails
-                .Include(dd => dd.Course)
-                .Include(dd => dd.Group)
-                .Include(dd => dd.Semester)
-                .Where(dd => dd.DisciplineId == disciplineId && dd.TeacherId == teacherId)
-                .ToListAsync();
 
-           return _mapper.Map<List<DisciplineDetailDTO>>(details);
-        }
 
         public async Task<DisciplineDetailDTO> GetByIdAsync(int detailId)
         {
@@ -94,13 +69,17 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
                 .Include(dd => dd.Group)
                 .Include(dd => dd.Semester)
                 .FirstOrDefaultAsync(dd => dd.Id == detailId);
-            return _mapper.Map<DisciplineDetailDTO> (details);
+            return _mapper.Map<DisciplineDetailDTO>(details);
 
         }
-        public Task<DisciplineDetailDTO> GetDisciplineDetailByIdAsync(int id)
+        public async Task<List<DisciplineDetailEntity>> GetByDisciplineIdAsync(int disciplineId)
         {
-            throw new NotImplementedException();
+            return await _context.DisciplineDetails
+                .Where(dd => dd.DisciplineId == disciplineId)
+                .Include(dd => dd.Group)
+                .ToListAsync();
         }
+
 
 
         public async Task UpdateAsync(DisciplineDetailDTO dto)
@@ -135,10 +114,19 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
         public async Task AddAsync(DisciplineDetailDTO disciplineDetailDTO)
         {
 
-           
+
             var entity = _mapper.Map<DisciplineDetailEntity>(disciplineDetailDTO);
             await _context.DisciplineDetails.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
+        public async Task<DisciplineDetailDTO> GetByGroupAndDisciplineAsync(int groupId, int disciplineId)
+        {
+            var details = await _context.DisciplineDetails
+                .FirstOrDefaultAsync(dd => dd.GroupId == groupId && dd.DisciplineId == disciplineId);
+            return _mapper.Map<DisciplineDetailDTO>(details);
+
+        }
+
+
     }
 }

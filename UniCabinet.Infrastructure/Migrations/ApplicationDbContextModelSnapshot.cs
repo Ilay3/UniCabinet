@@ -213,6 +213,9 @@ namespace UniCabinet.Infrastructure.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("DisciplineId")
                         .HasColumnType("int");
 

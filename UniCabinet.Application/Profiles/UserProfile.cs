@@ -11,8 +11,7 @@ namespace UniCabinet.Application.Profiles
         {
             CreateMap<UserEntity, UserDTO>()
                 .ForMember(dest => dest.Roles, opt => opt.Ignore())
-                .ForMember(dest => dest.SpecializationId, opt => opt.MapFrom(src => src.SpecialtyId))
-;
+                .ForMember(dest => dest.SpecializationId, opt => opt.MapFrom(src => src.SpecialtyId));
 
             CreateMap<UserDTO, UserDetailVM>();
         }

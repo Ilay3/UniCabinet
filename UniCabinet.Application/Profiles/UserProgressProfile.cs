@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using UniCabinet.Core.DTOs.StudentManagement;
-using UniCabinet.Core.DTOs.UserManagement;
-using UniCabinet.Core.Models.ViewModel.User;
+using UniCabinet.Core.DTOs.StudentProgressManagment;
+using UniCabinet.Core.Models.ViewModel.Student;
 using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Application.Profiles
@@ -10,7 +9,11 @@ namespace UniCabinet.Application.Profiles
     {
         public UserProgressProfile()
         {
-            CreateMap<StudentProgressEntity, StudentProgressDTO>().ReverseMap();    
+            CreateMap<StudentProgressEntity, StudentProgressDTO>()
+                .ForMember(dest=>dest.DisciplineName, opt => opt.Ignore())
+                .ReverseMap();
+            CreateMap<StudentProgressDTO, StudentProgressVM>()
+              .ForMember(dest => dest.DisciplineName, opt => opt.MapFrom(src => src.DisciplineName)).ReverseMap()   ;
 
         }
     }

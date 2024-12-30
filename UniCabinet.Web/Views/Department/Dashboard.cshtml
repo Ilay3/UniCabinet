@@ -1,0 +1,60 @@
+﻿@model UniCabinet.Core.Models.ViewModel.Departmet.DepartmentWithDisciplinesVM
+
+@{
+    ViewData["Title"] = "Deartment Dashboard";
+}
+<h2>Список дисциплин</h2>
+
+<div class="form-group">
+    <label for="yearFilter">Фильтр по году:</label>
+    <select id="yearFilter" class="form-control">
+        <option value="">Все годы</option>
+        @for (var year = DateTime.Now.Year; year >= DateTime.Now.Year - 10; year--)
+        {
+            <option value="@year">@year</option>
+        }
+    </select>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название дисциплины</th>
+            <th>Описание</th>
+            <th>Действие</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var discipline in Model.Disciplines)
+        {
+            <tr>
+                <td>@discipline.Name</td>
+                <td>@discipline.Description</td>
+                <td>
+                    <button type="button"
+                            class="btn btn-primary btn-sm"
+                            onclick="showGroups(@discipline.Id)">
+                        Показать группы
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div id="modalContainer"></div>
+
+@section Scripts {
+    <script>
+
+        function showGroups(disciplineId) {
+            var selectedYear = document.getElementById("yearFilter").value;
+
+            var fileDate = selectedYear ? selectedYear + '-01-01' : '';
+
+            var modalUrl = `/Teacher/GetGroupsForDisciplineModal?disciplineId=${disciplineId}&filetDate=${encodeURIComponent(fileDate)}`;
+
+            openModal(modalUrl, 'groupsModal');
+        }
+    </script>
+}

@@ -31,6 +31,8 @@ public class DisciplineDetailEntity
     /// Количество практических
     /// </summary>
     public int PracticalCount { get; set; }
+    
+    public DateTime CreatedDate { get; set; }
 
 
     // Навигационные свойства

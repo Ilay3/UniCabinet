@@ -1,4 +1,4 @@
-﻿namespace UniCabinet.Core.DTOs.StudentManagement
+﻿namespace UniCabinet.Core.DTOs.StudentProgressManagment
 {
     public class StudentProgressDTO
     {
@@ -8,6 +8,7 @@
 
         public int DisciplineDetailId { get; set; }
 
+        public string DisciplineName { get; set; }
         /// <summary>
         /// Сумма баллов за лекций
         /// </summary>

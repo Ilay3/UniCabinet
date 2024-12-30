@@ -1,15 +1,11 @@
-﻿using UniCabinet.Core.DTOs.StudentManagement;
+﻿using UniCabinet.Core.DTOs.StudentProgressManagment;
 using UniCabinet.Domain.Entities;
 
 namespace UniCabinet.Application.Interfaces.Repository
 {
     public interface IStudentProgressRepository
     {
-        void AddStudentProgress(StudentProgressDTO studentProgressDTO);
-        void DeleteStudentProgress(int id);
-        List<StudentProgressDTO> GetAllStudentProgress();
-        StudentProgressDTO GetStudentProfressById(int id);
-        void UpdateStudentProgress(StudentProgressDTO studentProgressDTO);
+        Task<List<StudentProgressDTO>> GetAllStudentProgressById(string studentId);
         Task<StudentProgressDTO> GetStudentProgressAsync(string studentId, int disciplineDetailId);
         Task AddStudentProgressAsync(StudentProgressDTO studentProgress);
         Task UpdateFinalGradeAsync(string studentId, decimal finalGrade);

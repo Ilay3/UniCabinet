@@ -1,11 +1,12 @@
 ﻿$(function () {
     var selectedRole = $('#roleFilter').data('selected-role');
-
     if (selectedRole && selectedRole !== '') {
         $('#roleFilter').val(selectedRole);
     } else {
-        $('#roleFilter').val('Student');
+        // НЕ пишите 'Student' здесь, если реальное значение — 'Студент'
+        $('#roleFilter').val('Студент');
     }
+
 
     $('#roleFilter').on('change', function () {
         var role = $(this).val();

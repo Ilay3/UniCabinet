@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -30,20 +29,22 @@
                     <ul class="navbar-nav mr-auto">
                         @if (User.IsInRole("Администратор"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Admin" asp-action="Index">Панель Администратора</a>
-                            </li>
-
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-dark" href="#" id="adminMenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Администрирование
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="adminMenu">
                                     <a class="dropdown-item" asp-controller="Admin" asp-action="VerifiedUsers">Список пользователей</a>
-                                    <a class="dropdown-item" asp-controller="Department" asp-action="DepartmentsAdminList">Список кафедр университета</a>
                                     <a class="dropdown-item" asp-controller="Specialization" asp-action="GetDataSpecialization">Список специальностей преподавателей</a>
-                                    <a class="dropdown-item" asp-controller="Group" asp-action="GroupsList">Список групп</a>
                                 </div>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Group" asp-action="GroupsList">Список групп</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Department" asp-action="DepartmentsAdminList">Список кафедр университета</a>
                             </li>
                         }
 
@@ -51,7 +52,7 @@
                         @if (User.IsInRole("Зав. Кафедры"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="HeadOfDepartment" asp-action="Index">Панель Заведующей</a>
+                                <a class="nav-link text-dark" asp-controller="Department" asp-action="Dashboard">Панель Заведующей</a>
                             </li>
 
                             <li class="nav-item dropdown">
@@ -60,7 +61,6 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="headOfDepMenu">
                                     <a class="dropdown-item" asp-controller="Department" asp-action="DepartmentList">Просмотр кафедры</a>
-                                    <a class="dropdown-item text-danger" href="#">Успеваемость групп</a>
                                 </div>
                             </li>
                         }
@@ -68,7 +68,7 @@
                         @if (User.IsInRole("Преподаватель"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Teacher" asp-action="Index">Панель Преподавателя</a>
+                                <a class="nav-link text-dark" asp-controller="Teacher" asp-action="Dashboard">Панель Преподавателя</a>
                             </li>
 
                             <li class="nav-item dropdown">
@@ -77,8 +77,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="teacherMenu">
                                     <a class="dropdown-item" asp-controller="Specialization" asp-action="GetDataSpecTeacher">Список дисциплин</a>
-                                    <a class="dropdown-item text-danger" href="#">Дисциплины преподавателя</a>
-                                    <a class="dropdown-item text-danger" href="#">Успеваемость групп</a>
+                                    <a class="dropdown-item" asp-controller="Discipline" asp-action="DisciplinesList">Дисциплины преподавателя</a>
                                 </div>
                             </li>
                         }
@@ -86,17 +85,7 @@
                         @if (User.IsInRole("Студент"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-danger" href="#">Моя Успеваемость</a>
-                            </li>
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark" href="#" id="studentMenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Студент
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="studentMenu">
-                                    <a class="dropdown-item text-danger" href="#">Экзамены</a> 
-                                    <a class="dropdown-item text-danger" href="#">Дисциплины</a>
-                                </div>
+                                <a class="nav-link text-dark" asp-controller="StudentProgress" asp-action="ProgressList">Моя Успеваемость</a>
                             </li>
                         }
                     </ul>
@@ -109,10 +98,10 @@
                                     @User.Identity.Name!
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a>
+                                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Профиль</a>
                                     <div class="dropdown-divider"></div>
                                     <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" method="post" class="d-inline">
-                                        <button type="submit" class="dropdown-item">Logout</button>
+                                        <button type="submit" class="dropdown-item">Выход</button>
                                     </form>
                                 </div>
                             </li>
@@ -120,10 +109,10 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Войти</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Регистрация</a>
                             </li>
                         }
                     </ul>
@@ -131,6 +120,7 @@
             </div>
         </nav>
     </header>
+
 
     <div class="container">
         <main role="main" class="pb-3">
@@ -140,7 +130,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - UniCabinet.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - UniCabinet.Web - <a asp-area="" asp-controller="Home" asp-action="Index">Главная страница</a>
         </div>
     </footer>
 

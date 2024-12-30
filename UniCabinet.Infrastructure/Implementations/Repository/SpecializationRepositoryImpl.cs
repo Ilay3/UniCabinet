@@ -5,7 +5,6 @@ using UniCabinet.Application.Interfaces;
 using UniCabinet.Application.Interfaces.Repository;
 using UniCabinet.Core.DTOs.CourseManagement;
 using UniCabinet.Core.DTOs.SpecializationManagement;
-using UniCabinet.Core.Models.ViewModel.User;
 using UniCabinet.Domain.Entities;
 using UniCabinet.Infrastructure.Data;
 
@@ -14,19 +13,13 @@ namespace UniCabinet.Infrastructure.Implementations.Repository
     public class SpecializationRepositoryImpl : ISpecializationRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<SpecializationRepositoryImpl> _logger;
         private readonly IMapper _mapper;
-        private readonly IUserService _userService;
         public SpecializationRepositoryImpl(
             ApplicationDbContext context,
-            ILogger<SpecializationRepositoryImpl> logger,
-            IMapper mapper,
-            IUserService userService)
+           IMapper mapper)
         {
             _context = context;
-            _logger = logger;
             _mapper = mapper;
-            _userService = userService;
         }
 
         public async Task<List<SpecializationDTO>> GetAllSpecialization()
